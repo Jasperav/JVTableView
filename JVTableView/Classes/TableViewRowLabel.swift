@@ -11,10 +11,10 @@ open class TableViewRowLabel: TableViewRow, Tappable {
     public var _text: String? = nil
     
     public init(identifier: String = "",
+                text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 isSelectable: Bool = false,
-                accessoryType: UITableViewCell.AccessoryType = .none,
-                text: String? = nil) {
+                accessoryType: UITableViewCell.AccessoryType = .none) {
         self.contentTypeJVLabel = contentTypeJVLabel
         self._text = text
         self.accessoryType = accessoryType
@@ -31,6 +31,8 @@ open class TableViewRowLabel: TableViewRow, Tappable {
         
         self.isVisible = isVisible
     }
+    
+    
     
     open func isVisible(_ cell: TableViewCellLabel) {
         cell.update(contentTypeJVLabelText: contentTypeJVLabel, accessoryType: accessoryType, text: _text)

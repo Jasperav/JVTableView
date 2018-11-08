@@ -14,7 +14,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         self.oldValue = oldValue
         currentValue = oldValue?() ?? false
         
-        super.init(identifier: identifier, contentTypeJVLabel: contentTypeJVLabel, isSelectable: false, accessoryType: .none, text: text)
+        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: false, accessoryType: .none)
     }
     
     public override func isVisible(_ cell: TableViewCellLabel) {

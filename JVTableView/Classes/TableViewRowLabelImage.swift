@@ -8,7 +8,7 @@ public class TableViewRowLabelImage: TableViewRowLabel {
         
         self.image = image
         
-        super.init(identifier: identifier, contentTypeJVLabel: contentTypeJVLabel, isSelectable: isSelectable, accessoryType: accessoryType, text: text)
+        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: isSelectable, accessoryType: accessoryType)
     }
     public override func isVisible(_ cell: TableViewCellLabel) {
         let _cell = cell as! TableViewCellLabelImage
