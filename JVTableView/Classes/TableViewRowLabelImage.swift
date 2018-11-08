@@ -4,7 +4,12 @@ public class TableViewRowLabelImage: TableViewRowLabel {
     
     public let image: UIImage
     
-    public init(identifier: String, contentTypeJVLabel: ContentTypeJVLabelText, isSelectable: Bool, accessoryType: UITableViewCell.AccessoryType, text: String?, image: UIImage) {
+    public init(identifier: String = "",
+                text: String? = nil,
+                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                isSelectable: Bool = false,
+                accessoryType: UITableViewCell.AccessoryType = .none,
+                image: UIImage) {
         
         self.image = image
         
