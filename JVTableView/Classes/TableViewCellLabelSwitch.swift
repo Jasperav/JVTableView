@@ -21,6 +21,6 @@ public class TableViewCellLabelSwitch: TableViewCellLabel, ChangeableValues {
     }
     
     public override func determineTrailingView() -> UIView? {
-        return _switch
+        return accessoryView
     }
 }
