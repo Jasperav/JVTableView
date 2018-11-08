@@ -19,7 +19,7 @@
 		6D76540A4C45C6DD571E7BBC /* Pods-JVTableView_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JVTableView_Tests.release.xcconfig"; path = "Target Support Files/Pods-JVTableView_Tests/Pods-JVTableView_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		812B8D924AE601C667371F36 /* Pods-JVTableView_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JVTableView_Tests.debug.xcconfig"; path = "Target Support Files/Pods-JVTableView_Tests/Pods-JVTableView_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		8536731DDF6A41705EACDDD5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		ACA5A1EE878A7A14EC943516 /* JVTableView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = JVTableView.podspec; path = ../JVTableView.podspec; sourceTree = "<group>"; };
+		ACA5A1EE878A7A14EC943516 /* JVTableView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = JVTableView.podspec; path = ../JVTableView.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CDA2C637D24C87FF07B0FE64 /* Pods_JVTableView_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JVTableView_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 

@@ -1,6 +1,6 @@
 import UIKit
 
-public class JVTableViewDatasource {
+open class JVTableViewDatasource {
     public var dataSource = [TableViewSection]()
     
     public init(dataSource: [TableViewSection] = []) {
@@ -44,16 +44,16 @@ public class JVTableViewDatasource {
         fatalError()
     }
     
-//    public func getText(_ identifier: String) -> String {
-//        let row = getRow(identifier) as! TableViewRowTextField
-//        
-//        return row.currentValue
-//    }
-//    
-//    public func getBool(_ identifier: String) -> Bool {
-//        let row = getRow(identifier) as! TableViewRowSwitch
-//        
-//        return row.currentValue
-//    }
+    public func getText(_ identifier: String) -> String {
+        let row = getRow(identifier) as! TableViewRowTextField
+        
+        return row.currentValue
+    }
+    
+    public func getBool(_ identifier: String) -> Bool {
+        let row = getRow(identifier) as! TableViewRowLabelSwitch
+        
+        return row.currentValue
+    }
     
 }
