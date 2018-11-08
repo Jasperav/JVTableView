@@ -5,10 +5,6 @@ open class TableViewRowLabel: TableViewRow, Tappable {
     
     public static var standardContentTypeJVLabel: ContentTypeJVLabelText!
     
-    public class func determineClassIdentifier() -> JVTableViewStdCell {
-        return JVTableViewStdCell.label
-    }
-    
     public let accessoryType: UITableViewCell.AccessoryType
     public var tapped: (() -> ())?
     public let contentTypeJVLabel: ContentTypeJVLabelText
@@ -23,7 +19,7 @@ open class TableViewRowLabel: TableViewRow, Tappable {
         self._text = text
         self.accessoryType = accessoryType
         
-        super.init(cell: TableViewRowLabel.determineClassIdentifier(), isVisible: nil, identifier: identifier)
+        super.init(cell: .label, isVisible: nil, identifier: identifier)
         
         self.isSelectable = isSelectable
         

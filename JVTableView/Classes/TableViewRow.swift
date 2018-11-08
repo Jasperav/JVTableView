@@ -3,7 +3,7 @@ import UIKit
 open class TableViewRow {
     
     // The identifier of the cell CLASS.
-    public let classIdentifier: String
+    public var classIdentifier = ""
     
     // Will be called by JVTableView when the cell has appeared on the screen.
     open var isVisible: ((_ cell: UITableViewCell) -> ())?

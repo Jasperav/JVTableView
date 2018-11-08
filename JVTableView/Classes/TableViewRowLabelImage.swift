@@ -2,10 +2,6 @@ import JVView
 
 public class TableViewRowLabelImage: TableViewRowLabel {
     
-    public override class func determineClassIdentifier() -> JVTableViewStdCell {
-        return JVTableViewStdCell.labelImage
-    }
-    
     public let image: UIImage
     
     public init(identifier: String = "",
@@ -18,6 +14,8 @@ public class TableViewRowLabelImage: TableViewRowLabel {
         self.image = image
         
         super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: isSelectable, accessoryType: accessoryType)
+        
+        classIdentifier = JVTableViewStdCell.labelImage.rawValue
     }
     public override func isVisible(_ cell: TableViewCellLabel) {
         let _cell = cell as! TableViewCellLabelImage
