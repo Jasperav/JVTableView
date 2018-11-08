@@ -3,14 +3,16 @@ import JVView
 
 open class TableViewRowLabel: TableViewRow, Tappable {
     
+    public static var standardContentTypeJVLabel: ContentTypeJVLabelText!
+    
     public let accessoryType: UITableViewCell.AccessoryType
     public var tapped: (() -> ())?
     public let contentTypeJVLabel: ContentTypeJVLabelText
     public var _text: String? = nil
     
-    public init(identifier: String,
-                contentTypeJVLabel: ContentTypeJVLabelText,
-                isSelectable: Bool,
+    public init(identifier: String = "",
+                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                isSelectable: Bool = false,
                 accessoryType: UITableViewCell.AccessoryType = .none,
                 text: String? = nil) {
         self.contentTypeJVLabel = contentTypeJVLabel
