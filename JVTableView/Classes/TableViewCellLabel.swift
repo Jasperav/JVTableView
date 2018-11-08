@@ -44,14 +44,16 @@ open class TableViewCellLabel: UITableViewCell {
         }
     }
     
-    open func update(options: JVLabelCellOptions, text: String? = nil) {
-        updateLabel(contentTypeJVLabelText: options.contentTypeJVLabelText, text: text)
+    open func update(contentTypeJVLabelText: ContentTypeJVLabelText,
+                     accessoryType: UITableViewCell.AccessoryType = .none,
+                     text: String? = nil) {
+        updateLabel(contentTypeJVLabelText: contentTypeJVLabelText, text: text)
         
-        assert(options.accessoryType != .none
+        assert(accessoryType != .none
             ? type(of: self) == TableViewCellLabel.self
             : true)
         
-        accessoryType = options.accessoryType
+        self.accessoryType = accessoryType
     }
     
     open func determineLeadingView() -> UIView? {

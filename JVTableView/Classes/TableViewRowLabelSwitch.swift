@@ -1,4 +1,5 @@
 import UIKit
+import JVView
 
 public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var hasChanged: ((Bool) -> ())?
@@ -7,13 +8,13 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var changed: (() -> ())?
     
     public init(identifier: String,
-                         cellOptions: JVLabelCellOptions,
+                         contentTypeJVLabel: ContentTypeJVLabelText,
                          text: String?,
                          oldValue: (() -> (Bool))? = nil) {
         self.oldValue = oldValue
         currentValue = oldValue?() ?? false
         
-        super.init(identifier: identifier, cellOptions: cellOptions, isSelectable: false, text: text)
+        super.init(identifier: identifier, contentTypeJVLabel: contentTypeJVLabel, isSelectable: false, accessoryType: .none, text: text)
     }
     
     public override func isVisible(_ cell: TableViewCellLabel) {

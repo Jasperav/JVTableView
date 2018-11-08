@@ -3,16 +3,19 @@ import JVView
 
 open class TableViewRowLabel: TableViewRow, Tappable {
     
+    public let accessoryType: UITableViewCell.AccessoryType
     public var tapped: (() -> ())?
-    public let cellOptions: JVLabelCellOptions
+    public let contentTypeJVLabel: ContentTypeJVLabelText
     public var _text: String? = nil
     
     public init(identifier: String,
-                cellOptions: JVLabelCellOptions,
+                contentTypeJVLabel: ContentTypeJVLabelText,
                 isSelectable: Bool,
+                accessoryType: UITableViewCell.AccessoryType = .none,
                 text: String? = nil) {
-        self.cellOptions = cellOptions
+        self.contentTypeJVLabel = contentTypeJVLabel
         self._text = text
+        self.accessoryType = accessoryType
         
         super.init(cell: .label, isVisible: nil, identifier: identifier)
         
@@ -27,11 +30,7 @@ open class TableViewRowLabel: TableViewRow, Tappable {
         self.isVisible = isVisible
     }
     
-    fileprivate func resetCell(_ cell: TableViewCellLabel) {
-        cell.update(options: cellOptions, text: _text)
-    }
-    
     open func isVisible(_ cell: TableViewCellLabel) {
-        resetCell(cell)
+        cell.update(contentTypeJVLabelText: contentTypeJVLabel, accessoryType: accessoryType, text: _text)
     }
 }
