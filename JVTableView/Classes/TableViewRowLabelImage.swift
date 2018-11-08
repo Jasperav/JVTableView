@@ -2,6 +2,10 @@ import JVView
 
 public class TableViewRowLabelImage: TableViewRowLabel {
     
+    public override class func determineClassIdentifier() -> JVTableViewStdCell {
+        return JVTableViewStdCell.labelImage
+    }
+    
     public let image: UIImage
     
     public init(identifier: String = "",
