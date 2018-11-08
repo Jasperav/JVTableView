@@ -39,6 +39,9 @@ public struct JVTableViewHelper {
         case .labelSwitch:
             tableView.register(TableViewCellLabelSwitch.self,
                                forCellReuseIdentifier: cell.rawValue)
+        case .labelImage:
+            tableView.register(TableViewCellLabelImage.self,
+                               forCellReuseIdentifier: cell.rawValue)
         }
     }
 }
