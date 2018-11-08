@@ -1,6 +1,0 @@
-framework module JVTappable {
-  umbrella header "JVTappable-umbrella.h"
-
-  export *
-  module * { export * }
-}

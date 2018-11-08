@@ -1,6 +1,0 @@
-framework module JVCurrentDevice {
-  umbrella header "JVCurrentDevice-umbrella.h"
-
-  export *
-  module * { export * }
-}
