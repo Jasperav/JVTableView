@@ -11,7 +11,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 oldValue: (() -> (Bool))? = nil
-                ) {
+        ) {
         self.oldValue = oldValue
         currentValue = oldValue?() ?? false
         
@@ -30,5 +30,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
             strongSelf.currentValue = hasChanged
             strongSelf.changed?()
         }
+        
+        super.isVisible(cell)
     }
 }

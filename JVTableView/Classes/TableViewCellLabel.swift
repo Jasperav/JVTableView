@@ -29,7 +29,7 @@ open class TableViewCellLabel: UITableViewCell {
             edges.minus(edge: .left)
         }
         
-        if trailingView != nil {
+        if let _trailingView = trailingView, accessoryView != _trailingView {
             edges.minus(edge: .right)
         }
         
@@ -39,7 +39,7 @@ open class TableViewCellLabel: UITableViewCell {
             label.leadingAnchor.constraint(equalTo: _leadingView.trailingAnchor, constant: self.edges.leading!).isActive = true
         }
         
-        if let _trailingView = trailingView {
+        if let _trailingView = trailingView, accessoryView != _trailingView {
             label.trailingAnchor.constraint(equalTo: _trailingView.leadingAnchor, constant: -self.edges.trailing!).isActive = true
         }
     }

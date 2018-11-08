@@ -21,5 +21,7 @@ public class TableViewRowLabelImage: TableViewRowLabel {
         let _cell = cell as! TableViewCellLabelImage
         
         _cell._imageView.image = image
+        
+        super.isVisible(cell)
     }
 }
