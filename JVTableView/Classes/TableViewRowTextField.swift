@@ -20,6 +20,7 @@ public class TableViewRowTextField: TableViewRow, ChangeableValues {
             guard let strongSelf = self else { return }
             let _cell = cell as! TableViewCellTextField
             
+            _cell.oldValue = strongSelf.oldValue
             _cell.textField.placeholder = placeholderText
             _cell.textField.text = strongSelf.currentValue
             

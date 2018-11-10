@@ -11,10 +11,10 @@ public class TableViewCellLabelImage: TableViewCellLabel {
         
         _imageView.equal(to: label, height: true, width: false)
         _imageView.setSameCenterY(view: label)
-        _imageView.setContentHuggingPriority(UILayoutPriority(rawValue: 249), for: .horizontal)
-        _imageView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 249), for: .horizontal)
-        _imageView.setContentHuggingPriority(UILayoutPriority(rawValue: 249), for: .vertical)
-        _imageView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 249), for: .vertical)
+        _imageView.setContentHuggingPriority(UILayoutPriority(rawValue: 1), for: .horizontal)
+        _imageView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1), for: .horizontal)
+        _imageView.setContentHuggingPriority(UILayoutPriority(rawValue: 1), for: .vertical)
+        _imageView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1), for: .vertical)
         _imageView.setWidthAndHeightAreTheSame()
     }
     

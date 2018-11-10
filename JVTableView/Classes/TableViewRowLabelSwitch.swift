@@ -5,7 +5,6 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var hasChanged: ((Bool) -> ())?
     public let oldValue: (() -> (Bool))?
     public var currentValue: Bool
-    public var changed: (() -> ())?
     
     public init(identifier: String = "",
                 text: String? = nil,
@@ -24,11 +23,12 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         let _cell = cell as! TableViewCellLabelSwitch
         
         _cell._switch.isOn = currentValue
+        _cell.oldValue = oldValue
         _cell.hasChanged = { [weak self] (hasChanged) in
             guard let strongSelf = self else { return }
             
             strongSelf.currentValue = hasChanged
-            strongSelf.changed?()
+            strongSelf.hasChanged?(strongSelf.determineHasBeenChanged())
         }
         
         super.isVisible(cell)

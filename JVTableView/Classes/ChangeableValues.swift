@@ -7,7 +7,7 @@ public protocol ChangeableValues: Changeable {
 
 public extension ChangeableValues {
     public func determineHasBeenChanged() -> Bool {
-        return currentValue != oldValue?()
+        return currentValue != oldValue!()
     }
     
     public func reset() {

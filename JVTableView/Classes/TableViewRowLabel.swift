@@ -5,9 +5,9 @@ open class TableViewRowLabel: TableViewRow, Tappable {
     
     public static var standardContentTypeJVLabel: ContentTypeJVLabelText!
     
-    public let accessoryType: UITableViewCell.AccessoryType
+    public var accessoryType: UITableViewCell.AccessoryType
     public var tapped: (() -> ())?
-    public let contentTypeJVLabel: ContentTypeJVLabelText
+    public var contentTypeJVLabel: ContentTypeJVLabelText
     public var _text: String? = nil
     
     public init(identifier: String = "",
@@ -30,6 +30,8 @@ open class TableViewRowLabel: TableViewRow, Tappable {
         }
         
         self.isVisible = isVisible
+        
+        assert(accessoryType != .none ? isSelectable : true)
     }
     
     open func isVisible(_ cell: TableViewCellLabel) {
