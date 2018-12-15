@@ -7,9 +7,11 @@ public class TableViewRowTextField: TableViewRow, ChangeableValues {
     
     // Sends back if the currentValue == oldValue
     public var hasChanged: ((Bool) -> ())?
+    public var validate: ((String) -> (Bool))
     
-    public init(identifier: String, placeholderText: String, oldValue: (() -> (String))? = nil) {
+    public init(identifier: String, placeholderText: String, validate: @escaping ((String) -> (Bool)), oldValue: (() -> (String))? = nil) {
         self.oldValue = oldValue
+        self.validate = validate
         currentValue = oldValue?() ?? ""
         
         super.init(cell: JVTableViewStdCell.textField,
@@ -23,6 +25,8 @@ public class TableViewRowTextField: TableViewRow, ChangeableValues {
             _cell.oldValue = strongSelf.oldValue
             _cell.textField.placeholder = placeholderText
             _cell.textField.text = strongSelf.currentValue
+            _cell.textField.accessibilityIdentifier = identifier
+            _cell.validate = validate
             
             _cell.hasChanged = { (hasChanged) in
                 strongSelf.currentValue = _cell.currentValue

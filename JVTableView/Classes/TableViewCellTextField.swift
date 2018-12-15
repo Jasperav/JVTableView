@@ -8,6 +8,7 @@ open class TableViewCellTextField: UITableViewCell, ChangeableValues {
     public var oldValue: (() -> (String))?
     public var hasChanged: ((Bool) -> ())?
     public let textField = UITextField(frame: CGRect.zero)
+    public var validate: ((String) -> (Bool))!
     
     public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -39,15 +40,20 @@ open class TableViewCellTextField: UITableViewCell, ChangeableValues {
 extension TableViewCellTextField: UITextFieldDelegate {
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        let newValue: String
+        
         // https://stackoverflow.com/questions/25621496/how-shouldchangecharactersinrange-works-in-swift
         // With the newValue property, we also want to include the added/removed character
         if let text = textField.text,
             let textRange = Range(range, in: text) {
-            currentValue = text.replacingCharacters(in: textRange,
-                                                    with: string)
+            newValue = text.replacingCharacters(in: textRange, with: string)
         } else {
-            currentValue = ""
+            newValue = ""
         }
+        
+        guard validate(newValue) else { return false }
+        
+        currentValue = newValue
         
         hasChanged?(determineHasBeenChanged())
         

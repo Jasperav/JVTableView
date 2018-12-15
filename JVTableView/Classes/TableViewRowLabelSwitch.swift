@@ -3,7 +3,7 @@ import JVView
 
 public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var hasChanged: ((Bool) -> ())?
-    public let oldValue: (() -> (Bool))?
+    public var oldValue: (() -> (Bool))?
     public var currentValue: Bool
     
     public init(identifier: String = "",

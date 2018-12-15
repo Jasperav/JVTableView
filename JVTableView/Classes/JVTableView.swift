@@ -5,14 +5,27 @@ import JVView
 
 open class JVTableView: UITableView {
     
+    public static var standardOptions: JVTableViewOptions!
+    
     open var helper: JVTableViewHelper!
     
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     public private (set) var jvDatasource: JVTableViewDatasource!
     public private (set) var options: JVTableViewOptions!
     
+    public init(datasource: JVTableViewDatasource, options: JVTableViewOptions = JVTableView.standardOptions!) {
+        super.init(frame: CGRect.zero, style: .grouped)
+        
+        initialize(datasource: datasource, options: options)
+        commonLoad()
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     // Call this in the awakeFromNib() before calling super.awakeFromNib()
-    public func initialize(options: JVTableViewOptions, datasource: JVTableViewDatasource) {
+    public func initialize(datasource: JVTableViewDatasource, options: JVTableViewOptions = JVTableView.standardOptions!) {
         assert(self.options == nil)
         
         self.options = options
@@ -27,6 +40,10 @@ open class JVTableView: UITableView {
         
         assert(jvDatasource != nil, "Call initialize() first in the awakeFromNib method.")
         
+        commonLoad()
+    }
+    
+    private func commonLoad() {
         sectionFooterHeight = UITableView.automaticDimension
         estimatedSectionFooterHeight = 5
         
