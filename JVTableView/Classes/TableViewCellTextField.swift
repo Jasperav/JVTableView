@@ -9,6 +9,7 @@ open class TableViewCellTextField: UITableViewCell, ChangeableValues {
     public var hasChanged: ((Bool) -> ())?
     public let textField = UITextField(frame: CGRect.zero)
     public var validate: ((String) -> (Bool))!
+    public var didReturn: (() -> ())?
     
     public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -51,7 +52,9 @@ extension TableViewCellTextField: UITextFieldDelegate {
             newValue = ""
         }
         
-        guard validate(newValue) else { return false }
+        let pressedBackSpaceAndHasPlaceHolderText = newValue == "" && textField.placeholder != nil
+        
+        guard validate(newValue) || pressedBackSpaceAndHasPlaceHolderText else { return false }
         
         currentValue = newValue
         
@@ -62,6 +65,7 @@ extension TableViewCellTextField: UITextFieldDelegate {
     
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        didReturn?()
         
         return true
     }

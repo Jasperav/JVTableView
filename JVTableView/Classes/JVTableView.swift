@@ -55,6 +55,12 @@ open class JVTableView: UITableView {
         reloadData()
     }
     
+    open override func reloadData() {
+        jvDatasource.determineSectionsWithVisibleRows()
+        
+        super.reloadData()
+    }
+    
     private func checkIfFormChanged() {
         guard let formHasChanged = formHasChanged else { return }
         
@@ -91,11 +97,11 @@ open class JVTableView: UITableView {
 extension JVTableView: UITableViewDataSource, UITableViewDelegate {
     
     public func numberOfSections(in tableView: UITableView) -> Int {
-        return jvDatasource.dataSource.count
+        return jvDatasource.dataSourceVisibleRows.count
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return jvDatasource.dataSource[section].rows.count
+        return jvDatasource.dataSourceVisibleRows[section].rows.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

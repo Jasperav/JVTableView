@@ -24,11 +24,9 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         
         _cell._switch.isOn = currentValue
         _cell.oldValue = oldValue
-        _cell.hasChanged = { [weak self] (hasChanged) in
-            guard let strongSelf = self else { return }
-            
-            strongSelf.currentValue = hasChanged
-            strongSelf.hasChanged?(strongSelf.determineHasBeenChanged())
+        _cell.hasChanged = { [unowned self] (hasChanged) in
+            self.currentValue = _cell._switch.isOn
+            self.hasChanged?(self.determineHasBeenChanged())
         }
         
         super.isVisible(cell)

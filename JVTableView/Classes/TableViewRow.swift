@@ -12,7 +12,7 @@ open class TableViewRow {
     public let identifier: String
     
     // Determine if this cell should appear in the table view.
-    open var showInTableView: (() -> (Bool))?
+    open var showInTableView: (() -> (Bool)) = { return true }
     
     // Determines if this cell should be selectable.
     // If set to true, it MUST have a tappable action (else the app will crash).

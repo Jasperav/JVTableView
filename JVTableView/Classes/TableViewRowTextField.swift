@@ -8,6 +8,8 @@ public class TableViewRowTextField: TableViewRow, ChangeableValues {
     // Sends back if the currentValue == oldValue
     public var hasChanged: ((Bool) -> ())?
     public var validate: ((String) -> (Bool))
+    public var keyboardReturnType = UIReturnKeyType.done
+    public var didReturn: (() -> ())?
     
     public init(identifier: String, placeholderText: String, validate: @escaping ((String) -> (Bool)), oldValue: (() -> (String))? = nil) {
         self.oldValue = oldValue
@@ -22,15 +24,20 @@ public class TableViewRowTextField: TableViewRow, ChangeableValues {
             guard let strongSelf = self else { return }
             let _cell = cell as! TableViewCellTextField
             
+            _cell.validate = validate
             _cell.oldValue = strongSelf.oldValue
             _cell.textField.placeholder = placeholderText
             _cell.textField.text = strongSelf.currentValue
             _cell.textField.accessibilityIdentifier = identifier
-            _cell.validate = validate
+            _cell.textField.returnKeyType = strongSelf.keyboardReturnType
             
             _cell.hasChanged = { (hasChanged) in
                 strongSelf.currentValue = _cell.currentValue
                 strongSelf.hasChanged?(hasChanged)
+            }
+            
+            _cell.didReturn = {
+                strongSelf.didReturn?()
             }
         }
         
