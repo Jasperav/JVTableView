@@ -2,8 +2,9 @@ import UIKit
 import JVConstraintEdges
 import JVTappable
 import JVView
+import JVFormChangeWatcher
 
-open class JVTableView: UITableView {
+open class JVTableView: UITableView, ChangeableForm {
     
     public static var standardOptions: JVTableViewOptions!
     
@@ -91,6 +92,10 @@ open class JVTableView: UITableView {
         if reloadData {
             self.reloadData()
         }
+    }
+    
+    public func resetForm() {
+        resetForm(reloadData: true)
     }
 }
 
