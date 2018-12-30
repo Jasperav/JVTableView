@@ -31,7 +31,7 @@ open class TableViewRowLabel: TableViewRow, Tappable {
         
         self.isVisible = isVisible
         
-        assert(accessoryType != .none ? isSelectable : true)
+        assert(accessoryType != .none ? isSelectable : !isSelectable)
     }
     
     open func isVisible(_ cell: TableViewCellLabel) {

@@ -42,6 +42,9 @@ public struct JVTableViewHelper {
         case .labelImage:
             tableView.register(TableViewCellLabelImage.self,
                                forCellReuseIdentifier: cell.rawValue)
+        case .labelDetail:
+            tableView.register(TableViewCellLabelWithDetail.self,
+                               forCellReuseIdentifier: cell.rawValue)
         }
     }
 }

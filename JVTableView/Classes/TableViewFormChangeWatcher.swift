@@ -1,3 +1,5 @@
+import UIKit
+
 // We use a class rather than a struct because structs do not support objc methods.
 /// Using the composite design pattern, you can add this class as a property to your viewcontroller.
 /// This class will do the following:
@@ -17,14 +19,12 @@ public class TableViewFormChangeWatcher<T: JVTableView, U: UIViewController> {
         self.viewController = viewController
         self.update = update
         
-        assert(tableView.formHasChanged == nil)
-        
         tableView.formHasChanged = { [unowned self] (hasNewValues) in
             self.handleFormChange(hasNewValues: hasNewValues)
         }
     }
     
-    private func handleFormChange(hasNewValues: Bool) {
+    public func handleFormChange(hasNewValues: Bool) {
         if hasNewValues && viewController.navigationItem.rightBarButtonItem == nil {
             viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.determineCancelButton(target: self, selector: #selector(resetValues))
             

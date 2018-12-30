@@ -6,7 +6,8 @@ public enum JVTableViewStdCell: String {
     textField,
     label,
     labelSwitch,
-    labelImage
+    labelImage,
+    labelDetail
 }
 
 //public enum JVCellAccessoryView {

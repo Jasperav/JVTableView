@@ -123,14 +123,18 @@ extension JVTableView: UITableViewDataSource, UITableViewDelegate {
         return jvDatasource.getSection(section).header
     }
     
-    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        // Return an empty UIView() if there is no footerText because else we get a weird gray square...
-        guard let text = jvDatasource.getSection(section).footerText else {
-            return UIView()
-        }
-        
-        return helper.determineFooterView(text: text)
+    public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return jvDatasource.getSection(section).footerText
     }
+    
+//    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        // Return an empty UIView() if there is no footerText because else we get a weird gray square...
+//        guard let text = jvDatasource.getSection(section).footerText else {
+//            return UIView()
+//        }
+//
+//        return helper.determineFooterView(text: text)
+//    }
     
     public func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let cell = jvDatasource.getRow(indexPath)
