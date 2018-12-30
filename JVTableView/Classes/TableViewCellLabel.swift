@@ -49,10 +49,6 @@ open class TableViewCellLabel: UITableViewCell {
                      text: String? = nil) {
         updateLabel(contentTypeJVLabelText: contentTypeJVLabelText, text: text)
         
-//        assert(accessoryType != .none
-//            ? type(of: self) == TableViewCellLabel.self
-//            : true)
-        
         self.accessoryType = accessoryType
     }
     
