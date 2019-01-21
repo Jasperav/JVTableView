@@ -22,59 +22,56 @@ public struct JVTableViewFooterOptions {
 public struct JVTableViewHeaderStretchImage {
     public let height: CGFloat
     public let image: UIImage?
-    public let buttonImage: UIImage?
-    public let tapped: (() -> ())?
     
-    public init(height: CGFloat, image: UIImage?, buttonImage: UIImage?, tapped: (() -> ())?) {
+    public init(height: CGFloat, image: UIImage?) {
         self.height = height
         self.image = image
-        self.buttonImage = buttonImage
-        self.tapped = tapped
     }
 }
 
-open class JVTableViewHeaderStretchView: UIView {
-    public var tapped: (() -> ())?
-    
-    public init(image: UIImage?, buttonImage: UIImage?, tapped: (() -> ())?) {
-        self.tapped = tapped
-        
-        super.init(frame: .zero)
-        
-        clipsToBounds = true
-        
-        addImageView(image: image)
-        
-        guard let buttonImage = buttonImage else { return }
-        
-        addButton(image: buttonImage)
-    }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        fatalError()
-    }
-    
-    private func addImageView(image: UIImage?) {
-        let imageView = UIImageView(frame: .zero)
-        
-        imageView.image = image
-        imageView.fill(toSuperview: self)
-        imageView.contentMode = .scaleAspectFill
-    }
-    
-    private func addButton(image: UIImage) {
-        let button = UIButton(type: .custom)
-        
-        button.fill(toSuperview: self, edges: ConstraintEdges(leading: nil, trailing: 10, top: nil, bottom: 10))
-        button.setHeight(35)
-        button.setWidthAndHeightAreTheSame()
-        
-        button.setImage(image, for: .normal)
-        button.imageView!.contentMode = .scaleAspectFit
-        button.addTarget(self, action: #selector(_tapped), for: .touchUpInside)
-    }
-    
-    @objc private func _tapped() {
-        tapped!()
-    }
-}
+// TODO: Remove if not needed.
+//open class JVTableViewHeaderStretchView: UIView {
+//    public var tapped: (() -> ())?
+//
+//    public init(image: UIImage?, buttonImage: UIImage?, tapped: (() -> ())?) {
+//        self.tapped = tapped
+//
+//        super.init(frame: .zero)
+//
+//        clipsToBounds = true
+//
+//        addImageView(image: image)
+//
+//        guard let buttonImage = buttonImage else { return }
+//
+//        addButton(image: buttonImage)
+//    }
+//
+//    public required init?(coder aDecoder: NSCoder) {
+//        fatalError()
+//    }
+//
+//    private func addImageView(image: UIImage?) {
+//        let imageView = UIImageView(frame: .zero)
+//
+//        imageView.image = image
+//        imageView.fill(toSuperview: self)
+//        imageView.contentMode = .scaleAspectFill
+//    }
+//
+//    private func addButton(image: UIImage) {
+//        let button = UIButton(type: .custom)
+//
+//        button.fill(toSuperview: self, edges: ConstraintEdges(leading: nil, trailing: 10, top: nil, bottom: 10))
+//        button.setHeight(35)
+//        button.setWidthAndHeightAreTheSame()
+//
+//        button.setImage(image, for: .normal)
+//        button.imageView!.contentMode = .scaleAspectFit
+//        button.addTarget(self, action: #selector(_tapped), for: .touchUpInside)
+//    }
+//
+//    @objc private func _tapped() {
+//        tapped!()
+//    }
+//}

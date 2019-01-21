@@ -3,6 +3,7 @@ import JVConstraintEdges
 import JVTappable
 import JVView
 import JVFormChangeWatcher
+import JVLoadableImage
 
 open class JVTableView: UITableView, ChangeableForm {
     
@@ -14,7 +15,7 @@ open class JVTableView: UITableView, ChangeableForm {
     public private (set) var jvDatasource: JVTableViewDatasource!
     public private (set) var options: JVTableViewOptions!
     public private (set) var headerStretchImage: JVTableViewHeaderStretchImage?
-    public private (set) var headerStretchView: JVTableViewHeaderStretchView?
+    public private (set) var headerStretchView: LoadableImage?
     
     public init(datasource: JVTableViewDatasource,
                 options: JVTableViewOptions = JVTableView.standardOptions!,
@@ -74,13 +75,17 @@ open class JVTableView: UITableView, ChangeableForm {
     }
     
     private func add(headerStretchImage: JVTableViewHeaderStretchImage) {
-        headerStretchView = JVTableViewHeaderStretchView(image: headerStretchImage.image, buttonImage: headerStretchImage.buttonImage, tapped: headerStretchImage.tapped)
+        headerStretchView = LoadableImage(style: .gray, rounded: false)
         
         contentInset = UIEdgeInsets(top: headerStretchImage.height, left: 0, bottom: 0, right: 0)
         
         addSubview(headerStretchView!)
         
         updateHeaderStretchImageView()
+        
+        guard let image = headerStretchImage.image else { return }
+        
+        headerStretchView!.show(image: image)
     }
     
     private func updateHeaderStretchImageView() {
