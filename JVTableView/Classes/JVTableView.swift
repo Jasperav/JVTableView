@@ -13,11 +13,15 @@ open class JVTableView: UITableView, ChangeableForm {
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     public private (set) var jvDatasource: JVTableViewDatasource!
     public private (set) var options: JVTableViewOptions!
+    public private (set) var headerStretchImage: JVTableViewHeaderStretchImage?
+    public private (set) var headerStretchView: JVTableViewHeaderStretchView?
     
-    public init(datasource: JVTableViewDatasource, options: JVTableViewOptions = JVTableView.standardOptions!) {
+    public init(datasource: JVTableViewDatasource,
+                options: JVTableViewOptions = JVTableView.standardOptions!,
+                headerStretchImage: JVTableViewHeaderStretchImage? = nil) {
         super.init(frame: CGRect.zero, style: .grouped)
         
-        initialize(datasource: datasource, options: options)
+        initialize(datasource: datasource, options: options, headerStretchImage: headerStretchImage)
         commonLoad()
     }
     
@@ -26,14 +30,21 @@ open class JVTableView: UITableView, ChangeableForm {
     }
     
     // Call this in the awakeFromNib() before calling super.awakeFromNib()
-    public func initialize(datasource: JVTableViewDatasource, options: JVTableViewOptions = JVTableView.standardOptions!) {
+    public func initialize(datasource: JVTableViewDatasource,
+                           options: JVTableViewOptions = JVTableView.standardOptions!,
+                           headerStretchImage: JVTableViewHeaderStretchImage? = nil) {
         assert(self.options == nil)
         
         self.options = options
+        self.headerStretchImage = headerStretchImage
         jvDatasource = datasource
         
         helper = JVTableViewHelper(tableView: self)
         helper.registerDefaultCells()
+        
+        guard let headerStretchImage = headerStretchImage else { return }
+        
+        add(headerStretchImage: headerStretchImage)
     }
     
     open override func awakeFromNib() {
@@ -60,6 +71,29 @@ open class JVTableView: UITableView, ChangeableForm {
         jvDatasource.determineSectionsWithVisibleRows()
         
         super.reloadData()
+    }
+    
+    private func add(headerStretchImage: JVTableViewHeaderStretchImage) {
+        headerStretchView = JVTableViewHeaderStretchView(image: headerStretchImage.image, buttonImage: headerStretchImage.buttonImage, tapped: headerStretchImage.tapped)
+        
+        contentInset = UIEdgeInsets(top: headerStretchImage.height, left: 0, bottom: 0, right: 0)
+        
+        addSubview(headerStretchView!)
+        
+        updateHeaderStretchImageView()
+    }
+    
+    private func updateHeaderStretchImageView() {
+        guard let headerStretchImage = headerStretchImage else { return }
+        
+        var headerRect = CGRect(x: 0, y: -headerStretchImage.height, width: bounds.width, height: headerStretchImage.height)
+        
+        if contentOffset.y < -headerStretchImage.height {
+            headerRect.origin.y = contentOffset.y
+            headerRect.size.height = -contentOffset.y
+        }
+        
+        headerStretchView!.frame = headerRect
     }
     
     private func checkIfFormChanged() {
@@ -153,6 +187,10 @@ extension JVTableView: UITableViewDataSource, UITableViewDelegate {
         
         // Instant deselect the row, maybe this isn't always useful if multiple rows needs to be selected.
         deselectRow(at: indexPath, animated: false)
+    }
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updateHeaderStretchImageView()
     }
     
 }
