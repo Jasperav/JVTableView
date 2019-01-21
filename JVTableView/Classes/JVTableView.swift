@@ -77,6 +77,8 @@ open class JVTableView: UITableView, ChangeableForm {
     private func add(headerStretchImage: JVTableViewHeaderStretchImage) {
         headerStretchView = LoadableImage(style: .gray, rounded: false)
         
+        headerStretchView!.set(contentMode: .scaleAspectFill)
+        
         contentInset = UIEdgeInsets(top: headerStretchImage.height, left: 0, bottom: 0, right: 0)
         
         addSubview(headerStretchView!)
