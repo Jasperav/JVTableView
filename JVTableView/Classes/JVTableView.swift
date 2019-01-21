@@ -77,7 +77,7 @@ open class JVTableView: UITableView, ChangeableForm {
     private func add(headerStretchImage: JVTableViewHeaderStretchImage) {
         headerStretchView = LoadableImage(style: .gray, rounded: false)
         
-        headerStretchView!.set(contentMode: .scaleAspectFill)
+        headerStretchView!.stretchImage()
         
         contentInset = UIEdgeInsets(top: headerStretchImage.height, left: 0, bottom: 0, right: 0)
         
@@ -173,14 +173,14 @@ extension JVTableView: UITableViewDataSource, UITableViewDelegate {
         return jvDatasource.getSection(section).footerText
     }
     
-//    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        // Return an empty UIView() if there is no footerText because else we get a weird gray square...
-//        guard let text = jvDatasource.getSection(section).footerText else {
-//            return UIView()
-//        }
-//
-//        return helper.determineFooterView(text: text)
-//    }
+    //    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    //        // Return an empty UIView() if there is no footerText because else we get a weird gray square...
+    //        guard let text = jvDatasource.getSection(section).footerText else {
+    //            return UIView()
+    //        }
+    //
+    //        return helper.determineFooterView(text: text)
+    //    }
     
     public func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let cell = jvDatasource.getRow(indexPath)
