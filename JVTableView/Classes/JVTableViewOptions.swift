@@ -30,8 +30,6 @@ public struct JVTableViewHeaderStretchImage {
         self.image = image
         self.buttonImage = buttonImage
         self.tapped = tapped
-        
-        assert(tapped != nil ? buttonImage != nil : true)
     }
 }
 
