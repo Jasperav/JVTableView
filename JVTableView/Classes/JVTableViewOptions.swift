@@ -21,11 +21,11 @@ public struct JVTableViewFooterOptions {
 
 public struct JVTableViewHeaderStretchImage {
     public let height: CGFloat
-    public let image: UIImage
+    public let image: UIImage?
     public let buttonImage: UIImage?
     public let tapped: (() -> ())?
     
-    public init(height: CGFloat, image: UIImage, buttonImage: UIImage?, tapped: (() -> ())?) {
+    public init(height: CGFloat, image: UIImage?, buttonImage: UIImage?, tapped: (() -> ())?) {
         self.height = height
         self.image = image
         self.buttonImage = buttonImage
@@ -38,7 +38,7 @@ public struct JVTableViewHeaderStretchImage {
 open class JVTableViewHeaderStretchView: UIView {
     public var tapped: (() -> ())?
     
-    public init(image: UIImage, buttonImage: UIImage?, tapped: (() -> ())?) {
+    public init(image: UIImage?, buttonImage: UIImage?, tapped: (() -> ())?) {
         self.tapped = tapped
         
         super.init(frame: .zero)
@@ -56,9 +56,10 @@ open class JVTableViewHeaderStretchView: UIView {
         fatalError()
     }
     
-    private func addImageView(image: UIImage) {
-        let imageView = UIImageView(image: image)
+    private func addImageView(image: UIImage?) {
+        let imageView = UIImageView(frame: .zero)
         
+        imageView.image = image
         imageView.fill(toSuperview: self)
         imageView.contentMode = .scaleAspectFill
     }
