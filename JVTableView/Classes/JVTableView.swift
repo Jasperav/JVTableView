@@ -74,6 +74,15 @@ open class JVTableView: UITableView, ChangeableForm {
         super.reloadData()
     }
     
+    /// Call this once after you did setup the whole tableview & datasource.
+    /// AND you have a header image view.
+    /// If there is an header image, this view needs to be explicitly layout out.
+    /// If this doesn't happen, the headerimage is shown half.
+    /// I don't know the technical reason of why this is needed...
+    public func correctHeaderImageAfterSetup() {
+        layoutIfNeeded()
+    }
+    
     private func add(headerStretchImage: JVTableViewHeaderStretchImage) {
         headerStretchView = LoadableImage(style: .gray, rounded: false)
         
@@ -82,8 +91,6 @@ open class JVTableView: UITableView, ChangeableForm {
         contentInset = UIEdgeInsets(top: headerStretchImage.height, left: 0, bottom: 0, right: 0)
         
         addSubview(headerStretchView!)
-        
-        updateHeaderStretchImageView()
         
         guard let image = headerStretchImage.image else { return }
         
