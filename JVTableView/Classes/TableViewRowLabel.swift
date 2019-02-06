@@ -1,12 +1,11 @@
-import JVTappable
 import JVView
+import JVNoParameterInitializable
 
-open class TableViewRowLabel: TableViewRow, Tappable {
+open class TableViewRowLabel: TableViewRow {
     
     public static var standardContentTypeJVLabel: ContentTypeJVLabelText!
     
     public var accessoryType: UITableViewCell.AccessoryType
-    public var tapped: (() -> ())?
     public var contentTypeJVLabel: ContentTypeJVLabelText
     public var _text: String? = nil
     
@@ -14,12 +13,13 @@ open class TableViewRowLabel: TableViewRow, Tappable {
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 isSelectable: Bool = false,
-                accessoryType: UITableViewCell.AccessoryType = .none) {
+                accessoryType: UITableViewCell.AccessoryType = .none,
+                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil) {
         self.contentTypeJVLabel = contentTypeJVLabel
         self._text = text
         self.accessoryType = accessoryType
         
-        super.init(cell: .label, isVisible: nil, identifier: identifier)
+        super.init(cell: .label, isVisible: nil, identifier: identifier,  showViewControllerOnTap: showViewControllerOnTap)
         
         self.isSelectable = isSelectable
         

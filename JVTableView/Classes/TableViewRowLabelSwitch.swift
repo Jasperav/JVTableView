@@ -14,7 +14,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         self.oldValue = oldValue
         currentValue = oldValue?() ?? false
         
-        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: false, accessoryType: .none)
+        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: false, accessoryType: .none, showViewControllerOnTap: nil)
         
         classIdentifier = JVTableViewStdCell.labelSwitch.rawValue
     }
