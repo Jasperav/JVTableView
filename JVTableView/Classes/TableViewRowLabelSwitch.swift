@@ -7,6 +7,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var currentValue: Bool
     
     public init(identifier: String = "",
+                isVisible: ((_ cell: UITableViewCell) -> ())? = nil,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 oldValue: (() -> (Bool))? = nil
@@ -14,7 +15,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         self.oldValue = oldValue
         currentValue = oldValue?() ?? false
         
-        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: false, accessoryType: .none, showViewControllerOnTap: nil)
+        super.init(identifier: identifier, isVisible: isVisible, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
         
         classIdentifier = JVTableViewStdCell.labelSwitch.rawValue
     }

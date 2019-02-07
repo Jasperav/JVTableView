@@ -9,17 +9,17 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
     public var contentTypeJVLabelDetail: ContentTypeJVLabelText
     
     public init(identifier: String = "",
+                isVisible: ((_ cell: UITableViewCell) -> ())? = nil,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 detailText: String? = nil,
                 contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
-                isSelectable: Bool = true,
-                accessoryType: UITableViewCell.AccessoryType = .none, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         
         self.detailText = detailText
         self.contentTypeJVLabelDetail = contentTypeJVLabelDetail
         
-        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: isSelectable, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        super.init(identifier: identifier, isVisible: isVisible, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         classIdentifier = JVTableViewStdCell.labelDetail.rawValue
     }

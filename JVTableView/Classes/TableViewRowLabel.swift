@@ -10,18 +10,18 @@ open class TableViewRowLabel: TableViewRow {
     public var _text: String? = nil
     
     public init(identifier: String = "",
+                isVisible: ((_ cell: UITableViewCell) -> ())? = nil,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
-                isSelectable: Bool = true,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.contentTypeJVLabel = contentTypeJVLabel
         self._text = text
         self.accessoryType = accessoryType
         
-        super.init(cell: .label, isVisible: nil, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        super.init(cell: .label, isVisible: isVisible, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
-        self.isSelectable = isSelectable
+        self.isSelectable = accessoryType != .none
         
         let isVisible: ((_ cell: UITableViewCell) -> ()) = { [weak self] (cell) in
             let _cell = cell as! TableViewCellLabel

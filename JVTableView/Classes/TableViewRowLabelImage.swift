@@ -6,17 +6,17 @@ public class TableViewRowLabelImage: TableViewRowLabel {
     public let image: UIImage
     
     public init(identifier: String = "",
+                isVisible: ((_ cell: UITableViewCell) -> ())? = nil,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
-                isSelectable: Bool = true,
-                accessoryType: UITableViewCell.AccessoryType = .none,
+                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 image: UIImage,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
                 tapped: (() -> ())? = nil) {
         
         self.image = image
         
-        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: isSelectable, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        super.init(identifier: identifier, isVisible: isVisible, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         classIdentifier = JVTableViewStdCell.labelImage.rawValue
     }
