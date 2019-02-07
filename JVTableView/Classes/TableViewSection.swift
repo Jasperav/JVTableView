@@ -8,4 +8,8 @@ public class TableViewSection {
         self.footerText = footerText
         self.rows = rows
     }
+    
+    public convenience init(header: String? = nil, footerText: String? = nil, row: TableViewRow) {
+        self.init(header: header, footerText: footerText, rows: [row])
+    }
 }
