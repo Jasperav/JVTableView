@@ -14,12 +14,12 @@ open class TableViewRowLabel: TableViewRow {
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 isSelectable: Bool = false,
                 accessoryType: UITableViewCell.AccessoryType = .none,
-                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil) {
+                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.contentTypeJVLabel = contentTypeJVLabel
         self._text = text
         self.accessoryType = accessoryType
         
-        super.init(cell: .label, isVisible: nil, identifier: identifier,  showViewControllerOnTap: showViewControllerOnTap)
+        super.init(cell: .label, isVisible: nil, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         self.isSelectable = isSelectable
         

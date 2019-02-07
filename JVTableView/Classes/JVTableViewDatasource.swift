@@ -4,6 +4,15 @@ open class JVTableViewDatasource {
     public var dataSource = [TableViewSection]()
     private (set) var dataSourceVisibleRows = [TableViewSection]()
     
+    // Don't override.
+    public init() {
+        createSections()
+    }
+    
+    open func createSections() {
+        fatalError() // Loop over all the sections.
+    }
+    
     public func determineSectionsWithVisibleRows() {
         dataSourceVisibleRows = dataSource.filter { $0.rows.filter { $0.showInTableView() }.count > 0 }
     }
@@ -15,10 +24,6 @@ open class JVTableViewDatasource {
                 row.showInTableView = { return true }
             }
         }
-    }
-    
-    public init(dataSource: [TableViewSection] = []) {
-        self.dataSource = dataSource
     }
     
     public func getRow(_ indexPath: IndexPath) -> TableViewRow {

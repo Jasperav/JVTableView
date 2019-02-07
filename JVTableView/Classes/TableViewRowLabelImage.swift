@@ -10,12 +10,13 @@ public class TableViewRowLabelImage: TableViewRowLabel {
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 isSelectable: Bool = false,
                 accessoryType: UITableViewCell.AccessoryType = .none,
+                image: UIImage,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
-                image: UIImage) {
+                tapped: (() -> ())? = nil) {
         
         self.image = image
         
-        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: isSelectable, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap)
+        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: isSelectable, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         classIdentifier = JVTableViewStdCell.labelImage.rawValue
     }

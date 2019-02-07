@@ -24,7 +24,7 @@ open class TableViewRow: Tappable {
     
     public let showViewControllerOnTap: UIViewControllerNoParameterInitializable?
     
-    public init(cellIdentifier: String, isVisible: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", tapped: (() -> ())? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil) {
+    public init(cellIdentifier: String, isVisible: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.classIdentifier = cellIdentifier
         self.isVisible = isVisible
         self.identifier = identifier
@@ -34,7 +34,7 @@ open class TableViewRow: Tappable {
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
     }
     
-    public init(cell: JVTableViewStdCell, isVisible: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", tapped: (() -> ())? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil) {
+    public init(cell: JVTableViewStdCell, isVisible: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.classIdentifier = cell.rawValue
         self.isVisible = isVisible
         self.identifier = identifier

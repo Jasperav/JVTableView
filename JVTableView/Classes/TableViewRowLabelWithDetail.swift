@@ -1,4 +1,5 @@
 import JVView
+import JVNoParameterInitializable
 
 public class TableViewRowLabelWithDetail: TableViewRowLabel {
     
@@ -13,12 +14,12 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
                 detailText: String? = nil,
                 contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
                 isSelectable: Bool = false,
-                accessoryType: UITableViewCell.AccessoryType = .none) {
+                accessoryType: UITableViewCell.AccessoryType = .none, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         
         self.detailText = detailText
         self.contentTypeJVLabelDetail = contentTypeJVLabelDetail
         
-        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: isSelectable, accessoryType: accessoryType)
+        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, isSelectable: isSelectable, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         classIdentifier = JVTableViewStdCell.labelDetail.rawValue
     }
