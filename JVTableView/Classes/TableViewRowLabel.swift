@@ -13,7 +13,7 @@ open class TableViewRowLabel: TableViewRow {
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 isSelectable: Bool = true,
-                accessoryType: UITableViewCell.AccessoryType = .none,
+                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.contentTypeJVLabel = contentTypeJVLabel
         self._text = text
@@ -32,6 +32,8 @@ open class TableViewRowLabel: TableViewRow {
         self.isVisible = isVisible
         
         assert(accessoryType != .none ? isSelectable : !isSelectable)
+        assert(tapped == nil ? true : isSelectable)
+        assert(showViewControllerOnTap == nil ? true : isSelectable)
     }
     
     open func isVisible(_ cell: TableViewCellLabel) {
