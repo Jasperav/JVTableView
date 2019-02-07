@@ -24,6 +24,9 @@ open class GenericTableViewController<T: JVTableView>: UITableViewController whe
         for row in tableViewGeneric.jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.isSelectable }) }) {
             assert(row.tapped != nil)
         }
+        for row in tableViewGeneric.jvDatasource.dataSource.flatMap({ $0.rows.filter({ !$0.isSelectable }) }) {
+            assert(row.tapped == nil)
+        }
         #endif
         
         guard tableViewGeneric.headerStretchView != nil else { return }
