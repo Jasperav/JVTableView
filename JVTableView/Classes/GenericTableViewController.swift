@@ -20,6 +20,12 @@ open class GenericTableViewController<T: JVTableView>: UITableViewController whe
             present(viewControllerType: row.showViewControllerOnTap!, tapped: &row.tapped)
         }
         
+        #if DEBUG
+        for row in tableViewGeneric.jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.isSelectable }) }) {
+            assert(row.tapped != nil)
+        }
+        #endif
+        
         guard tableViewGeneric.headerStretchView != nil else { return }
         
         tableViewGeneric.correctHeaderImageAfterSetup()

@@ -197,7 +197,7 @@ extension JVTableView: UITableViewDataSource, UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // If a row is selectable, is SHOULD ALWAYS BE TAPPEABLE
-        (jvDatasource.getRow(indexPath) as! Tappable).tapped!()
+        jvDatasource.getRow(indexPath).tapped!()
         
         // Instant deselect the row, maybe this isn't always useful if multiple rows needs to be selected.
         deselectRow(at: indexPath, animated: false)
