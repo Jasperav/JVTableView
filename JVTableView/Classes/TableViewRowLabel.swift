@@ -12,7 +12,7 @@ open class TableViewRowLabel: TableViewRow {
     public init(identifier: String = "",
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
-                isSelectable: Bool = false,
+                isSelectable: Bool = true,
                 accessoryType: UITableViewCell.AccessoryType = .none,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.contentTypeJVLabel = contentTypeJVLabel

@@ -8,7 +8,7 @@ public class TableViewRowLabelImage: TableViewRowLabel {
     public init(identifier: String = "",
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
-                isSelectable: Bool = false,
+                isSelectable: Bool = true,
                 accessoryType: UITableViewCell.AccessoryType = .none,
                 image: UIImage,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,

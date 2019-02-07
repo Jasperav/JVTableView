@@ -13,7 +13,7 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 detailText: String? = nil,
                 contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
-                isSelectable: Bool = false,
+                isSelectable: Bool = true,
                 accessoryType: UITableViewCell.AccessoryType = .none, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         
         self.detailText = detailText
