@@ -17,7 +17,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         
         super.init(identifier: identifier, isVisible: isVisible, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
         
-        classIdentifier = JVTableViewStdCell.labelSwitch.rawValue
+        changeClassType(cell: JVTableViewStdCell.labelSwitch)
     }
     
     public override func isVisible(_ cell: TableViewCellLabel) {

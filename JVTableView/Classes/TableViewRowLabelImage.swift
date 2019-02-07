@@ -18,7 +18,7 @@ public class TableViewRowLabelImage: TableViewRowLabel {
         
         super.init(identifier: identifier, isVisible: isVisible, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
-        classIdentifier = JVTableViewStdCell.labelImage.rawValue
+        changeClassType(cell: .labelImage)
     }
     public override func isVisible(_ cell: TableViewCellLabel) {
         let _cell = cell as! TableViewCellLabelImage

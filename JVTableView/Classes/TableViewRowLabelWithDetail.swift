@@ -21,7 +21,7 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
         
         super.init(identifier: identifier, isVisible: isVisible, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
-        classIdentifier = JVTableViewStdCell.labelDetail.rawValue
+        changeClassType(cell: JVTableViewStdCell.labelDetail)
     }
     public override func isVisible(_ cell: TableViewCellLabel) {
         let _cell = cell as! TableViewCellLabelWithDetail

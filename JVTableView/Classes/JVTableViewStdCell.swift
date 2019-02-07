@@ -1,5 +1,6 @@
 import UIKit
 import JVView
+import JVContentType
 
 public enum JVTableViewStdCell: String {
     case
@@ -8,17 +9,19 @@ public enum JVTableViewStdCell: String {
     labelSwitch,
     labelImage,
     labelDetail
+    
+    var classType: UITableViewCell.Type {
+        switch self {
+        case .textField:
+            return TableViewCellTextField.self
+        case .label:
+            return TableViewCellLabel.self
+        case .labelSwitch:
+            return TableViewCellLabelSwitch.self
+        case .labelImage:
+            return TableViewCellLabelImage.self
+        case .labelDetail:
+            return TableViewCellLabelWithDetail.self
+        }
+    }
 }
-
-//public enum JVCellAccessoryView {
-//    case _switch, disclosure
-//
-//    public func addAccessoryView(cell: UITableViewCell) {
-//        switch self {
-//        case ._switch:
-//            break
-//        case .disclosure:
-//            cell.accessoryType = .disclosureIndicator
-//        }
-//    }
-//}

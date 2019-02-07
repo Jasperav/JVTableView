@@ -9,8 +9,6 @@ open class JVTableView: UITableView, ChangeableForm {
     
     public static var standardOptions: JVTableViewOptions!
     
-    open var helper: JVTableViewHelper!
-    
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     public private (set) var jvDatasource: JVTableViewDatasource!
     public private (set) var options: JVTableViewOptions!
@@ -40,8 +38,16 @@ open class JVTableView: UITableView, ChangeableForm {
         self.headerStretchImage = headerStretchImage
         jvDatasource = datasource
         
-        helper = JVTableViewHelper(tableView: self)
-        helper.registerDefaultCells()
+        let classTypes = datasource.dataSource.flatMap { $0.rows.map { $0.classType } }
+        var insertedClassTypes: Set<String> = []
+        
+        for classType in classTypes {
+            let classIdentifier = String(describing: classType)
+            
+            guard insertedClassTypes.insert(classIdentifier).inserted else { return }
+            
+            register(classType, forCellReuseIdentifier: String(describing: classIdentifier))
+        }
         
         guard let headerStretchImage = headerStretchImage else { return }
         

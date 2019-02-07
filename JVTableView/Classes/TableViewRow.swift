@@ -4,8 +4,8 @@ import JVTappable
 
 open class TableViewRow: Tappable {
     
-    // The identifier of the cell CLASS.
-    public var classIdentifier = ""
+    public private (set) var classType: UITableViewCell.Type
+    public private (set) var classIdentifier: String
     
     // Will be called by JVTableView when the cell has appeared on the screen.
     open var isVisible: ((_ cell: UITableViewCell) -> ())?
@@ -24,8 +24,9 @@ open class TableViewRow: Tappable {
     
     public let showViewControllerOnTap: UIViewControllerNoParameterInitializable?
     
-    public init(cellIdentifier: String, isVisible: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
-        self.classIdentifier = cellIdentifier
+    public init(classType: UITableViewCell.Type, isVisible: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+        self.classType = classType
+        self.classIdentifier = String(describing: classType)
         self.isVisible = isVisible
         self.identifier = identifier
         self.showViewControllerOnTap = showViewControllerOnTap
@@ -35,12 +36,23 @@ open class TableViewRow: Tappable {
     }
     
     public init(cell: JVTableViewStdCell, isVisible: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
-        self.classIdentifier = cell.rawValue
+        self.classType = cell.classType
+        self.classIdentifier = String(describing: classType)
         self.isVisible = isVisible
         self.identifier = identifier
         self.showViewControllerOnTap = showViewControllerOnTap
         self.tapped = tapped
         
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
+    }
+    
+    public func change(classType: UITableViewCell.Type) {
+        self.classType = classType
+        self.classIdentifier = String(describing: classType)
+    }
+    
+    func changeClassType(cell: JVTableViewStdCell) {
+        self.classType = cell.classType
+        self.classIdentifier = String(describing: classType)
     }
 }
