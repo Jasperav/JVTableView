@@ -1,3 +1,3 @@
-protocol SectionCreator {}
+public protocol SectionCreator {}
 
-protocol RowCreator {}
+public protocol RowCreator {}
