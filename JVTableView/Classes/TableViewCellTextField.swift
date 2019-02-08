@@ -1,7 +1,7 @@
 import UIKit
 import JVConstraintEdges
 
-open class TableViewCellTextField: UITableViewCell, ChangeableValues {
+open class TableViewCellTextField: TableViewCell, ChangeableValues, UITextFieldDelegate {
     open var edges = ConstraintEdges(all: 10)
     
     public var currentValue = ""
@@ -11,23 +11,7 @@ open class TableViewCellTextField: UITableViewCell, ChangeableValues {
     public var validate: ((String) -> (Bool))!
     public var didReturn: (() -> ())?
     
-    public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        commonLoad()
-    }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    open override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        commonLoad()
-    }
-    
-    open func commonLoad() {
+    open override func configure() {
         assert(textField.superview == nil)
         
         textField.fill(toSuperview: contentView, edges: edges)
@@ -36,9 +20,7 @@ open class TableViewCellTextField: UITableViewCell, ChangeableValues {
         textField.returnKeyType = .done
         textField.delegate = self
     }
-}
-
-extension TableViewCellTextField: UITextFieldDelegate {
+    
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         let newValue: String

@@ -6,12 +6,12 @@ public class TableViewCellLabelSwitch: TableViewCellLabel, ChangeableValues {
     public var hasChanged: ((Bool) -> ())?
     public let _switch = UISwitch(frame: CGRect.zero)
     
-    open override func setup() {
+    open override func configure() {
         accessoryView = _switch
         
         _switch.addTarget(self, action: #selector(valueChange), for: .valueChanged)
         
-        super.setup()
+        super.configure()
     }
     
     @objc func valueChange() {

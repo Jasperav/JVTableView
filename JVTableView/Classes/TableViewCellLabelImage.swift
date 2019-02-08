@@ -4,10 +4,10 @@ public class TableViewCellLabelImage: TableViewCellLabel {
     public let _imageView = UIImageView(frame: CGRect.zero)
     open var edgesImageView = ConstraintEdges(leading: 10)
     
-    public override func setup() {
+    public override func configure() {
         _imageView.fill(toSuperview: contentView, edges: edgesImageView)
         
-        super.setup()
+        super.configure()
         
         _imageView.equal(to: label, height: true, width: false)
         _imageView.setSameCenterY(view: label)

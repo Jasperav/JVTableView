@@ -3,7 +3,7 @@ import JVConstraintEdges
 public class TableViewCellLabelWithDetail: TableViewCellLabel {
     public let labelDetail = UILabel(frame: .zero)
     
-    public override func setup() {
+    public override func configure() {
         var edges = self.edges.min(.left)
         
         edges.trailing = 5
@@ -14,7 +14,7 @@ public class TableViewCellLabelWithDetail: TableViewCellLabel {
         // Resetting this to 1 ensures us the height of the 'normal' label doesn't shrink
         labelDetail.setContentHuggingPriority(UILayoutPriority(rawValue: 1), for: .vertical)
 
-        super.setup()
+        super.configure()
     }
     
     public override func determineTrailingView() -> UIView? {

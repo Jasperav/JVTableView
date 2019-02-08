@@ -2,24 +2,14 @@ import UIKit
 import JVView
 import JVConstraintEdges
 
-open class TableViewCellLabel: UITableViewCell {
+open class TableViewCellLabel: TableViewCell {
     
     open var edges = ConstraintEdges(height: 15, width: 15)
     
     // We use a UILabel here because we need to update the label as a whole.
     public let label = UILabel(frame: CGRect.zero)
     
-    public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        setup()
-    }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    open func setup() {
+    open override func configure() {
         var edges = self.edges
         
         let leadingView = determineLeadingView()

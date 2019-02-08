@@ -10,7 +10,7 @@ public enum JVTableViewStdCell: String {
     labelImage,
     labelDetail
     
-    var classType: UITableViewCell.Type {
+    var classType: TableViewCell.Type {
         switch self {
         case .textField:
             return TableViewCellTextField.self
