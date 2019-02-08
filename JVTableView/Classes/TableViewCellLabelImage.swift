@@ -1,27 +1,24 @@
 import JVConstraintEdges
+import JVLoadableImage
 
 open class TableViewCellLabelImage: TableViewCellLabel {
     
     open var edgesImageView = ConstraintEdges(leading: 10)
     
-    public let _imageView = UIImageView(frame: CGRect.zero)
+    public let loadableImageView = LoadableImage(style: .gray, rounded: true)
     
     open override func configure() {
-        _imageView.fill(toSuperview: contentView, edges: edgesImageView)
+        loadableImageView.fill(toSuperview: contentView, edges: edgesImageView)
         
         super.configure()
         
-        _imageView.equal(to: label, height: true, width: false)
-        _imageView.setSameCenterY(view: label)
-        _imageView.setContentHuggingPriority(UILayoutPriority(rawValue: 1), for: .horizontal)
-        _imageView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1), for: .horizontal)
-        _imageView.setContentHuggingPriority(UILayoutPriority(rawValue: 1), for: .vertical)
-        _imageView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1), for: .vertical)
-        _imageView.setWidthAndHeightAreTheSame()
-        _imageView.contentMode = .scaleAspectFit
+        loadableImageView.equal(to: label, height: true, width: false)
+        loadableImageView.setSameCenterY(view: label)
+        loadableImageView.setContentHuggingAndCompressionResistance(1)
+        loadableImageView.setWidthAndHeightAreTheSame()
     }
     
     open override func determineLeadingView() -> UIView? {
-        return _imageView
+        return loadableImageView
     }
 }

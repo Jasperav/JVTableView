@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'JVTableView'
-  s.version          = '0.5.0'
+  s.version          = '0.5.1'
   s.summary          = 'A short description of JVTableView.'
 
 # This description is used to generate tags and improve search results.
@@ -44,4 +44,5 @@ s.dependency 'JVTappable'
 s.dependency 'JVFormChangeWatcher'
 s.dependency 'JVLoadableImage'
 s.dependency 'JVNoParameterInitializable'
+s.dependency 'JVLoadableImage'
 end

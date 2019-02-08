@@ -1,16 +1,18 @@
 import JVView
 import JVNoParameterInitializable
 
-public class TableViewRowLabelImage: TableViewRowLabel {
+open class TableViewRowLabelImage: TableViewRowLabel {
     
-    public let image: UIImage
+    /// Changing this property alone does not change the image of the cell property itself
+    /// This has only effect when the cell reappears.
+    public var image: UIImage?
     
     public init(identifier: String = "",
                 isVisible: ((_ cell: UITableViewCell) -> ())? = nil,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                image: UIImage,
+                image: UIImage?,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
                 tapped: (() -> ())? = nil) {
         
@@ -20,10 +22,15 @@ public class TableViewRowLabelImage: TableViewRowLabel {
         
         changeClassType(cell: .labelImage)
     }
-    public override func isVisible(_ cell: TableViewCellLabel) {
+    
+    open override func isVisible(_ cell: TableViewCellLabel) {
         let _cell = cell as! TableViewCellLabelImage
         
-        _cell._imageView.image = image
+        if let image = image {
+            _cell.loadableImageView.show(image: image)
+        } else {
+            _cell.loadableImageView.showIndicator()
+        }
         
         super.isVisible(cell)
     }
