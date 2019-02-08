@@ -4,7 +4,7 @@ import JVTappable
 
 open class TableViewRow: Tappable {
     
-    public private (set) var classType: UITableViewCell.Type
+    public private (set) var classType: TableViewCell.Type
     public private (set) var classIdentifier: String
     
     // Will be called by JVTableView when the cell has appeared on the screen.
@@ -24,7 +24,7 @@ open class TableViewRow: Tappable {
     
     public let showViewControllerOnTap: UIViewControllerNoParameterInitializable?
     
-    public init(classType: UITableViewCell.Type, isVisible: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+    public init(classType: TableViewCell.Type, isVisible: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.classType = classType
         self.classIdentifier = String(describing: classType)
         self.isVisible = isVisible
@@ -46,7 +46,7 @@ open class TableViewRow: Tappable {
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
     }
     
-    public func change(classType: UITableViewCell.Type) {
+    public func change(classType: TableViewCell.Type) {
         self.classType = classType
         self.classIdentifier = String(describing: classType)
     }
