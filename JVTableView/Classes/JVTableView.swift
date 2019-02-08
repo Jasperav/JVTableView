@@ -7,35 +7,19 @@ import JVLoadableImage
 
 open class JVTableView: UITableView, ChangeableForm {
     
-    public static var standardOptions: JVTableViewOptions!
-    
+
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
+    
     public private (set) var jvDatasource: JVTableViewDatasource!
-    public private (set) var options: JVTableViewOptions!
     public private (set) var headerStretchImage: JVTableViewHeaderStretchImage?
     public private (set) var headerStretchView: LoadableImage?
     
     public init(datasource: JVTableViewDatasource,
-                options: JVTableViewOptions = JVTableView.standardOptions!,
                 headerStretchImage: JVTableViewHeaderStretchImage? = nil) {
         super.init(frame: CGRect.zero, style: .grouped)
         
-        initialize(datasource: datasource, options: options, headerStretchImage: headerStretchImage)
-        commonLoad()
-    }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    // Call this in the awakeFromNib() before calling super.awakeFromNib()
-    public func initialize(datasource: JVTableViewDatasource,
-                           options: JVTableViewOptions = JVTableView.standardOptions!,
-                           headerStretchImage: JVTableViewHeaderStretchImage? = nil) {
-        assert(self.options == nil)
-        
-        self.options = options
         self.headerStretchImage = headerStretchImage
+        
         jvDatasource = datasource
         
         let classTypes = datasource.dataSource.flatMap { $0.rows.map { $0.classType } }
@@ -49,20 +33,6 @@ open class JVTableView: UITableView, ChangeableForm {
             register(classType, forCellReuseIdentifier: String(describing: classIdentifier))
         }
         
-        guard let headerStretchImage = headerStretchImage else { return }
-        
-        add(headerStretchImage: headerStretchImage)
-    }
-    
-    open override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        assert(jvDatasource != nil, "Call initialize() first in the awakeFromNib method.")
-        
-        commonLoad()
-    }
-    
-    private func commonLoad() {
         sectionFooterHeight = UITableView.automaticDimension
         estimatedSectionFooterHeight = 5
         
@@ -72,6 +42,25 @@ open class JVTableView: UITableView, ChangeableForm {
         tableFooterView = UIView()
         
         reloadData()
+        
+        guard let headerStretchImage = headerStretchImage else { return }
+        
+        add(headerStretchImage: headerStretchImage)
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError()
+    }
+    
+    public func validate() {
+        #if DEBUG
+        for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.isSelectable }) }) {
+            assert(row.tapped != nil)
+        }
+        for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ !$0.isSelectable }) }) {
+            assert(row.tapped == nil)
+        }
+        #endif
     }
     
     open override func reloadData() {
