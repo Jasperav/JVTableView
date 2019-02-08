@@ -1,10 +1,12 @@
 import JVConstraintEdges
 
-public class TableViewCellLabelImage: TableViewCellLabel {
-    public let _imageView = UIImageView(frame: CGRect.zero)
+open class TableViewCellLabelImage: TableViewCellLabel {
+    
     open var edgesImageView = ConstraintEdges(leading: 10)
     
-    public override func configure() {
+    public let _imageView = UIImageView(frame: CGRect.zero)
+    
+    open override func configure() {
         _imageView.fill(toSuperview: contentView, edges: edgesImageView)
         
         super.configure()
@@ -19,7 +21,7 @@ public class TableViewCellLabelImage: TableViewCellLabel {
         _imageView.contentMode = .scaleAspectFit
     }
     
-    public override func determineLeadingView() -> UIView? {
+    open override func determineLeadingView() -> UIView? {
         return _imageView
     }
 }
