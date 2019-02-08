@@ -156,7 +156,7 @@ extension JVTableView: UITableViewDataSource, UITableViewDelegate {
         let row = jvDatasource.getRow(indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: row.classIdentifier, for: indexPath)
         
-        row.isVisible?(cell)
+        row.configure(cell: cell as! TableViewCell)
         
         if let changeableRow = row as? Changeable {
             changeableRow.hasChanged = { [weak self] (_) in

@@ -9,7 +9,7 @@ open class TableViewCellLabel: TableViewCell {
     // We use a UILabel here because we need to update the label as a whole.
     public let label = UILabel(frame: CGRect.zero)
     
-    open override func configure() {
+    open override func setup() {
         var edges = self.edges
         
         let leadingView = determineLeadingView()

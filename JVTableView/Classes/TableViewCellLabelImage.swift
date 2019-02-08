@@ -7,10 +7,10 @@ open class TableViewCellLabelImage: TableViewCellLabel {
     
     public let loadableImageView = LoadableImage(style: .gray, rounded: true)
     
-    open override func configure() {
+    open override func setup() {
         loadableImageView.fill(toSuperview: contentView, edges: edgesImageView)
         
-        super.configure()
+        super.setup()
         
         loadableImageView.equal(to: label, height: true, width: false)
         loadableImageView.setSameCenterY(view: label)

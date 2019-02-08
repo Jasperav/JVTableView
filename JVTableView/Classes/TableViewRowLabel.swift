@@ -10,7 +10,7 @@ open class TableViewRowLabel: TableViewRow {
     public var _text: String? = nil
     
     public init(identifier: String = "",
-                isVisible: ((_ cell: UITableViewCell) -> ())? = nil,
+                configureInstant: ((_ cell: UITableViewCell) -> ())? = nil,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
@@ -19,24 +19,18 @@ open class TableViewRowLabel: TableViewRow {
         self._text = text
         self.accessoryType = accessoryType
         
-        super.init(cell: .label, isVisible: isVisible, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        super.init(cell: .label, configureInstant: configureInstant, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         self.isSelectable = accessoryType != .none
-        
-        let isVisible: ((_ cell: UITableViewCell) -> ()) = { [weak self] (cell) in
-            let _cell = cell as! TableViewCellLabel
-            
-            self?.isVisible(_cell)
-        }
-        
-        self.isVisible = isVisible
         
         assert(accessoryType != .none ? isSelectable : !isSelectable)
         assert(tapped == nil ? true : isSelectable)
         assert(showViewControllerOnTap == nil ? true : isSelectable)
     }
     
-    open func isVisible(_ cell: TableViewCellLabel) {
-        cell.update(contentTypeJVLabelText: contentTypeJVLabel, accessoryType: accessoryType, text: _text)
+    open override func configure(cell: TableViewCell) {
+        (cell as! TableViewCellLabel).update(contentTypeJVLabelText: contentTypeJVLabel, accessoryType: accessoryType, text: _text)
+        
+        super.configure(cell: cell)
     }
 }

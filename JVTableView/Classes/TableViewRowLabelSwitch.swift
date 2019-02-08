@@ -7,7 +7,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var currentValue: Bool
     
     public init(identifier: String = "",
-                isVisible: ((_ cell: UITableViewCell) -> ())? = nil,
+                configureInstant: ((_ cell: UITableViewCell) -> ())? = nil,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 oldValue: (() -> (Bool))? = nil
@@ -15,12 +15,12 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         self.oldValue = oldValue
         currentValue = oldValue?() ?? false
         
-        super.init(identifier: identifier, isVisible: isVisible, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
+        super.init(identifier: identifier, configureInstant: configureInstant, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
         
         changeClassType(cell: JVTableViewStdCell.labelSwitch)
     }
     
-    public override func isVisible(_ cell: TableViewCellLabel) {
+    public override func configure(cell: TableViewCell) {
         let _cell = cell as! TableViewCellLabelSwitch
         
         _cell._switch.isOn = currentValue
@@ -30,6 +30,6 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
             self.hasChanged?(self.determineHasBeenChanged())
         }
         
-        super.isVisible(cell)
+        super.configure(cell: cell)
     }
 }

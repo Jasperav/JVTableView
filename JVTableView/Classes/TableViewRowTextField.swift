@@ -1,7 +1,8 @@
 import UIKit
 
-public class TableViewRowTextField: TableViewRow, ChangeableValues {
+open class TableViewRowTextField: TableViewRow, ChangeableValues {
     
+    public let placeholderText: String
     public var oldValue: (() -> (String))?
     public var currentValue: String
     
@@ -11,40 +12,40 @@ public class TableViewRowTextField: TableViewRow, ChangeableValues {
     public var keyboardReturnType = UIReturnKeyType.done
     public var didReturn: (() -> ())?
     
-    public init(identifier: String, placeholderText: String, validate: @escaping ((String) -> (Bool)), oldValue: (() -> (String))? = nil) {
+    public init(identifier: String,
+        configureInstant: ((_ cell: UITableViewCell) -> ())? = nil,
+                placeholderText: String,
+                validate: @escaping ((String) -> (Bool)),
+                oldValue: (() -> (String))? = nil) {
         self.oldValue = oldValue
         self.validate = validate
+        self.placeholderText = placeholderText
         currentValue = oldValue?() ?? ""
         
         super.init(cell: JVTableViewStdCell.textField,
-                   isVisible: nil,
+                   configureInstant: configureInstant,
                    identifier: identifier)
-        
-        let isVisible: ((_ cell: UITableViewCell) -> ()) = { [weak self] (cell) in
-            guard let strongSelf = self else { return }
-            let _cell = cell as! TableViewCellTextField
-            
-            _cell.validate = validate
-            _cell.oldValue = strongSelf.oldValue
-            _cell.textField.placeholder = placeholderText
-            _cell.textField.text = strongSelf.currentValue
-            _cell.textField.accessibilityIdentifier = identifier
-            _cell.textField.returnKeyType = strongSelf.keyboardReturnType
-            
-            _cell.hasChanged = { (hasChanged) in
-                strongSelf.currentValue = _cell.currentValue
-                strongSelf.hasChanged?(hasChanged)
-            }
-            
-            _cell.didReturn = {
-                strongSelf.didReturn?()
-            }
-        }
-        
-        self.isVisible = isVisible
     }
     
-    public func setCurrentValue() {
+    open override func configure(cell: TableViewCell) {
+        let _cell = cell as! TableViewCellTextField
         
+        _cell.validate = validate
+        _cell.oldValue = oldValue
+        _cell.textField.placeholder = placeholderText
+        _cell.textField.text = currentValue
+        _cell.textField.accessibilityIdentifier = identifier
+        _cell.textField.returnKeyType = keyboardReturnType
+        
+        _cell.hasChanged = { [unowned self] (hasChanged) in
+            self.currentValue = _cell.currentValue
+            self.hasChanged?(hasChanged)
+        }
+        
+        _cell.didReturn = { [unowned self] in
+            self.didReturn?()
+        }
+        
+        super.configure(cell: cell)
     }
 }

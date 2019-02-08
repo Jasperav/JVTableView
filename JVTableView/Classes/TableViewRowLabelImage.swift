@@ -8,7 +8,7 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     public var image: UIImage?
     
     public init(identifier: String = "",
-                isVisible: ((_ cell: UITableViewCell) -> ())? = nil,
+                configureInstant: ((_ cell: UITableViewCell) -> ())? = nil,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
@@ -18,12 +18,12 @@ open class TableViewRowLabelImage: TableViewRowLabel {
         
         self.image = image
         
-        super.init(identifier: identifier, isVisible: isVisible, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        super.init(identifier: identifier, configureInstant: configureInstant, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         changeClassType(cell: .labelImage)
     }
     
-    open override func isVisible(_ cell: TableViewCellLabel) {
+    open override func configure(cell: TableViewCell) {
         let _cell = cell as! TableViewCellLabelImage
         
         if let image = image {
@@ -32,6 +32,6 @@ open class TableViewRowLabelImage: TableViewRowLabel {
             _cell.loadableImageView.showIndicator()
         }
         
-        super.isVisible(cell)
+        super.configure(cell: cell)
     }
 }

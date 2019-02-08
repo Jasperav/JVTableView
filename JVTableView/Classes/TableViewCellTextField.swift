@@ -11,7 +11,7 @@ open class TableViewCellTextField: TableViewCell, ChangeableValues, UITextFieldD
     public var validate: ((String) -> (Bool))!
     public var didReturn: (() -> ())?
     
-    open override func configure() {
+    open override func setup() {
         assert(textField.superview == nil)
         
         textField.fill(toSuperview: contentView, edges: edges)
