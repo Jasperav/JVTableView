@@ -22,15 +22,15 @@ open class JVTableView: UITableView, ChangeableForm {
         
         jvDatasource = datasource
         
-        let classTypes = datasource.dataSource.flatMap { $0.rows.map { $0.classType } }
+        let rows = datasource.dataSource.flatMap { $0.rows }
         var insertedClassTypes: Set<String> = []
         
-        for classType in classTypes {
-            let classIdentifier = String(describing: classType)
+        for row in rows {
+            let classIdentifier = row.classIdentifier
             
-            guard insertedClassTypes.insert(classIdentifier).inserted else { return }
+            guard insertedClassTypes.insert(classIdentifier).inserted else { break }
             
-            register(classType, forCellReuseIdentifier: String(describing: classIdentifier))
+            register(row.classType, forCellReuseIdentifier: classIdentifier)
         }
         
         sectionFooterHeight = UITableView.automaticDimension
