@@ -8,11 +8,10 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     public var image: UIImage?
     
     public init(identifier: String = "",
-               
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                image: UIImage?,
+                image: UIImage? = nil,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
                 tapped: (() -> ())? = nil) {
         
