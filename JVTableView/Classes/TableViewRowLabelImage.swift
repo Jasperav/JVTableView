@@ -23,14 +23,20 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     }
     
     open override func configure(cell: TableViewCell) {
-        let _cell = cell as! TableViewCellLabelImage
-        
-        if let image = image {
-            _cell.loadableImageView.show(image: image)
-        } else {
-            _cell.loadableImageView.showIndicator()
+        if shouldUpdateImage() {
+            let _cell = cell as! TableViewCellLabelImage
+            
+            if let image = image {
+                _cell.loadableImageView.show(image: image)
+            } else {
+                _cell.loadableImageView.showIndicator()
+            }
         }
         
         super.configure(cell: cell)
+    }
+    
+    open func shouldUpdateImage() -> Bool {
+        return true
     }
 }
