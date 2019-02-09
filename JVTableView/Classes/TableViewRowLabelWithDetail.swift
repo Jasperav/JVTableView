@@ -9,7 +9,7 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
     public var contentTypeJVLabelDetail: ContentTypeJVLabelText
     
     public init(identifier: String = "",
-                configureInstant: ((_ cell: UITableViewCell) -> ())? = nil,
+               
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 detailText: String? = nil,
@@ -19,7 +19,7 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
         self.detailText = detailText
         self.contentTypeJVLabelDetail = contentTypeJVLabelDetail
         
-        super.init(identifier: identifier, configureInstant: configureInstant, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         changeClassType(cell: JVTableViewStdCell.labelDetail)
     }

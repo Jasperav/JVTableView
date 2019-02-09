@@ -13,7 +13,6 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues {
     public var didReturn: (() -> ())?
     
     public init(identifier: String,
-        configureInstant: ((_ cell: UITableViewCell) -> ())? = nil,
                 placeholderText: String,
                 validate: @escaping ((String) -> (Bool)),
                 oldValue: (() -> (String))? = nil) {
@@ -23,7 +22,6 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues {
         currentValue = oldValue?() ?? ""
         
         super.init(cell: JVTableViewStdCell.textField,
-                   configureInstant: configureInstant,
                    identifier: identifier)
     }
     
@@ -45,7 +43,5 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues {
         _cell.didReturn = { [unowned self] in
             self.didReturn?()
         }
-        
-        super.configure(cell: cell)
     }
 }

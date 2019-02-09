@@ -7,9 +7,6 @@ open class TableViewRow: Tappable {
     public private (set) var classType: TableViewCell.Type
     public private (set) var classIdentifier: String
     
-    /// Added so that the user can instantly add changes to the cell.
-    open var configureInstant: ((_ cell: UITableViewCell) -> ())?
-    
     // By setting an identifier, it can be retrieved through the datasource again to query e.g. the value.
     public let identifier: String
     
@@ -24,10 +21,9 @@ open class TableViewRow: Tappable {
     
     public let showViewControllerOnTap: UIViewControllerNoParameterInitializable?
     
-    public init(classType: TableViewCell.Type, configureInstant: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+    public init(classType: TableViewCell.Type, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.classType = classType
         self.classIdentifier = String(describing: classType)
-        self.configureInstant = configureInstant
         self.identifier = identifier
         self.showViewControllerOnTap = showViewControllerOnTap
         self.tapped = tapped
@@ -35,10 +31,9 @@ open class TableViewRow: Tappable {
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
     }
     
-    public init(cell: JVTableViewStdCell, configureInstant: ((_ cell: UITableViewCell) -> ())? = nil, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+    public init(cell: JVTableViewStdCell, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.classType = cell.classType
         self.classIdentifier = String(describing: classType)
-        self.configureInstant = configureInstant
         self.identifier = identifier
         self.showViewControllerOnTap = showViewControllerOnTap
         self.tapped = tapped
@@ -52,7 +47,7 @@ open class TableViewRow: Tappable {
     }
     
     open func configure(cell: TableViewCell) {
-        configureInstant?(cell)
+        fatalError()
     }
     
     func changeClassType(cell: JVTableViewStdCell) {

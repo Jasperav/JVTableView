@@ -10,7 +10,7 @@ open class TableViewRowLabel: TableViewRow {
     public var _text: String? = nil
     
     public init(identifier: String = "",
-                configureInstant: ((_ cell: UITableViewCell) -> ())? = nil,
+               
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
@@ -19,7 +19,7 @@ open class TableViewRowLabel: TableViewRow {
         self._text = text
         self.accessoryType = accessoryType
         
-        super.init(cell: .label, configureInstant: configureInstant, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        super.init(cell: .label, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         self.isSelectable = accessoryType != .none
         
@@ -30,7 +30,5 @@ open class TableViewRowLabel: TableViewRow {
     
     open override func configure(cell: TableViewCell) {
         (cell as! TableViewCellLabel).update(contentTypeJVLabelText: contentTypeJVLabel, accessoryType: accessoryType, text: _text)
-        
-        super.configure(cell: cell)
     }
 }

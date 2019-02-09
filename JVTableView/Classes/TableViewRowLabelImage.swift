@@ -8,7 +8,7 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     public var image: UIImage?
     
     public init(identifier: String = "",
-                configureInstant: ((_ cell: UITableViewCell) -> ())? = nil,
+               
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
@@ -18,7 +18,7 @@ open class TableViewRowLabelImage: TableViewRowLabel {
         
         self.image = image
         
-        super.init(identifier: identifier, configureInstant: configureInstant, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         changeClassType(cell: .labelImage)
     }
