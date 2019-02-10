@@ -6,7 +6,7 @@ open class TableViewCellLabelImage: TableViewCellLabel {
     public let loadableImageView = LoadableImage(style: .gray, rounded: true)
     
     open override func setup() {
-        loadableImageView.fill(toSuperview: contentView, edges: TableViewRow.edges)
+        loadableImageView.fill(toSuperview: contentView, edges: ConstraintEdges(leading: TableViewRow.edges.leading!))
         
         super.setup()
         
