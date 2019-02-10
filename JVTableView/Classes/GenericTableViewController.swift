@@ -1,6 +1,7 @@
 import JVNoParameterInitializable
+import JVChangeableValue
 
-open class GenericTableViewController<T: JVTableView>: UITableViewController where T: NoParameterInitializable {
+open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasource>: UITableViewController where T: NoParameterInitializable {
     
     public unowned let tableViewGeneric: T
     
@@ -22,6 +23,9 @@ open class GenericTableViewController<T: JVTableView>: UITableViewController whe
         
         #if DEBUG
         tableViewGeneric.validate()
+        if type(of: self) == GenericTableViewController.self {
+            assert(tableViewGenericReference.jvDatasource.dataSource.flatMap({ $0.rows }).allSatisfy({ !($0 is Changeable) }), "There is a changeable row here, but this class doesn't watch the change!")
+        }
         #endif
         
         guard tableViewGeneric.headerStretchView != nil else { return }

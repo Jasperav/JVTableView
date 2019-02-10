@@ -6,15 +6,15 @@ import JVFormChangeWatcher
 import JVLoadableImage
 import JVChangeableValue
 
-open class JVTableView: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate {
+open class JVTableView<T: JVTableViewDatasource>: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate {
     
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     
-    public private (set) var jvDatasource: JVTableViewDatasource!
+    public private (set) var jvDatasource: T!
     public private (set) var headerStretchImage: JVTableViewHeaderStretchImage?
     public private (set) var headerStretchView: LoadableImage?
     
-    public init(datasource: JVTableViewDatasource,
+    public init(datasource: T,
                 headerStretchImage: JVTableViewHeaderStretchImage? = nil,
                 style: UITableView.Style = .grouped) {
         super.init(frame: CGRect.zero, style: style)
