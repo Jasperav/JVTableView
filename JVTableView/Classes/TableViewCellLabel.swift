@@ -34,14 +34,6 @@ open class TableViewCellLabel: TableViewCell {
         }
     }
     
-    open func update(contentTypeJVLabelText: ContentTypeJVLabelText,
-                     accessoryType: UITableViewCell.AccessoryType = .none,
-                     text: String? = nil) {
-        updateLabel(contentTypeJVLabelText: contentTypeJVLabelText, text: text)
-        
-        self.accessoryType = accessoryType
-    }
-    
     open func determineLeadingView() -> UIView? {
         return nil
     }

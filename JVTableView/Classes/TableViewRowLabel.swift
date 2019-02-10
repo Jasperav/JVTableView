@@ -1,25 +1,16 @@
 import JVView
 import JVNoParameterInitializable
 
-open class TableViewRowLabel: TableViewRow {
-    
-    public static var standardContentTypeJVLabel: ContentTypeJVLabelText!
-    
-    public var accessoryType: UITableViewCell.AccessoryType
-    public var contentTypeJVLabel: ContentTypeJVLabelText
-    public var _text: String? = nil
+open class TableViewRowLabel: TableViewRowText {
     
     public init(identifier: String = "",
-               
                 text: String? = nil,
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
-        self.contentTypeJVLabel = contentTypeJVLabel.copy(contentTypeId: nil)
-        self._text = text
-        self.accessoryType = accessoryType
+
         
-        super.init(cell: .label, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        super.init(cell: .label, identifier: identifier, accessoryType: accessoryType, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
         
         self.isSelectable = accessoryType != .none
         
@@ -28,7 +19,7 @@ open class TableViewRowLabel: TableViewRow {
         assert(showViewControllerOnTap == nil ? true : isSelectable)
     }
     
-    open override func configure(cell: TableViewCell) {
-        (cell as! TableViewCellLabel).update(contentTypeJVLabelText: contentTypeJVLabel, accessoryType: accessoryType, text: _text)
+    open override func update(cell: TableViewCell) {
+        (cell as! TableViewCellLabel).updateLabel(contentTypeJVLabelText: contentTypeJVLabel, text: _text)
     }
 }

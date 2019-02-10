@@ -8,7 +8,8 @@ public enum JVTableViewStdCell: String {
     label,
     labelSwitch,
     labelImage,
-    labelDetail
+    labelDetail,
+    button
     
     var classType: TableViewCell.Type {
         switch self {
@@ -22,6 +23,8 @@ public enum JVTableViewStdCell: String {
             return TableViewCellLabelImage.self
         case .labelDetail:
             return TableViewCellLabelWithDetail.self
+        case .button:
+            return TableViewCellButton.self
         }
     }
 }
