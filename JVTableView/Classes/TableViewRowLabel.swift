@@ -15,7 +15,7 @@ open class TableViewRowLabel: TableViewRow {
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
-        self.contentTypeJVLabel = contentTypeJVLabel
+        self.contentTypeJVLabel = contentTypeJVLabel.copy(contentTypeId: nil)
         self._text = text
         self.accessoryType = accessoryType
         
