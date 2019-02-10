@@ -1,6 +1,7 @@
 import UIKit
 import JVNoParameterInitializable
 import JVTappable
+import os
 
 open class TableViewRow: Tappable {
     
@@ -47,7 +48,7 @@ open class TableViewRow: Tappable {
     }
     
     open func configure(cell: TableViewCell) {
-        fatalError()
+        os_log("Unconfigured cell: %{private}@", type: .debug, String(describing: cell))
     }
     
     func changeClassType(cell: JVTableViewStdCell) {

@@ -22,7 +22,6 @@ open class GenericTableViewController<T: JVTableView>: UITableViewController whe
         
         #if DEBUG
         tableViewGeneric.validate()
-        
         #endif
         
         guard tableViewGeneric.headerStretchView != nil else { return }
