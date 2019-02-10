@@ -1,7 +1,7 @@
 import JVNoParameterInitializable
 import JVChangeableValue
 
-open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasource>: UITableViewController where T: NoParameterInitializable {
+open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasource>: UITableViewController {
     
     public unowned let tableViewGeneric: T
     

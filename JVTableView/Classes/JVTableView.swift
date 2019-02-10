@@ -5,25 +5,25 @@ import JVView
 import JVFormChangeWatcher
 import JVLoadableImage
 import JVChangeableValue
+import JVNoParameterInitializable
 
-open class JVTableView<T: JVTableViewDatasource>: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate {
+open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate, NoParameterInitializable {
     
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     
-    public private (set) var jvDatasource: T!
+    public let jvDatasource: U
+    
     public private (set) var headerStretchImage: JVTableViewHeaderStretchImage?
     public private (set) var headerStretchView: LoadableImage?
     
-    public init(datasource: T,
-                headerStretchImage: JVTableViewHeaderStretchImage? = nil,
-                style: UITableView.Style = .grouped) {
-        super.init(frame: CGRect.zero, style: style)
+    public required init() {
+        jvDatasource = U.init()
         
-        self.headerStretchImage = headerStretchImage
+        super.init(frame: CGRect.zero, style: jvDatasource.determineStyle())
         
-        jvDatasource = datasource
+        self.headerStretchImage = jvDatasource.determineHeaderStretchImage()
         
-        let rows = datasource.dataSource.flatMap { $0.rows }
+        let rows = jvDatasource.dataSource.flatMap { $0.rows }
         var insertedClassTypes: Set<String> = []
         
         for row in rows {

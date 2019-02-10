@@ -1,16 +1,24 @@
 import UIKit
+import JVNoParameterInitializable
 
-open class JVTableViewDatasource {
+open class JVTableViewDatasource: NoParameterInitializable {
     public var dataSource = [TableViewSection]()
     private (set) var dataSourceVisibleRows = [TableViewSection]()
     
-    // Don't override.
-    public init() {
+    public required init() {
         createSections()
     }
     
     open func createSections() {
         fatalError() // Loop over all the sections.
+    }
+    
+    open func determineHeaderStretchImage() -> JVTableViewHeaderStretchImage? {
+        return nil
+    }
+    
+    open func determineStyle() -> UITableView.Style {
+        return .grouped
     }
     
     public func determineSectionsWithVisibleRows() {
