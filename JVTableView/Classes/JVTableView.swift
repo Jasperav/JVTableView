@@ -5,7 +5,7 @@ import JVView
 import JVFormChangeWatcher
 import JVLoadableImage
 
-open class JVTableView: UITableView, ChangeableForm {
+open class JVTableView: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate {
     
 
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
@@ -140,9 +140,6 @@ open class JVTableView: UITableView, ChangeableForm {
     public func resetForm() {
         resetForm(reloadData: true)
     }
-}
-
-extension JVTableView: UITableViewDataSource, UITableViewDelegate {
     
     public func numberOfSections(in tableView: UITableView) -> Int {
         return jvDatasource.dataSourceVisibleRows.count
@@ -152,7 +149,7 @@ extension JVTableView: UITableViewDataSource, UITableViewDelegate {
         return jvDatasource.dataSourceVisibleRows[section].rows.count
     }
     
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = jvDatasource.getRow(indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: row.classIdentifier, for: indexPath)
         
@@ -175,15 +172,6 @@ extension JVTableView: UITableViewDataSource, UITableViewDelegate {
         return jvDatasource.getSection(section).footerText
     }
     
-    //    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-    //        // Return an empty UIView() if there is no footerText because else we get a weird gray square...
-    //        guard let text = jvDatasource.getSection(section).footerText else {
-    //            return UIView()
-    //        }
-    //
-    //        return helper.determineFooterView(text: text)
-    //    }
-    
     public func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let cell = jvDatasource.getRow(indexPath)
         
@@ -201,5 +189,4 @@ extension JVTableView: UITableViewDataSource, UITableViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateHeaderStretchImageView()
     }
-    
 }
