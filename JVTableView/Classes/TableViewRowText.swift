@@ -1,4 +1,5 @@
 import JVView
+import JVConstraintEdges
 import JVNoParameterInitializable
 
 open class TableViewRowText: TableViewRow {

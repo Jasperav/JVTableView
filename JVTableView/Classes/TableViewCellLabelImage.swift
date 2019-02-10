@@ -3,12 +3,10 @@ import JVLoadableImage
 
 open class TableViewCellLabelImage: TableViewCellLabel {
     
-    open var edgesImageView = ConstraintEdges(leading: 10)
-    
     public let loadableImageView = LoadableImage(style: .gray, rounded: true)
     
     open override func setup() {
-        loadableImageView.fill(toSuperview: contentView, edges: edgesImageView)
+        loadableImageView.fill(toSuperview: contentView, edges: TableViewRow.edges)
         
         super.setup()
         

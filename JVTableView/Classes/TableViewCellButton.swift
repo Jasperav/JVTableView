@@ -3,12 +3,10 @@ import JVConstraintEdges
 
 open class TableViewCellButton: TableViewCell {
     
-    open var edges = ConstraintEdges(height: 15, width: 15)
-    
     public let button = UIButton(type: .system)
     
     open override func setup() {
-        button.fill(toSuperview: contentView, edges: edges)
+        button.fill(toSuperview: contentView, edges: TableViewRow.edges)
     }
     
     open func update(contentTypeJVLabelText: ContentTypeJVLabelText,

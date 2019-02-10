@@ -2,7 +2,6 @@ import UIKit
 import JVConstraintEdges
 
 open class TableViewCellTextField: TableViewCell, ChangeableValues, UITextFieldDelegate {
-    open var edges = ConstraintEdges(all: 10)
     
     public var currentValue = ""
     public var oldValue: (() -> (String))?
@@ -14,7 +13,7 @@ open class TableViewCellTextField: TableViewCell, ChangeableValues, UITextFieldD
     open override func setup() {
         assert(textField.superview == nil)
         
-        textField.fill(toSuperview: contentView, edges: edges)
+        textField.fill(toSuperview: contentView, edges: TableViewRow.edges)
         
         textField.borderStyle = .roundedRect
         textField.returnKeyType = .done

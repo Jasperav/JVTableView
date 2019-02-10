@@ -4,7 +4,7 @@ public class TableViewCellLabelWithDetail: TableViewCellLabel {
     public let labelDetail = UILabel(frame: .zero)
     
     public override func setup() {
-        var edges = self.edges.min(.left)
+        var edges = TableViewRow.edges.min(.left)
         
         edges.trailing = 5
         

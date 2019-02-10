@@ -2,8 +2,11 @@ import UIKit
 import JVNoParameterInitializable
 import JVTappable
 import os
+import JVConstraintEdges
 
 open class TableViewRow: Tappable {
+    
+    public static let edges = ConstraintEdges(height: 15, width: 15)
     
     public private (set) var classType: TableViewCell.Type
     public private (set) var classIdentifier: String
