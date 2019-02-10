@@ -179,11 +179,13 @@
 				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/JVCAGradientLayerExtensions/JVCAGradientLayerExtensions.framework",
 				"${BUILT_PRODUCTS_DIR}/JVCAShapeLayerExtensions/JVCAShapeLayerExtensions.framework",
+				"${BUILT_PRODUCTS_DIR}/JVChangeableValue/JVChangeableValue.framework",
 				"${BUILT_PRODUCTS_DIR}/JVConstraintEdges/JVConstraintEdges.framework",
 				"${BUILT_PRODUCTS_DIR}/JVContentType/JVContentType.framework",
 				"${BUILT_PRODUCTS_DIR}/JVCurrentDevice/JVCurrentDevice.framework",
 				"${BUILT_PRODUCTS_DIR}/JVFontUtils/JVFontUtils.framework",
 				"${BUILT_PRODUCTS_DIR}/JVFormChangeWatcher/JVFormChangeWatcher.framework",
+				"${BUILT_PRODUCTS_DIR}/JVGenericNotificationCenter/JVGenericNotificationCenter.framework",
 				"${BUILT_PRODUCTS_DIR}/JVGradientLayer/JVGradientLayer.framework",
 				"${BUILT_PRODUCTS_DIR}/JVLoadableImage/JVLoadableImage.framework",
 				"${BUILT_PRODUCTS_DIR}/JVNoParameterInitializable/JVNoParameterInitializable.framework",
@@ -192,6 +194,7 @@
 				"${BUILT_PRODUCTS_DIR}/JVSizeable/JVSizeable.framework",
 				"${BUILT_PRODUCTS_DIR}/JVTableView/JVTableView.framework",
 				"${BUILT_PRODUCTS_DIR}/JVTappable/JVTappable.framework",
+				"${BUILT_PRODUCTS_DIR}/JVTextField/JVTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/JVView/JVView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -201,11 +204,13 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVCAGradientLayerExtensions.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVCAShapeLayerExtensions.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVChangeableValue.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVConstraintEdges.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVContentType.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVCurrentDevice.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVFontUtils.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVFormChangeWatcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVGenericNotificationCenter.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVGradientLayer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVLoadableImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVNoParameterInitializable.framework",
@@ -214,6 +219,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVSizeable.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVTableView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVTappable.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

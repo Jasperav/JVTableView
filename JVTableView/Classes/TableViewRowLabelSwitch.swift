@@ -1,5 +1,6 @@
 import UIKit
 import JVView
+import JVChangeableValue
 
 public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var hasChanged: ((Bool) -> ())?

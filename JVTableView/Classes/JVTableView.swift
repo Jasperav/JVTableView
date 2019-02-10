@@ -4,10 +4,10 @@ import JVTappable
 import JVView
 import JVFormChangeWatcher
 import JVLoadableImage
+import JVChangeableValue
 
 open class JVTableView: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate {
     
-
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     
     public private (set) var jvDatasource: JVTableViewDatasource!

@@ -1,4 +1,5 @@
 import UIKit
+import JVChangeableValue
 
 public class TableViewCellLabelSwitch: TableViewCellLabel, ChangeableValues {
     public var currentValue = false
