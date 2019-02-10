@@ -15,8 +15,9 @@ open class JVTableView: UITableView, ChangeableForm, UITableViewDataSource, UITa
     public private (set) var headerStretchView: LoadableImage?
     
     public init(datasource: JVTableViewDatasource,
-                headerStretchImage: JVTableViewHeaderStretchImage? = nil) {
-        super.init(frame: CGRect.zero, style: .grouped)
+                headerStretchImage: JVTableViewHeaderStretchImage? = nil,
+                style: UITableView.Style = .grouped) {
+        super.init(frame: CGRect.zero, style: style)
         
         self.headerStretchImage = headerStretchImage
         
