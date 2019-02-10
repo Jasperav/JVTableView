@@ -9,6 +9,8 @@ open class TableViewCellButton: TableViewCell {
     open override func setup() {
         button.fill(toSuperview: contentView, edges: TableViewRow.edges)
         
+        button.isUserInteractionEnabled = false
+        
         if CurrentDevice.isRightToLeftLanguage {
             button.contentHorizontalAlignment = .right
         } else {
