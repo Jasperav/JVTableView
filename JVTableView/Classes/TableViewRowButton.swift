@@ -1,7 +1,7 @@
 import JVView
 import JVNoParameterInitializable
 
-class TableViewRowButton: TableViewRowText {
+open class TableViewRowButton: TableViewRowText {
     public init(identifier: String = "",
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
@@ -15,7 +15,7 @@ class TableViewRowButton: TableViewRowText {
         assert(accessoryType != .none)
     }
     
-    override func update(cell: TableViewCell) {
+    open override func update(cell: TableViewCell) {
         let _cell = cell as! TableViewCellButton
         
         _cell.update(contentTypeJVLabelText: contentTypeJVLabel, text: _text)
