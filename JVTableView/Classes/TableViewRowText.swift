@@ -9,7 +9,7 @@ open class TableViewRowText: TableViewRow {
     public var contentTypeJVLabel: ContentTypeJVLabelText
     public var _text: String? = nil
     
-    public init(classType: TableViewCell.Type, identifier: String = "", accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+    public init(classType: TableViewCell.Type, identifier: String = TableViewRow.defaultRowIdentifier, accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.accessoryType = accessoryType
         self.contentTypeJVLabel = contentTypeJVLabel.copy(contentTypeId: nil)
         self._text = text
@@ -17,7 +17,7 @@ open class TableViewRowText: TableViewRow {
         super.init(classType: classType, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
     }
     
-    public init(cell: JVTableViewStdCell, identifier: String = "", accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+    public init(cell: JVTableViewStdCell, identifier: String = TableViewRow.defaultRowIdentifier, accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.accessoryType = accessoryType
         self.contentTypeJVLabel = contentTypeJVLabel.copy(contentTypeId: nil)
         self._text = text

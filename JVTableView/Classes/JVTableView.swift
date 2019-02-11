@@ -56,7 +56,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     public func validate() {
         #if DEBUG
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.isSelectable }) }) {
-            assert(row.tapped != nil)
+            assert(row.tapped != nil || row.identifier != TableViewRow.defaultRowIdentifier)
         }
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ !$0.isSelectable }) }) {
             assert(row.tapped == nil)
@@ -180,14 +180,25 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // If a row is selectable, is SHOULD ALWAYS BE TAPPEABLE
-        jvDatasource.getRow(indexPath).tapped!()
+        let row = jvDatasource.getRow(indexPath)
         
-        // Instant deselect the row, maybe this isn't always useful if multiple rows needs to be selected.
-        deselectRow(at: indexPath, animated: false)
+        if let tapped = row.tapped {
+            tapped()
+        } else {
+            assert(row.identifier != TableViewRow.defaultRowIdentifier)
+            
+            tapped(identifier: row.identifier)
+        }
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateHeaderStretchImageView()
+    }
+    
+    /// For allowing easier tapping, this method is available.
+    /// Without this method, we would have a lot of methods with getRow...() in the initalizer of the implementing class.
+    /// This omits that all.
+    open func tapped(identifier: String) {
+        fatalError()
     }
 }

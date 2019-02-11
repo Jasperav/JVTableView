@@ -2,7 +2,7 @@ import JVNoParameterInitializable
 import JVChangeableValue
 import JVFormChangeWatcher
 
-open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableViewDatasource>: GenericTableViewController<T, U> where T: NoParameterInitializable {
+open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableViewDatasource>: GenericTableViewController<T, U> {
     
     private var formChangeWatcher: FormChangeWatcher<T, GenericWatchableTableViewController<T, U>>!
     

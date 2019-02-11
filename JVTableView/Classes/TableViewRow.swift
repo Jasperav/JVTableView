@@ -6,6 +6,7 @@ import JVConstraintEdges
 
 open class TableViewRow: Tappable {
     
+    public static let defaultRowIdentifier = ""
     public static let edges = ConstraintEdges(height: 15, width: 15)
     
     public private (set) var classType: TableViewCell.Type
@@ -25,7 +26,7 @@ open class TableViewRow: Tappable {
     
     public let showViewControllerOnTap: UIViewControllerNoParameterInitializable?
     
-    public init(classType: TableViewCell.Type, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+    public init(classType: TableViewCell.Type, identifier: String = TableViewRow.defaultRowIdentifier, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.classType = classType
         self.classIdentifier = String(describing: classType)
         self.identifier = identifier

@@ -2,7 +2,7 @@ import JVView
 import JVNoParameterInitializable
 
 open class TableViewRowButton: TableViewRowText {
-    public init(identifier: String = "",
+    public init(identifier: String = TableViewRow.defaultRowIdentifier,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,

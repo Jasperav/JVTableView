@@ -7,7 +7,7 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     /// This has only effect when the cell reappears.
     public var image: UIImage?
     
-    public init(identifier: String = "",
+    public init(identifier: String = TableViewRow.defaultRowIdentifier,
                 text: String? = nil,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
