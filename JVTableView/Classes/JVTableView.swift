@@ -55,6 +55,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     public func validate() {
         #if DEBUG
+        // Either the tapped closure must be filled in, or it has a custom identifier.
+        // see tapped(identifier: String) for more information.
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.isSelectable }) }) {
             assert(row.tapped != nil || row.identifier != TableViewRow.defaultRowIdentifier)
         }

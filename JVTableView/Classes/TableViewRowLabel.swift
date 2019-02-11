@@ -22,4 +22,11 @@ open class TableViewRowLabel: TableViewRowText {
     open override func update(cell: TableViewCell) {
         (cell as! TableViewCellLabel).updateLabel(contentTypeJVLabelText: contentTypeJVLabel, text: _text)
     }
+    
+    @discardableResult
+    public func makeDestructive() -> TableViewRowLabel {
+        contentTypeJVLabel = contentTypeJVLabel.changeColor(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
+        
+        return self
+    }
 }
