@@ -46,6 +46,10 @@ open class JVTableViewDatasource: NoParameterInitializable {
         return dataSourceVisibleRows[section]
     }
     
+    public func getRow<T: RawRepresentable>(_ identifier: T) -> TableViewRow where T.RawValue == String {
+        return getRow(identifier.rawValue)
+    }
+    
     public func getRow(_ identifier: String) -> TableViewRow {
         for section in dataSource {
             for row in section.rows {
