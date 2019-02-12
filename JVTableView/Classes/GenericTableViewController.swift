@@ -25,9 +25,15 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         tableViewGeneric.validate()
         #endif
         
-        guard tableViewGeneric.headerStretchView != nil else { return }
+        guard tableViewGeneric.headerStretchView != nil else {
+            setupRows()
+            
+            return
+        }
         
         tableViewGeneric.correctHeaderImageAfterSetup()
+        
+        setupRows()
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -39,6 +45,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         save()
     }
+    
+    /// If any rows needs to be configured (one-time), this is the place to do this.
+    /// This method gets called after the initializer is done.
+    open func setupRows() { }
     
     open func save() {
         #if DEBUG
