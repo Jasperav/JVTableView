@@ -42,6 +42,10 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         
         tableFooterView = UIView()
         
+        #if DEBUG
+        validate()
+        #endif
+        
         reloadData()
         
         guard let headerStretchImage = headerStretchImage else { return }
@@ -51,6 +55,34 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError()
+    }
+    
+    private func updateTableViewRowTextUpdateListeners() {
+        let updateListeners = createTableViewRowTextUpdateListeners()
+        let rows = jvDatasource.dataSource
+            .flatMap({ $0.rows })
+            .filter({ $0.identifier != TableViewRow.defaultRowIdentifier })
+            .compactMap({ $0 as? TableViewRowText })
+        
+        for row in rows {
+            guard let updateListener = updateListeners.first(where: { $0.rowIdentifier == row.identifier }) else { continue }
+            
+            row._text = updateListener.text
+        }
+    }
+    
+    private func updateTableViewRowTextFieldUpdateListeners() {
+        let updateListeners = createTableViewRowTextFieldUpdateListeners()
+        let rows = jvDatasource.dataSource
+            .flatMap({ $0.rows })
+            .filter({ $0.identifier != TableViewRow.defaultRowIdentifier })
+            .compactMap({ $0 as? TableViewRowTextField })
+        
+        for row in rows {
+            guard let updateListener = updateListeners.first(where: { $0.rowIdentifier == row.identifier }) else { continue }
+            
+            row.oldValue = { return updateListener.text }
+        }
     }
     
     public func validate() {
@@ -63,11 +95,39 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ !$0.isSelectable }) }) {
             assert(row.tapped == nil)
         }
+        let rowsCustomIdentifier = jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.identifier != TableViewRow.defaultRowIdentifier}) }).map({ $0.identifier })
+        var customIdentifiers = Set<String>()
+        
+        for identifier in rowsCustomIdentifier {
+            assert(customIdentifiers.insert(identifier).inserted)
+        }
         #endif
     }
     
     open override func reloadData() {
         jvDatasource.determineSectionsWithVisibleRows()
+        updateTableViewRowTextUpdateListeners()
+        
+        #if DEBUG
+        // Every row should now have a text property
+        let texts = jvDatasource.dataSource
+            .flatMap({ $0.rows })
+            .compactMap({ $0 as? TableViewRowText })
+            .map({ $0._text })
+        
+        for text in texts {
+            assert(text != nil && text! != "")
+        }
+        
+        let textFields = jvDatasource.dataSource
+            .flatMap({ $0.rows })
+            .compactMap({ $0 as? TableViewRowTextField })
+            .map({ $0.oldValue! })
+        
+        for text in textFields {
+            assert(text() != "")
+        }
+        #endif
         
         super.reloadData()
     }
@@ -197,10 +257,24 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         updateHeaderStretchImageView()
     }
     
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        view.endEditing(true)
+//    }
+    
     /// For allowing easier tapping, this method is available.
     /// Without this method, we would have a lot of methods with getRow...() in the initalizer of the implementing class.
     /// This omits that all.
     open func tapped(identifier: String) {
         fatalError()
+    }
+    
+    open func createTableViewRowTextUpdateListeners() -> [TableViewRowTextUpdateListener] {
+        // By default we dont have any listeners
+        return []
+    }
+    
+    open func createTableViewRowTextFieldUpdateListeners() -> [TableViewRowTextFieldUpdateListener] {
+        // By default we dont have any listeners
+        return []
     }
 }
