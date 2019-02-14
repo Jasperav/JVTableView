@@ -16,6 +16,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     public let jvDatasource: U
     
+    let rows: [TableViewRow]
     let rowsWithCustomIdentifier: [TableViewRow]
     
     private let changeableRows: [TableViewRow & Changeable]
@@ -23,7 +24,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     public required init() {
         let tempJVDatasource = U.init()
         
-        let rows = tempJVDatasource.dataSource.flatMap({ $0.rows })
+        rows = tempJVDatasource.dataSource.flatMap({ $0.rows })
         
         rowsWithCustomIdentifier = rows.filter({ $0.identifier != TableViewRow.defaultRowIdentifier })
         
@@ -103,6 +104,13 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         jvDatasource.determineSectionsWithVisibleRows()
         
         super.reloadData()
+    }
+    
+    func determineRowsWithoutTapHandlers() -> [TableViewRow] {
+        return rowsWithCustomIdentifier
+            .filter { $0.isSelectable }
+            .filter { $0.tapped == nil }
+            .filter { $0.showViewControllerOnTap == nil }
     }
     
     /// Call this once after you did setup the whole tableview & datasource.

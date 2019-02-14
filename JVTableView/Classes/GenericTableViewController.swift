@@ -15,9 +15,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         tableView = tableViewGeneric
         
-        configure()
-        
-        for row in tableViewGeneric.jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.showViewControllerOnTap != nil }) }) {
+        for row in tableViewGeneric.rows.filter({ $0.showViewControllerOnTap != nil }) {
             present(viewControllerType: row.showViewControllerOnTap!, tapped: &row.tapped)
         }
         
@@ -26,14 +24,14 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         #endif
         
         guard tableViewGeneric.headerStretchView != nil else {
-            setupRows()
+            reloadData()
             
             return
         }
         
         tableViewGeneric.correctHeaderImageAfterSetup()
         
-        setupRows()
+        reloadData()
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -104,21 +102,19 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         }
         #endif
         
+        let rowsToAddTapHandlersTo = tableViewGeneric.determineRowsWithoutTapHandlers()
+        
+        addTapHandlers(rows: rowsToAddTapHandlersTo)
+        
+        assert(tableViewGeneric.determineRowsWithoutTapHandlers().count == 0, "Not every tappable row has a tap listener.")
+        
         tableViewGeneric.reloadData()
     }
-    /// If any rows needs to be configured (one-time), this is the place to do this.
-    /// This method gets called after the initializer is done.
-    open func setupRows() { }
     
     open func save(allChangeableRows: [TableViewRowUpdate], changedRows: [TableViewRowUpdate]) {
         #if DEBUG
         assert(allChangeableRows.count == 0, "There are rows to save but this method isn't overridden!")
         #endif
-    }
-    
-    /// Called right after the init completely setted up.
-    open func configure() {
-        reloadData()
     }
     
     open func createTableViewRowTextUpdates() -> [TableViewRowTextUpdate] {
@@ -133,5 +129,9 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     open func createTableViewRowSwitchUpdates() -> [TableViewRowSwitchUpdate] {
         return []
+    }
+    
+    open func addTapHandlers(rows: [TableViewRow]) {
+        assert(rows.count == 0, "There are rows that require to have a tap listener attached to it, but this method isn't overridden.")
     }
 }
