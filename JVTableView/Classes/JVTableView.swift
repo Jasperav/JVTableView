@@ -9,14 +9,16 @@ import JVNoParameterInitializable
 
 open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate, NoParameterInitializable {
     
+    public private (set) var headerStretchImage: JVTableViewHeaderStretchImage?
+    public private (set) var headerStretchView: LoadableImage?
+    
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     
     public let jvDatasource: U
-    private let rowsWithCustomIdentifier: [TableViewRow]
-    private let changeableRows: [TableViewRow & Changeable]
     
-    public private (set) var headerStretchImage: JVTableViewHeaderStretchImage?
-    public private (set) var headerStretchView: LoadableImage?
+    let rowsWithCustomIdentifier: [TableViewRow]
+    
+    private let changeableRows: [TableViewRow & Changeable]
     
     public required init() {
         let tempJVDatasource = U.init()
@@ -99,41 +101,6 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     open override func reloadData() {
         jvDatasource.determineSectionsWithVisibleRows()
-        
-        let textUpdates = createTableViewRowTextUpdates()
-        let textFieldUpdates = createTableViewRowTextFieldUpdates()
-        let switchUpdates = createTableViewRowSwitchUpdates()
-        
-        #if DEBUG
-        let rowIdentifiers = Set(textUpdates.map { $0.rowIdentifier } + textFieldUpdates.map { $0.rowIdentifier } + switchUpdates.map { $0.rowIdentifier })
-        
-        assert(rowIdentifiers.count == textUpdates.count + textFieldUpdates.count + switchUpdates.count, "Duplicate identifer for update")
-        #endif
-        
-        textUpdates.update(rows: rowsWithCustomIdentifier)
-        textFieldUpdates.update(rows: rowsWithCustomIdentifier)
-        switchUpdates.update(rows: rowsWithCustomIdentifier)
-        
-        #if DEBUG
-        // Every row should now have a text property
-        let texts = jvDatasource.dataSource
-            .flatMap({ $0.rows })
-            .compactMap({ $0 as? TableViewRowText })
-            .map({ $0._text })
-        
-        for text in texts {
-            assert(text != "")
-        }
-        
-        let textFields = jvDatasource.dataSource
-            .flatMap({ $0.rows })
-            .compactMap({ $0 as? TableViewRowTextField })
-            .map({ $0.oldValue })
-        
-        for text in textFields {
-            assert(text != "")
-        }
-        #endif
         
         super.reloadData()
     }
@@ -272,20 +239,6 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     /// This omits that all.
     open func tapped(identifier: String) {
         fatalError()
-    }
-    
-    open func createTableViewRowTextUpdates() -> [TableViewRowTextUpdate] {
-        // By default we dont have any listeners
-        return []
-    }
-    
-    open func createTableViewRowTextFieldUpdates() -> [TableViewRowTextFieldUpdate] {
-        // By default we dont have any listeners
-        return []
-    }
-    
-    open func createTableViewRowSwitchUpdates() -> [TableViewRowSwitchUpdate] {
-        return []
     }
     
     open func retrieveChangeableRows() -> [TableViewRowUpdate] {

@@ -3,7 +3,7 @@ import JVChangeableValue
 
 open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasource>: UITableViewController {
     
-    public unowned let tableViewGeneric: T
+    unowned let tableViewGeneric: T
     
     public init() {
         // Create a reference else tableViewGeneric gets instantly deinitialized.
@@ -53,6 +53,57 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         save(allChangeableRows: changeableRows, changedRows: changedRows)
     }
     
+    open func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout (() -> ())?) {
+        assert(tapped == nil)
+        
+        tapped = { [unowned self] in
+            let viewController = viewControllerType.init()
+            
+            self.navigationController!.pushViewController(viewController, animated: true)
+        }
+    }
+}
+
+/// Recommended overridable methods.
+public extension GenericTableViewController {
+    open func reloadData() {
+        let textUpdates = createTableViewRowTextUpdates()
+        let textFieldUpdates = createTableViewRowTextFieldUpdates()
+        let switchUpdates = createTableViewRowSwitchUpdates()
+        
+        #if DEBUG
+        let rowIdentifiers = Set(textUpdates.map { $0.rowIdentifier } + textFieldUpdates.map { $0.rowIdentifier } + switchUpdates.map { $0.rowIdentifier })
+        
+        assert(rowIdentifiers.count == textUpdates.count + textFieldUpdates.count + switchUpdates.count, "Duplicate identifer for update")
+        #endif
+        
+        textUpdates.update(rows: tableViewGeneric.rowsWithCustomIdentifier)
+        textFieldUpdates.update(rows: tableViewGeneric.rowsWithCustomIdentifier)
+        switchUpdates.update(rows: tableViewGeneric.rowsWithCustomIdentifier)
+        
+        #if DEBUG
+        // Every row should now have a text property
+        let texts = tableViewGeneric.jvDatasource.dataSource
+            .flatMap({ $0.rows })
+            .compactMap({ $0 as? TableViewRowText })
+            .map({ $0._text })
+        
+        for text in texts {
+            assert(text != "")
+        }
+        
+        let textFields = tableViewGeneric.jvDatasource.dataSource
+            .flatMap({ $0.rows })
+            .compactMap({ $0 as? TableViewRowTextField })
+            .map({ $0.oldValue })
+        
+        for text in textFields {
+            assert(text != "")
+        }
+        #endif
+        
+        tableViewGeneric.reloadData()
+    }
     /// If any rows needs to be configured (one-time), this is the place to do this.
     /// This method gets called after the initializer is done.
     open func setupRows() { }
@@ -65,16 +116,20 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     /// Called right after the init completely setted up.
     open func configure() {
-        // Nothing by default
+        reloadData()
     }
     
-    open func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout (() -> ())?) {
-        assert(tapped == nil)
-        
-        tapped = { [unowned self] in
-            let viewController = viewControllerType.init()
-            
-            self.navigationController!.pushViewController(viewController, animated: true)
-        }
+    open func createTableViewRowTextUpdates() -> [TableViewRowTextUpdate] {
+        // By default we dont have any listeners
+        return []
+    }
+    
+    open func createTableViewRowTextFieldUpdates() -> [TableViewRowTextFieldUpdate] {
+        // By default we dont have any listeners
+        return []
+    }
+    
+    open func createTableViewRowSwitchUpdates() -> [TableViewRowSwitchUpdate] {
+        return []
     }
 }
