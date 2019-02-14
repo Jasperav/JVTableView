@@ -3,7 +3,7 @@ import JVChangeableValue
 public enum TableViewRowUpdateType {
     case text(String), bool(Bool), other(Any)
     
-    var asText: String {
+    public var asText: String {
         switch self {
         case .text(let text):
             return text
@@ -12,10 +12,19 @@ public enum TableViewRowUpdateType {
         }
     }
     
-    var asBool: Bool {
+    public var asBool: Bool {
         switch self {
         case .bool(let bool):
             return bool
+        default:
+            fatalError()
+        }
+    }
+    
+    public var asOther: Any {
+        switch self {
+        case .other(let other):
+            return other
         default:
             fatalError()
         }
