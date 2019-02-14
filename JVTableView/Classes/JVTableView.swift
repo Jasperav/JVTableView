@@ -77,17 +77,17 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
             assert(row.tapped != nil || row.identifier != TableViewRow.defaultRowIdentifier)
         }
         
-        // If the row isn't selectable, it can not be tappable.
+        // If the row isn't selectable, it can not be tappable or showViewControllerOnTap.
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ !$0.isSelectable }) }) {
             assert(row.tapped == nil)
+            assert(row.showViewControllerOnTap == nil)
         }
         
-        // Omit duplicated
-        let rowsCustomIdentifier = jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.identifier != TableViewRow.defaultRowIdentifier}) }).map({ $0.identifier })
+        // Omit row identifier duplicated
         var customIdentifiers = Set<String>()
         
-        for identifier in rowsCustomIdentifier {
-            assert(customIdentifiers.insert(identifier).inserted)
+        for row in rowsWithCustomIdentifier {
+            assert(customIdentifiers.insert(row.identifier).inserted)
         }
         
         for row in changeableRows {
