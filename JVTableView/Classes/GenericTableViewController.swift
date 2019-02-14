@@ -62,10 +62,12 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
             self.navigationController!.pushViewController(viewController, animated: true)
         }
     }
-}
-
-/// Recommended overridable methods.
-public extension GenericTableViewController {
+    
+    
+    
+    /// * Recommended overridable methods. *
+    
+    /// Always call super.reloadData() if you override this method.
     open func reloadData() {
         let textUpdates = createTableViewRowTextUpdates()
         let textFieldUpdates = createTableViewRowTextFieldUpdates()
