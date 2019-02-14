@@ -9,7 +9,7 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
     public override init() {
         super.init()
         
-        formChangeWatcher = FormChangeWatcher(changeableForm: tableViewGeneric, viewController: self, update: save)
+        formChangeWatcher = FormChangeWatcher(changeableForm: tableViewGeneric, viewController: self, update: prepareForSave)
         
         #if DEBUG
         assert(tableViewGeneric.jvDatasource.dataSource.flatMap({ $0.rows }).filter({ $0 is Changeable }).count > 0, "You are watching a datasource which hasn't got changeable rows")

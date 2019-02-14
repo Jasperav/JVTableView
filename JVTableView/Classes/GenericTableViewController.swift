@@ -43,16 +43,23 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        save()
+        prepareForSave()
+    }
+    
+    public func prepareForSave() {
+        let changeableRows = tableViewGeneric.retrieveChangeableRows()
+        let changedRows = changeableRows.filter { $0.hasChanged }
+        
+        save(allChangeableRows: changeableRows, changedRows: changedRows)
     }
     
     /// If any rows needs to be configured (one-time), this is the place to do this.
     /// This method gets called after the initializer is done.
     open func setupRows() { }
     
-    open func save() {
+    open func save(allChangeableRows: [TableViewRowUpdate], changedRows: [TableViewRowUpdate]) {
         #if DEBUG
-        assert(tableViewGeneric.jvDatasource.dataSource.flatMap({ $0.rows }).filter({ $0 is Changeable }).count > 0, "There is a changeable row here, but this class doesn't save the changes!")
+        assert(allChangeableRows.count == 0, "There are rows to save but this method isn't overridden!")
         #endif
     }
     

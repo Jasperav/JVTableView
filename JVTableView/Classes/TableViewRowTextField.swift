@@ -7,7 +7,7 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues {
     public static var textFieldInitializer: TextFieldInitializer!
     
     public let placeholderText: String
-    public var oldValue: (() -> (String))?
+    public var oldValue = ""
     public var currentValue: String
     
     // Sends back if the currentValue == oldValue
@@ -21,11 +21,11 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues {
                 placeholderText: String,
                 validate: @escaping ((String) -> (Bool)),
                 textFieldInitializer: TextFieldInitializer = TableViewRowTextField.textFieldInitializer,
-                oldValue: (() -> (String))? = nil) {
+                oldValue: String = "") {
         self.oldValue = oldValue
         self.validate = validate
         self.placeholderText = placeholderText
-        currentValue = oldValue?() ?? ""
+        currentValue = oldValue
         self.textFieldInitializer = textFieldInitializer
         
         super.init(cell: JVTableViewStdCell.textField,
@@ -53,5 +53,9 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues {
         _cell.textField.didReturn = { [unowned self] in
             self.didReturn?()
         }
+    }
+    
+    open override func determineUpdateType() -> TableViewRowUpdateType {
+        return .text(currentValue)
     }
 }

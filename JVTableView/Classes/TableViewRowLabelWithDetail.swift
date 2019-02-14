@@ -9,7 +9,7 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
     public var contentTypeJVLabelDetail: ContentTypeJVLabelText
     
     public init(identifier: String = TableViewRow.defaultRowIdentifier,
-                text: String? = nil,
+                text: String = "",
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 detailText: String? = nil,
                 contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,

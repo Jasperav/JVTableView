@@ -8,7 +8,7 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     public var image: UIImage?
     
     public init(identifier: String = TableViewRow.defaultRowIdentifier,
-                text: String? = nil,
+                text: String = "",
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 image: UIImage? = nil,

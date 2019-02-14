@@ -2,8 +2,9 @@ import UIKit
 import JVChangeableValue
 
 public class TableViewCellLabelSwitch: TableViewCellLabel, ChangeableValues {
+    
     public var currentValue = false
-    public var oldValue: (() -> (Bool))?
+    public var oldValue = false
     public var hasChanged: ((Bool) -> ())?
     public let _switch = UISwitch(frame: CGRect.zero)
     

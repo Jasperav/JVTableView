@@ -55,6 +55,11 @@ open class TableViewRow: Tappable {
         os_log("Unconfigured cell: %{private}@", type: .debug, String(describing: cell))
     }
     
+    // Will be called when 'self' is changeable and the data from the tableView will be saved.
+    open func determineUpdateType() -> TableViewRowUpdateType {
+        fatalError()
+    }
+    
     func changeClassType(cell: JVTableViewStdCell) {
         self.classType = cell.classType
         self.classIdentifier = String(describing: classType)

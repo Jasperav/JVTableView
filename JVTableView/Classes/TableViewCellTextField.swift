@@ -8,7 +8,7 @@ open class TableViewCellTextField: TableViewCell, ChangeableValues {
     public let textField = JVTextField()
     
     public var currentValue = ""
-    public var oldValue: (() -> (String))?
+    public var oldValue = ""
     public var hasChanged: ((Bool) -> ())?
     public var didReturn: (() -> ())?
     

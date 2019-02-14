@@ -3,7 +3,7 @@ import JVNoParameterInitializable
 
 open class TableViewRowButton: TableViewRowText {
     public init(identifier: String = TableViewRow.defaultRowIdentifier,
-                text: String? = nil,
+                text: String = "",
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {

@@ -12,18 +12,27 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     
     public let jvDatasource: U
+    private let rowsWithCustomIdentifier: [TableViewRow]
+    private let changeableRows: [TableViewRow & Changeable]
     
     public private (set) var headerStretchImage: JVTableViewHeaderStretchImage?
     public private (set) var headerStretchView: LoadableImage?
     
     public required init() {
-        jvDatasource = U.init()
+        let tempJVDatasource = U.init()
+        
+        let rows = tempJVDatasource.dataSource.flatMap({ $0.rows })
+        
+        rowsWithCustomIdentifier = rows.filter({ $0.identifier != TableViewRow.defaultRowIdentifier })
+        
+        changeableRows = rows.compactMap { $0 as? TableViewRow & Changeable }
+        
+        jvDatasource = tempJVDatasource
         
         super.init(frame: CGRect.zero, style: jvDatasource.determineStyle())
         
         self.headerStretchImage = jvDatasource.determineHeaderStretchImage()
-        
-        let rows = jvDatasource.dataSource.flatMap { $0.rows }
+
         var insertedClassTypes: Set<String> = []
         
         for row in rows {
@@ -57,34 +66,6 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         fatalError()
     }
     
-    private func updateTableViewRowTextUpdateListeners() {
-        let updateListeners = createTableViewRowTextUpdateListeners()
-        let rows = jvDatasource.dataSource
-            .flatMap({ $0.rows })
-            .filter({ $0.identifier != TableViewRow.defaultRowIdentifier })
-            .compactMap({ $0 as? TableViewRowText })
-        
-        for row in rows {
-            guard let updateListener = updateListeners.first(where: { $0.rowIdentifier == row.identifier }) else { continue }
-            
-            row._text = updateListener.text
-        }
-    }
-    
-    private func updateTableViewRowTextFieldUpdateListeners() {
-        let updateListeners = createTableViewRowTextFieldUpdateListeners()
-        let rows = jvDatasource.dataSource
-            .flatMap({ $0.rows })
-            .filter({ $0.identifier != TableViewRow.defaultRowIdentifier })
-            .compactMap({ $0 as? TableViewRowTextField })
-        
-        for row in rows {
-            guard let updateListener = updateListeners.first(where: { $0.rowIdentifier == row.identifier }) else { continue }
-            
-            row.oldValue = { return updateListener.text }
-        }
-    }
-    
     public func validate() {
         #if DEBUG
         // Either the tapped closure must be filled in, or it has a custom identifier.
@@ -92,21 +73,46 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.isSelectable }) }) {
             assert(row.tapped != nil || row.identifier != TableViewRow.defaultRowIdentifier)
         }
+        
+        // If the row isn't selectable, it can not be tappable.
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ !$0.isSelectable }) }) {
             assert(row.tapped == nil)
         }
+        
+        // Omit duplicated
         let rowsCustomIdentifier = jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.identifier != TableViewRow.defaultRowIdentifier}) }).map({ $0.identifier })
         var customIdentifiers = Set<String>()
         
         for identifier in rowsCustomIdentifier {
             assert(customIdentifiers.insert(identifier).inserted)
         }
+        
+        for row in changeableRows {
+            // Every changeable row should have an identifier
+            assert(row.identifier != TableViewRow.defaultRowIdentifier)
+            // Every changeable row must override determineCurrentValue().
+            // The default method throws a fatalerror. We check if it doesn't throw.
+            row.determineUpdateType()
+        }
         #endif
     }
     
     open override func reloadData() {
         jvDatasource.determineSectionsWithVisibleRows()
-        updateTableViewRowTextUpdateListeners()
+        
+        let textUpdates = createTableViewRowTextUpdates()
+        let textFieldUpdates = createTableViewRowTextFieldUpdates()
+        let switchUpdates = createTableViewRowSwitchUpdates()
+        
+        #if DEBUG
+        let rowIdentifiers = Set(textUpdates.map { $0.rowIdentifier } + textFieldUpdates.map { $0.rowIdentifier } + switchUpdates.map { $0.rowIdentifier })
+        
+        assert(rowIdentifiers.count == textUpdates.count + textFieldUpdates.count + switchUpdates.count, "Duplicate identifer for update")
+        #endif
+        
+        textUpdates.update(rows: rowsWithCustomIdentifier)
+        textFieldUpdates.update(rows: rowsWithCustomIdentifier)
+        switchUpdates.update(rows: rowsWithCustomIdentifier)
         
         #if DEBUG
         // Every row should now have a text property
@@ -116,16 +122,16 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
             .map({ $0._text })
         
         for text in texts {
-            assert(text != nil && text! != "")
+            assert(text != "")
         }
         
         let textFields = jvDatasource.dataSource
             .flatMap({ $0.rows })
             .compactMap({ $0 as? TableViewRowTextField })
-            .map({ $0.oldValue! })
+            .map({ $0.oldValue })
         
         for text in textFields {
-            assert(text() != "")
+            assert(text != "")
         }
         #endif
         
@@ -257,9 +263,9 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         updateHeaderStretchImageView()
     }
     
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        view.endEditing(true)
-//    }
+    //    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    //        view.endEditing(true)
+    //    }
     
     /// For allowing easier tapping, this method is available.
     /// Without this method, we would have a lot of methods with getRow...() in the initalizer of the implementing class.
@@ -268,13 +274,21 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         fatalError()
     }
     
-    open func createTableViewRowTextUpdateListeners() -> [TableViewRowTextUpdateListener] {
+    open func createTableViewRowTextUpdates() -> [TableViewRowTextUpdate] {
         // By default we dont have any listeners
         return []
     }
     
-    open func createTableViewRowTextFieldUpdateListeners() -> [TableViewRowTextFieldUpdateListener] {
+    open func createTableViewRowTextFieldUpdates() -> [TableViewRowTextFieldUpdate] {
         // By default we dont have any listeners
         return []
+    }
+    
+    open func createTableViewRowSwitchUpdates() -> [TableViewRowSwitchUpdate] {
+        return []
+    }
+    
+    open func retrieveChangeableRows() -> [TableViewRowUpdate] {
+        return changeableRows.map { TableViewRowUpdate(changeableRow: $0) }
     }
 }
