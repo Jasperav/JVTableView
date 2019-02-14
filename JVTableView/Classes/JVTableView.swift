@@ -14,8 +14,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     
-    public let jvDatasource: U
-    
+    let jvDatasource: U
     let rows: [TableViewRow]
     let rowsWithCustomIdentifier: [TableViewRow]
     
