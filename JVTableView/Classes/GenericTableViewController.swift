@@ -15,6 +15,8 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         tableView = tableViewGeneric
         
+        setup()
+        
         for row in tableViewGeneric.rows.filter({ $0.showViewControllerOnTap != nil }) {
             present(viewControllerType: row.showViewControllerOnTap!, tapped: &row.tapped)
         }
@@ -133,5 +135,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     open func addTapHandlers(rows: [TableViewRow]) {
         assert(rows.count == 0, "There are rows that require to have a tap listener attached to it, but this method isn't overridden.")
+    }
+    
+    open func setup() {
+        // One time setup for the view controller.
+        // Don't change row values in this method.
     }
 }
