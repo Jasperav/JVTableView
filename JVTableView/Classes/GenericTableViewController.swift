@@ -131,6 +131,8 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         let visibleUpdateRows = createTableViewRowConditionallyVisible()
         
+        assert(Set(visibleUpdateRows).count == visibleUpdateRows.count, "The row identifier is used twice, this is illegal")
+        
         for row in visibleUpdateRows {
             let tableViewRow = tableViewGeneric.jvDatasource.getRow(row.rowIdentifier)
             
