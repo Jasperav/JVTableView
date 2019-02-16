@@ -52,7 +52,13 @@ open class TableViewRow: Tappable {
     }
     
     open func configure(cell: TableViewCell) {
-        os_log("Unconfigured cell: %{private}@", type: .debug, String(describing: cell))
+        #if DEBUG
+        // Let the app crash when a standard cell hasn't been configured.
+        let forbiddenClassTypes = JVTableViewStdCell.allCases.map { $0.classType }
+        let currentCellType = type(of: cell)
+        
+        assert(!forbiddenClassTypes.contains(where: { $0 == currentCellType }))
+        #endif
     }
     
     // Will be called when 'self' is changeable and the data from the tableView will be saved.

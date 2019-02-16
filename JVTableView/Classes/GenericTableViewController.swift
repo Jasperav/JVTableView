@@ -1,11 +1,25 @@
 import JVNoParameterInitializable
 import JVChangeableValue
+import JVLoadableImage
 
+/// Subclass of UITableViewController.
+/// Inhert from this class if you want just want to use a JVTableView without any additional views.
+/// It provides a really easy way to display tableviews with really lots of validations
+/// Type T: The table view type.
+/// Type U: the datasource type.
+/// You do not need to create a JVTableView subclass.
 open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasource>: UITableViewController {
     
+    /// The generic table view.
     unowned let tableViewGeneric: T
     
-    public init() {
+    /// Is filled when the datasource has set the header image.
+    public private (set) var headerImageLoadableView: LoadableImage?
+    
+    /// Possibility to override the initalizer.
+    /// Be aware we also have a setup() method which omits the required initalizer of the decoder
+    /// if you want to set e.g. a title.
+    public init(title: String? = nil) {
         // Create a reference else tableViewGeneric gets instantly deinitialized.
         let tableViewGenericReference = T.init()
         
@@ -13,10 +27,24 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         super.init(style: tableViewGenericReference.style)
         
+        self.title = title
+        
         tableView = tableViewGeneric
         
+        // Give the user the possiblity to customize values.
+        // See the description of the init() why this method is here.
         setup()
         
+        // After the setup, we require every row that is selectable but doesn't have
+        // a tapped handler and view controller to present, to add a tap handler.
+        let rowsToAddTapHandlersTo = tableViewGeneric.determineRowsWithoutTapHandlers()
+        
+        addTapHandlers(rows: rowsToAddTapHandlersTo)
+        
+        assert(tableViewGeneric.determineRowsWithoutTapHandlers().count == 0, "Not every tappable row has a tap listener.")
+        
+        // For all the view controllers that needs to be presented after they have been tapped
+        // we do that here.
         for row in tableViewGeneric.rows.filter({ $0.showViewControllerOnTap != nil }) {
             present(viewControllerType: row.showViewControllerOnTap!, tapped: &row.tapped)
         }
@@ -25,11 +53,18 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         tableViewGeneric.validate()
         #endif
         
-        guard tableViewGeneric.headerStretchView != nil else {
+        guard let headerImage = tableViewGeneric.headerImage else {
             reloadData()
             
             return
         }
+        
+        headerImageLoadableView = headerImage.loadableView
+        
+        configure(headerImageView: headerImageLoadableView!)
+        
+        // The identifier must have changed after configuration.
+        assert(headerImageLoadableView!.identifier != 0)
         
         tableViewGeneric.correctHeaderImageAfterSetup()
         
@@ -40,30 +75,25 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         fatalError("init(coder:) has not been implemented")
     }
     
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        tableViewGeneric.endEditing(true)
+    }
+    
+    /// When the view disappears when want to save the form.
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         prepareForSave()
     }
     
-    public func prepareForSave() {
+    /// Prepares to call the save method.
+    /// It checks the necessary rows to select and passes it to the save method.
+    open func prepareForSave() {
         let changeableRows = tableViewGeneric.retrieveChangeableRows()
         let changedRows = changeableRows.filter { $0.hasChanged }
         
         save(allChangeableRows: changeableRows, changedRows: changedRows)
     }
-    
-    open func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout (() -> ())?) {
-        assert(tapped == nil)
-        
-        tapped = { [unowned self] in
-            let viewController = viewControllerType.init()
-            
-            self.navigationController!.pushViewController(viewController, animated: true)
-        }
-    }
-    
-    
     
     /// * Recommended overridable methods. *
     
@@ -85,60 +115,70 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         #if DEBUG
         // Every row should now have a text property
-        let texts = tableViewGeneric.jvDatasource.dataSource
-            .flatMap({ $0.rows })
+        let texts = tableViewGeneric.rows
             .compactMap({ $0 as? TableViewRowText })
             .map({ $0._text })
         
         for text in texts {
-            assert(text != "")
+            assert(text != "", "A row without text is never good.")
         }
         
-        let textFields = tableViewGeneric.jvDatasource.dataSource
-            .flatMap({ $0.rows })
-            .compactMap({ $0 as? TableViewRowTextField })
-            .map({ $0.oldValue })
+        let textFields = tableViewGeneric.rows.compactMap({ $0 as? TableViewRowTextField })
         
         for text in textFields {
-            assert(text != "")
+            assert(text.validationBlockUserInput(text.oldValue), "The new data isn't valid at the first place!")
         }
         #endif
-        
-        let rowsToAddTapHandlersTo = tableViewGeneric.determineRowsWithoutTapHandlers()
-        
-        addTapHandlers(rows: rowsToAddTapHandlersTo)
-        
-        assert(tableViewGeneric.determineRowsWithoutTapHandlers().count == 0, "Not every tappable row has a tap listener.")
         
         tableViewGeneric.reloadData()
     }
     
+    /// This method must be overridden if you have rows that have changed.
     open func save(allChangeableRows: [TableViewRowUpdate], changedRows: [TableViewRowUpdate]) {
-        #if DEBUG
         assert(allChangeableRows.count == 0, "There are rows to save but this method isn't overridden!")
-        #endif
     }
     
+    /// Returns the rows that needs to have there value properties dynamically updated
     open func createTableViewRowTextUpdates() -> [TableViewRowTextUpdate] {
         // By default we dont have any listeners
         return []
     }
     
+    /// Returns the rows that needs to have there value properties dynamically updated
     open func createTableViewRowTextFieldUpdates() -> [TableViewRowTextFieldUpdate] {
         // By default we dont have any listeners
         return []
     }
     
+    /// Returns the rows that needs to have there value properties dynamically updated
     open func createTableViewRowSwitchUpdates() -> [TableViewRowSwitchUpdate] {
+        // By default we dont have any listeners
         return []
     }
     
+    /// This method must be overridden if you are using a header image.
+    open func configure(headerImageView: LoadableImage) {
+        fatalError()
+    }
+    
+    /// Some view controllers do not conform to NoParameterInitializable
+    /// Because they need more info when they are initialized.
+    /// Do that here.
     open func addTapHandlers(rows: [TableViewRow]) {
         assert(rows.count == 0, "There are rows that require to have a tap listener attached to it, but this method isn't overridden.")
     }
     
-    open func setup() {
-        // One time setup for the view controller.
-        // Don't change row values in this method.
+    /// One time setup for the view controller.
+    /// See the description of the init() why this method is here.
+    open func setup() {}
+    
+    open func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout (() -> ())?) {
+        assert(tapped == nil)
+        
+        tapped = { [unowned self] in
+            let viewController = viewControllerType.init()
+            
+            self.navigationController!.pushViewController(viewController, animated: true)
+        }
     }
 }

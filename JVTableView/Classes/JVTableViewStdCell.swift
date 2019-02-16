@@ -2,7 +2,7 @@ import UIKit
 import JVView
 import JVContentType
 
-public enum JVTableViewStdCell: String {
+public enum JVTableViewStdCell: String, CaseIterable {
     case
     textField,
     label,

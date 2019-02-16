@@ -6,19 +6,35 @@ import JVFormChangeWatcher
 import JVLoadableImage
 import JVChangeableValue
 import JVNoParameterInitializable
+import JVInputValidator
 
 open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate, NoParameterInitializable {
     
-    public private (set) var headerStretchImage: JVTableViewHeaderStretchImage?
-    public private (set) var headerStretchView: LoadableImage?
-    
+    /// Will be called when anything in the form has been changed.
+    /// Not mandatory when you have a screen which won't update directly
+    /// When the screen disappears, the save method will be called
+    /// With an array of changed rows.
+    /// This property is usefull when you want to be directly notified if anything in the form has changed.
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     
+    /// Making the datasource non-public will prevent the developer to directly modify rows.
+    /// This is always illegal and can cause a corrupted state.
     let jvDatasource: U
+    
+    /// Contains all the rows of jvDatasource.
     let rows: [TableViewRow]
+    
+    /// Contains all the rows of jvDatasource which rowIdentifier isn't set to the default ("").
     let rowsWithCustomIdentifier: [TableViewRow]
     
-    private let changeableRows: [TableViewRow & Changeable]
+    /// Contains all the rows of jvDatasource which conforms to the protocol Changeable.
+    let changeableRows: [TableViewRow & Changeable]
+    
+    /// The header stretch view which will maintain the stretch image.
+    private (set) var headerImage: JVTableViewHeaderImage?
+    
+    /// Contains all the rows of jvDatasource which conforms to the protocol InputValidateable.
+    private let rowInputValidators: [InputValidator]
     
     public required init() {
         let tempJVDatasource = U.init()
@@ -29,21 +45,15 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         
         changeableRows = rows.compactMap { $0 as? TableViewRow & Changeable }
         
+        rowInputValidators = rows.compactMap { $0 as? InputValidateable }.map { $0.inputValidator }
+        
         jvDatasource = tempJVDatasource
         
         super.init(frame: CGRect.zero, style: jvDatasource.determineStyle())
         
-        self.headerStretchImage = jvDatasource.determineHeaderStretchImage()
-
-        var insertedClassTypes: Set<String> = []
+        self.headerImage = jvDatasource.determineHeaderImage()
         
-        for row in rows {
-            let classIdentifier = row.classIdentifier
-            
-            guard insertedClassTypes.insert(classIdentifier).inserted else { break }
-            
-            register(row.classType, forCellReuseIdentifier: classIdentifier)
-        }
+        registerUniqueCellTypes()
         
         sectionFooterHeight = UITableView.automaticDimension
         estimatedSectionFooterHeight = 5
@@ -59,9 +69,9 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         
         reloadData()
         
-        guard let headerStretchImage = headerStretchImage else { return }
+        guard let headerImage = headerImage else { return }
         
-        add(headerStretchImage: headerStretchImage)
+        add(headerImage: headerImage)
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -112,6 +122,10 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
             .filter { $0.showViewControllerOnTap == nil }
     }
     
+    public func isValid() -> Bool {
+        return rowInputValidators.allSatisfy { $0.validationState == .valid }
+    }
+    
     /// Call this once after you did setup the whole tableview & datasource.
     /// AND you have a header image view.
     /// If there is an header image, this view needs to be explicitly layout out.
@@ -121,33 +135,28 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         layoutIfNeeded()
     }
     
-    private func add(headerStretchImage: JVTableViewHeaderStretchImage) {
-        headerStretchView = LoadableImage(style: .gray, rounded: false)
+    private func add(headerImage: JVTableViewHeaderImage) {
+        headerImage.loadableView.stretchImage()
         
-        headerStretchView!.stretchImage()
+        contentInset = UIEdgeInsets(top: headerImage.height, left: 0, bottom: 0, right: 0)
         
-        contentInset = UIEdgeInsets(top: headerStretchImage.height, left: 0, bottom: 0, right: 0)
-        
-        addSubview(headerStretchView!)
-        
-        guard let image = headerStretchImage.image else { return }
-        
-        headerStretchView!.show(image: image)
+        addSubview(headerImage.loadableView)
     }
     
     private func updateHeaderStretchImageView() {
-        guard let headerStretchImage = headerStretchImage else { return }
+        guard let headerImage = headerImage else { return }
         
-        var headerRect = CGRect(x: 0, y: -headerStretchImage.height, width: bounds.width, height: headerStretchImage.height)
+        var headerRect = CGRect(x: 0, y: -headerImage.height, width: bounds.width, height: headerImage.height)
         
-        if contentOffset.y < -headerStretchImage.height {
+        if contentOffset.y < -headerImage.height {
             headerRect.origin.y = contentOffset.y
             headerRect.size.height = -contentOffset.y
         }
         
-        headerStretchView!.frame = headerRect
+        headerImage.loadableView.frame = headerRect
     }
     
+    /// Checks if any row in the datasource has a different oldValue compared to its currentValue.
     private func checkIfFormChanged() {
         guard let formHasChanged = formHasChanged else { return }
         
@@ -161,6 +170,20 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         }
         
         formHasChanged(false)
+    }
+    
+    /// Registers the unique cell types with there reuse identifier.
+    private func registerUniqueCellTypes() {
+        var insertedClassTypes: Set<String> = []
+        
+        for row in rows {
+            let classIdentifier = row.classIdentifier
+            
+            guard insertedClassTypes.insert(classIdentifier).inserted else { break }
+            
+            // The cell hasn't been registered yet, do it now.
+            register(row.classType, forCellReuseIdentifier: classIdentifier)
+        }
     }
     
     /// Resets everything to the oldValues
@@ -236,11 +259,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateHeaderStretchImageView()
     }
-    
-    //    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    //        view.endEditing(true)
-    //    }
-    
+
     /// For allowing easier tapping, this method is available.
     /// Without this method, we would have a lot of methods with getRow...() in the initalizer of the implementing class.
     /// This omits that all.

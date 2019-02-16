@@ -68,6 +68,10 @@ public extension Array where Element: RowUpdater {
             
             matchingRow.update(row: row)
         }
+        
+        #if DEBUG
+        validate(allRows: filteredRows)
+        #endif
     }
     
     func find(rowIdentifier: String) -> Element? {
@@ -78,5 +82,15 @@ public extension Array where Element: RowUpdater {
         }
         
         return nil
+    }
+}
+
+private extension Array where Element: RowUpdater {
+    /// Checks if every row in the current update list is present in the allRows parameter.
+    /// Ofcourse it is mandatory to, when the user updates a row, it is present in the array of all rows.
+    func validate(allRows: [Element.R]) {
+        for row in self {
+            guard allRows.contains(where: { $0.identifier == row.rowIdentifier }) else { fatalError("Tried to update a row which isn't even in the list.") }
+        }
     }
 }

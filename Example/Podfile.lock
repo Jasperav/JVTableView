@@ -10,11 +10,12 @@ PODS:
   - JVCurrentDevice (0.1.1):
     - DeviceKit
   - JVFontUtils (0.1.0)
-  - JVFormChangeWatcher (0.1.0)
+  - JVFormChangeWatcher (0.1.1)
   - JVGenericNotificationCenter (0.1.2)
   - JVGradientLayer (0.1.2):
     - JVCAGradientLayerExtensions
     - JVContentType
+  - JVInputValidator (0.1.4)
   - JVLoadableImage (0.2.1):
     - JVConstraintEdges
     - JVGenericNotificationCenter
@@ -24,7 +25,7 @@ PODS:
     - JVCAShapeLayerExtensions
     - JVContentType
   - JVSizeable (0.1.0)
-  - JVTableView (0.7.6):
+  - JVTableView (0.8.4):
     - JVConstraintEdges
     - JVFormChangeWatcher
     - JVLoadableImage
@@ -33,8 +34,9 @@ PODS:
     - JVTextField
     - JVView
   - JVTappable (0.1.0)
-  - JVTextField (0.1.5):
+  - JVTextField (0.1.7):
     - JVChangeableValue
+    - JVInputValidator
     - JVView
   - JVView (0.2.0):
     - JVConstraintEdges
@@ -63,6 +65,7 @@ SPEC REPOS:
     - JVFormChangeWatcher
     - JVGenericNotificationCenter
     - JVGradientLayer
+    - JVInputValidator
     - JVLoadableImage
     - JVNoParameterInitializable
     - JVRestartable
@@ -85,17 +88,18 @@ SPEC CHECKSUMS:
   JVContentType: bf617302d029baefccde48eb79edc7634fd15f55
   JVCurrentDevice: 36aaad85ebb56d935de74e7b3bc47c852899dc39
   JVFontUtils: e390fee698f64889fafa4ccabd25084bdbf136b7
-  JVFormChangeWatcher: edf4f282d5cbd46521a361b56751de32d55d6e68
+  JVFormChangeWatcher: d1e3e226353747fc16794ba88ba3928dd089c7ce
   JVGenericNotificationCenter: 5e6b2a2774954d6bed9389d79984bac77f705ff7
   JVGradientLayer: 34e464b6f5624370653606c94229e81dcf1282ea
+  JVInputValidator: 59a66bcb4ecae09a4a2d03785ba1c0ea3c8edb67
   JVLoadableImage: f4122e21a812ddc70f371700fb9b722d88c60af2
   JVNoParameterInitializable: 4a41b313e0409cfcb41c1620d70e0ebbe682157b
   JVRestartable: 008c47ae1b36de3bf2cdad2299852231b5749f2a
   JVShapeHalfMoon: 31444957e7a226e800003afaee2634c8ba8129a1
   JVSizeable: 1252e6b1bed411b3fc34f6119d8eaf6803876cd3
-  JVTableView: 996933aa182785e5e18e53135efa035d90651a26
+  JVTableView: 26a3d0c20150f85d926d610999bbd090baecf2f4
   JVTappable: 974c863a43962d8f985d5dee205b2ad00b62fcbd
-  JVTextField: d569bd33cba4d2382e8ed9420dc308aec926b70a
+  JVTextField: 6ff38fed9599e365be06d1cfe6586e79ba57040f
   JVView: cf3480ca75335733b329dd3a34c68a743fc672dc
 
 PODFILE CHECKSUM: 00ccd456b08e8fea833a5d368f2ccc81425c1c87
