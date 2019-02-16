@@ -18,16 +18,13 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     /// Possibility to override the initalizer.
     /// Be aware we also have a setup() method which omits the required initalizer of the decoder
-    /// if you want to set e.g. a title.
-    public init(title: String? = nil) {
+    public init() {
         // Create a reference else tableViewGeneric gets instantly deinitialized.
         let tableViewGenericReference = T.init()
         
         tableViewGeneric = tableViewGenericReference
         
         super.init(style: tableViewGenericReference.style)
-        
-        self.title = title
         
         tableView = tableViewGeneric
         
