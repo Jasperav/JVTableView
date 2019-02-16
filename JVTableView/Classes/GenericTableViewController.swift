@@ -89,6 +89,8 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         let changeableRows = tableViewGeneric.retrieveChangeableRows()
         let changedRows = changeableRows.filter { $0.hasChanged }
         
+        guard changedRows.count > 0 else { return }
+        
         save(allChangeableRows: changeableRows, changedRows: changedRows)
     }
     
@@ -131,6 +133,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     }
     
     /// This method must be overridden if you have rows that have changed.
+    /// Will be called if at least one row have been changed.
     open func save(allChangeableRows: [TableViewRowUpdate], changedRows: [TableViewRowUpdate]) {
         assert(allChangeableRows.count == 0, "There are rows to save but this method isn't overridden!")
     }
