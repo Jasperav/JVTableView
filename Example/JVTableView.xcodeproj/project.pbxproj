@@ -196,6 +196,7 @@
 				"${BUILT_PRODUCTS_DIR}/JVTableView/JVTableView.framework",
 				"${BUILT_PRODUCTS_DIR}/JVTappable/JVTappable.framework",
 				"${BUILT_PRODUCTS_DIR}/JVTextField/JVTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/JVURLOpener/JVURLOpener.framework",
 				"${BUILT_PRODUCTS_DIR}/JVView/JVView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -222,6 +223,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVTableView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVTappable.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVURLOpener.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

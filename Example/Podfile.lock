@@ -25,19 +25,21 @@ PODS:
     - JVCAShapeLayerExtensions
     - JVContentType
   - JVSizeable (0.1.0)
-  - JVTableView (0.8.4):
+  - JVTableView (0.8.8):
     - JVConstraintEdges
     - JVFormChangeWatcher
     - JVLoadableImage
     - JVNoParameterInitializable
     - JVTappable
     - JVTextField
+    - JVURLOpener
     - JVView
   - JVTappable (0.1.0)
   - JVTextField (0.1.7):
     - JVChangeableValue
     - JVInputValidator
     - JVView
+  - JVURLOpener (0.1.1)
   - JVView (0.2.0):
     - JVConstraintEdges
     - JVContentType
@@ -73,6 +75,7 @@ SPEC REPOS:
     - JVSizeable
     - JVTappable
     - JVTextField
+    - JVURLOpener
     - JVView
 
 EXTERNAL SOURCES:
@@ -97,9 +100,10 @@ SPEC CHECKSUMS:
   JVRestartable: 008c47ae1b36de3bf2cdad2299852231b5749f2a
   JVShapeHalfMoon: 31444957e7a226e800003afaee2634c8ba8129a1
   JVSizeable: 1252e6b1bed411b3fc34f6119d8eaf6803876cd3
-  JVTableView: 26a3d0c20150f85d926d610999bbd090baecf2f4
+  JVTableView: ed31b0100ada7551f61e6f53da013947dc442d67
   JVTappable: 974c863a43962d8f985d5dee205b2ad00b62fcbd
   JVTextField: 6ff38fed9599e365be06d1cfe6586e79ba57040f
+  JVURLOpener: 6545c4695a338bb2047643a97151eecafe0620e7
   JVView: cf3480ca75335733b329dd3a34c68a743fc672dc
 
 PODFILE CHECKSUM: 00ccd456b08e8fea833a5d368f2ccc81425c1c87
