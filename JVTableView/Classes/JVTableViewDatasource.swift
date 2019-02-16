@@ -40,6 +40,17 @@ open class JVTableViewDatasource: NoParameterInitializable {
         return dataSourceVisibleRows[section]
     }
     
+    public func getRow(_ identifier: String) -> TableViewRow {
+        for section in dataSource {
+            for row in section.rows {
+                guard row.identifier == identifier else { continue }
+                return row
+            }
+        }
+        
+        fatalError()
+    }
+    
 //    // Call this in your viewDidDisappear
 //    public func clean() {
 //        for section in dataSource {
@@ -54,16 +65,6 @@ open class JVTableViewDatasource: NoParameterInitializable {
 //        return getRow(identifier.rawValue)
 //    }
 //
-//    public func getRow(_ identifier: String) -> TableViewRow {
-//        for section in dataSource {
-//            for row in section.rows {
-//                guard row.identifier == identifier else { continue }
-//                return row
-//            }
-//        }
-//
-//        fatalError()
-//    }
 //
 //    public func removeRow(_ identifier: String) {
 //        for section in dataSource {

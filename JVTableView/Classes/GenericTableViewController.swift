@@ -129,6 +129,14 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         }
         #endif
         
+        let visibleUpdateRows = createTableViewRowConditionallyVisible()
+        
+        for row in visibleUpdateRows {
+            let tableViewRow = tableViewGeneric.jvDatasource.getRow(row.rowIdentifier)
+            
+            tableViewRow.showInTableView = { return row.isVisible }
+        }
+        
         tableViewGeneric.reloadData()
     }
     
@@ -153,6 +161,11 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     /// Returns the rows that needs to have there value properties dynamically updated
     open func createTableViewRowSwitchUpdates() -> [TableViewRowSwitchUpdate] {
         // By default we dont have any listeners
+        return []
+    }
+    
+    /// Creates the rows that needs to be dynamically visible
+    open func createTableViewRowConditionallyVisible() -> [TableViewRowVisibleUpdate] {
         return []
     }
     
