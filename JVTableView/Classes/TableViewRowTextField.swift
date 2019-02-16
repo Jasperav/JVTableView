@@ -25,13 +25,13 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
     public init(identifier: String,
                 placeholderText: String,
                 validationBlockUserInput: @escaping ((String) -> (Bool)),
-                validationToChangeValidationState: @escaping ((String) -> (Bool)),
+                validationToChangeValidationState: ((String) -> (Bool))? = nil,
                 keyboardReturnType: UIReturnKeyType = .done,
                 textFieldInitializer: TextFieldInitializer = TableViewRowTextField.textFieldInitializer,
                 oldValue: String = "") {
         self.oldValue = oldValue
         self.validationBlockUserInput = validationBlockUserInput
-        self.validationToChangeValidationState = validationToChangeValidationState
+        self.validationToChangeValidationState = validationToChangeValidationState ?? validationBlockUserInput
         self.placeholderText = placeholderText
         self.keyboardReturnType = keyboardReturnType
         self.textFieldInitializer = textFieldInitializer
@@ -39,6 +39,8 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
         
         super.init(cell: JVTableViewStdCell.textField,
                    identifier: identifier)
+        
+        assert(validationBlockUserInput(""), "No input shouldn't be blocked.")
     }
     
     open override func configure(cell: TableViewCell) {
