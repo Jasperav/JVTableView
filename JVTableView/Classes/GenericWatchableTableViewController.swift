@@ -8,10 +8,10 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
     
     private var formChangeWatcher: FormChangeWatcher<T, GenericWatchableTableViewController<T, U>>!
     
-    public init(topRightButtonText: String, topLeftButtonTextWhenFormIsChanged: String?, topRightButtonState: FormChangeWatcherTopRightButtonState) {
+    public init(topRightButtonText: String = FormChangeWatcherDefaultValues.defaultTopRightButtonText, topLeftButtonTextWhenFormIsChanged: String? = FormChangeWatcherDefaultValues.defaultTopLeftButtonText) {
         super.init()
         
-        formChangeWatcher = FormChangeWatcher(changeableForm: tableViewGeneric, viewController: self, topRightButtonText: topRightButtonText, topLeftButtonTextWhenFormIsChanged: topLeftButtonTextWhenFormIsChanged, topRightButtonState: topRightButtonState, tappedTopRightButton: prepareForSave)
+        formChangeWatcher = FormChangeWatcher(changeableForm: tableViewGeneric, viewController: self, topRightButtonText: determineTopRightButtonText(), topLeftButtonTextWhenFormIsChanged: determineHasCancelButtonAsTopLeftButton() ? FormChangeWatcherDefaultValues.defaultTopLeftButtonText : nil, tappedTopRightButton: prepareForSave)
         
         #if DEBUG
         assert(tableViewGeneric.changeableRows.count > 0, "You are watching a datasource which hasn't got changeable rows")
@@ -21,4 +21,13 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    open func determineHasCancelButtonAsTopLeftButton() -> Bool {
+        return true
+    }
+    
+    open func determineTopRightButtonText() -> String {
+        return FormChangeWatcherDefaultValues.defaultTopRightButtonText
+    }
+
 }
