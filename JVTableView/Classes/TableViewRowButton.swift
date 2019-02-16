@@ -4,13 +4,11 @@ import JVURLOpener
 
 open class TableViewRowButton: TableViewRowText {
     public init(identifier: String = TableViewRow.defaultRowIdentifier,
-                text: String = "",
+                text: String,
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
-                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
                 url: String) {
 
-        super.init(cell: .button, identifier: identifier, accessoryType: accessoryType, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: showViewControllerOnTap, tapped: {
+        super.init(cell: .button, identifier: identifier, accessoryType: .disclosureIndicator, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: nil, tapped: {
             URLOpener.open(url: url)
         })
         
