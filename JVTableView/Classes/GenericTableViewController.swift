@@ -114,7 +114,9 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         guard changedRows.count > 0 else { return }
         
-        save(allChangeableRows: changeableRows, changedRows: changedRows)
+        save(changeableRows: changeableRows)
+        
+        save(changedRows: changedRows)
     }
     
     /// * Recommended overridable methods. *
@@ -174,8 +176,14 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     /// This method must be overridden if you have rows that have changed.
     /// Will be called if at least one row have been changed.
-    open func save(allChangeableRows: [TableViewRowUpdate], changedRows: [TableViewRowUpdate]) {
-        assert(allChangeableRows.count == 0, "There are rows to save but this method isn't overridden!")
+    open func save(changeableRows: [TableViewRowUpdate]) {
+        assert(changeableRows.count == 0, "There are rows to save but this method isn't overridden!")
+    }
+    
+    /// This method must be overridden if you have rows that have changed.
+    /// Will be called if at least one row have been changed.
+    open func save(changedRows: [TableViewRowUpdate]) {
+        assert(changedRows.count == 0, "There are rows to save but this method isn't overridden!")
     }
     
     /// Returns the rows that needs to have there value properties dynamically updated
