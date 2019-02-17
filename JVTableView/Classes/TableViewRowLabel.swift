@@ -15,7 +15,7 @@ open class TableViewRowLabel: TableViewRowText {
         commonLoad()
     }
     
-    public init(rawIdentifier: String,
+    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
                 text: String = "",
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
