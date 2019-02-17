@@ -17,6 +17,7 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
     public var didReturn: (() -> ())?
     
     let validationBlockUserInput: ((String) -> (Bool))
+    var isFirstResponder: Bool
     private let validationToChangeValidationState: ((String) -> (Bool))
     private let keyboardReturnType: UIReturnKeyType
     private let textFieldInitializer: TextFieldInitializer
@@ -28,13 +29,15 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
                 validationToChangeValidationState: ((String) -> (Bool))? = nil,
                 keyboardReturnType: UIReturnKeyType = .done,
                 textFieldInitializer: TextFieldInitializer = TableViewRowTextField.textFieldInitializer,
-                oldValue: String = "") {
+                oldValue: String = "",
+                isFirstResponder: Bool = false) {
         self.oldValue = oldValue
         self.validationBlockUserInput = validationBlockUserInput
         self.validationToChangeValidationState = validationToChangeValidationState ?? validationBlockUserInput
         self.placeholderText = placeholderText
         self.keyboardReturnType = keyboardReturnType
         self.textFieldInitializer = textFieldInitializer
+        self.isFirstResponder = isFirstResponder
         currentValue = oldValue
         
         super.init(cell: JVTableViewStdCell.textField,

@@ -76,11 +76,28 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         tableViewGeneric.endEditing(true)
     }
     
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        makeTextFieldFirstResponder()
+    }
+    
     /// When the view disappears when want to save the form.
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         prepareForSave()
+    }
+    
+    func makeTextFieldFirstResponder() {
+        guard let rowIdentifier = tableViewGeneric.firstResponderTableViewRowIdentifier else { return }
+        guard let cell = (tableViewGeneric.visibleCells as! [TableViewCell]).first(where: { $0.identifier == rowIdentifier}) else {
+            assert(false, "There is a first responder cell but it isn't visible.")
+            
+            return
+        }
+        
+        (cell as! TableViewCellTextField).textField.becomeFirstResponder()
     }
     
     /// Prepares to call the save method.

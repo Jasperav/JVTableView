@@ -30,6 +30,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     /// Contains all the rows of jvDatasource which conforms to the protocol Changeable.
     let changeableRows: [TableViewRow & Changeable]
     
+    let firstResponderTableViewRowIdentifier: String?
+    
     /// The header stretch view which will maintain the stretch image.
     private (set) var headerImage: JVTableViewHeaderImage?
     
@@ -46,6 +48,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         changeableRows = rows.compactMap { $0 as? TableViewRow & Changeable }
         
         rowInputValidators = rows.compactMap { $0 as? InputValidateable }.map { $0.inputValidator }
+        
+        firstResponderTableViewRowIdentifier = rowsWithCustomIdentifier.compactMap { $0 as? TableViewRowTextField }.first(where: { $0.isFirstResponder })?.identifier
         
         jvDatasource = tempJVDatasource
         
@@ -106,6 +110,12 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
             // The default method throws a fatalerror. We check if it doesn't throw.
             row.determineUpdateType()
         }
+        
+        var firstResponderRows = rows.compactMap { $0 as? TableViewRowTextField }
+        
+        firstResponderRows.removeAll(where: { !$0.isFirstResponder })
+        
+        assert(firstResponderRows.count <= 1, "No more than 1 table view row text field can be the first responder.")
         #endif
     }
     
