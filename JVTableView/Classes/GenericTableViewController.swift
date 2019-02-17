@@ -130,9 +130,6 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         let switchableRows = tableViewGeneric.rows.compactMap { $0 as? TableViewRowLabelSwitch }
         
         assert(switchableRows.count == switchUpdates.count)
-        
-        // Besides that, every switchable row must have a identifier.
-        assert(switchableRows.allSatisfy { $0.identifier != TableViewRow.defaultRowIdentifier })
         #endif
         
         textUpdates.update(rows: tableViewGeneric.rowsWithCustomIdentifier)

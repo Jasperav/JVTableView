@@ -9,7 +9,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var oldValue = false
     public var currentValue = false
     
-    public init<T: RawRepresentable>(identifier: T? = nil,
+    public init<T: RawRepresentable>(identifier: T,
                 text: String = "",
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) where T.RawValue == String {
         super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
