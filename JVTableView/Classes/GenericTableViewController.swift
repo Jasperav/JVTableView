@@ -10,6 +10,10 @@ import JVLoadableImage
 /// You do not need to create a JVTableView subclass.
 open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasource>: UITableViewController {
     
+    var shouldCallPrepareForSaveWhenViewDidDisappeared: Bool {
+        return true
+    }
+    
     /// The generic table view.
     unowned let tableViewGeneric: T
     
@@ -87,7 +91,9 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        prepareForSave(viewDidDisappear: true)
+        guard shouldCallPrepareForSaveWhenViewDidDisappeared else { return }
+        
+        prepareForSave()
     }
 
     public func makeTextFieldFirstResponder() {
@@ -102,13 +108,13 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     /// Prepares to call the save method.
     /// It checks the necessary rows to select and passes it to the save method.
-    open func prepareForSave(viewDidDisappear: Bool) {
+    open func prepareForSave() {
         let changeableRows = tableViewGeneric.retrieveChangeableRows()
         let changedRows = changeableRows.filter { $0.hasChanged }
         
         guard changedRows.count > 0 else { return }
         
-        save(allChangeableRows: changeableRows, changedRows: changedRows, viewDidDisappear: viewDidDisappear)
+        save(allChangeableRows: changeableRows, changedRows: changedRows)
     }
     
     /// * Recommended overridable methods. *
@@ -168,7 +174,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     /// This method must be overridden if you have rows that have changed.
     /// Will be called if at least one row have been changed.
-    open func save(allChangeableRows: [TableViewRowUpdate], changedRows: [TableViewRowUpdate], viewDidDisappear: Bool) {
+    open func save(allChangeableRows: [TableViewRowUpdate], changedRows: [TableViewRowUpdate]) {
         assert(allChangeableRows.count == 0, "There are rows to save but this method isn't overridden!")
     }
     
