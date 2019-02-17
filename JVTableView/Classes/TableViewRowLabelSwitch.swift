@@ -4,18 +4,14 @@ import JVChangeableValue
 
 public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var hasChanged: ((Bool) -> ())?
+    
+    // Since the switch's value should always be dynamic, the user must provide the actual value of the switch at runtime.
     public var oldValue = false
-    public var currentValue: Bool
+    public var currentValue = false
     
     public init<T: RawRepresentable>(identifier: T? = nil,
                 text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
-                oldValue: Bool = false
-        ) where T.RawValue == String {
-        self.oldValue = oldValue
-        
-        currentValue = oldValue
-        
+                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) where T.RawValue == String {
         super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
         
         changeClassType(cell: JVTableViewStdCell.labelSwitch)

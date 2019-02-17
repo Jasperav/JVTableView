@@ -120,9 +120,19 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         let switchUpdates = createTableViewRowSwitchUpdates()
         
         #if DEBUG
+        // Checks if there are no duplicate identifiers.
         let rowIdentifiers = Set(textUpdates.map { $0.rowIdentifier } + textFieldUpdates.map { $0.rowIdentifier } + switchUpdates.map { $0.rowIdentifier })
         
         assert(rowIdentifiers.count == textUpdates.count + textFieldUpdates.count + switchUpdates.count, "Duplicate identifer for update")
+        
+        // Every row that has a switch must be updated at runtime.
+        // This means that the count of switchUpdates must be equal to the total amount of switch rows in the datasource.
+        let switchableRows = tableViewGeneric.rows.compactMap { $0 as? TableViewRowLabelSwitch }
+        
+        assert(switchableRows.count == switchUpdates.count)
+        
+        // Besides that, every switchable row must have a identifier.
+        assert(switchableRows.allSatisfy { $0.identifier != TableViewRow.defaultRowIdentifier })
         #endif
         
         textUpdates.update(rows: tableViewGeneric.rowsWithCustomIdentifier)
