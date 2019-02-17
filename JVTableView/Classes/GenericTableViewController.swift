@@ -86,7 +86,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        prepareForSave()
+        prepareForSave(viewDidDisappear: true)
     }
     
     func makeTextFieldFirstResponder() {
@@ -102,13 +102,13 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     /// Prepares to call the save method.
     /// It checks the necessary rows to select and passes it to the save method.
-    open func prepareForSave() {
+    open func prepareForSave(viewDidDisappear: Bool) {
         let changeableRows = tableViewGeneric.retrieveChangeableRows()
         let changedRows = changeableRows.filter { $0.hasChanged }
         
         guard changedRows.count > 0 else { return }
         
-        save(allChangeableRows: changeableRows, changedRows: changedRows)
+        save(allChangeableRows: changeableRows, changedRows: changedRows, viewDidDisappear: viewDidDisappear)
     }
     
     /// * Recommended overridable methods. *
@@ -168,7 +168,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     /// This method must be overridden if you have rows that have changed.
     /// Will be called if at least one row have been changed.
-    open func save(allChangeableRows: [TableViewRowUpdate], changedRows: [TableViewRowUpdate]) {
+    open func save(allChangeableRows: [TableViewRowUpdate], changedRows: [TableViewRowUpdate], viewDidDisappear: Bool) {
         assert(allChangeableRows.count == 0, "There are rows to save but this method isn't overridden!")
     }
     

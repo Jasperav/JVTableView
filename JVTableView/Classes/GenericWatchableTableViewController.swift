@@ -11,7 +11,7 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
     public init(topRightButtonText: String = FormChangeWatcherDefaultValues.defaultTopRightButtonText, topLeftButtonTextWhenFormIsChanged: String? = FormChangeWatcherDefaultValues.defaultTopLeftButtonText) {
         super.init()
         
-        formChangeWatcher = FormChangeWatcher(changeableForm: tableViewGeneric, viewController: self, topRightButtonText: determineTopRightButtonText(), topLeftButtonTextWhenFormIsChanged: determineHasCancelButtonAsTopLeftButton() ? FormChangeWatcherDefaultValues.defaultTopLeftButtonText : nil, tappedTopRightButton: prepareForSave)
+        formChangeWatcher = FormChangeWatcher(changeableForm: tableViewGeneric, viewController: self, topRightButtonText: determineTopRightButtonText(), topLeftButtonTextWhenFormIsChanged: determineHasCancelButtonAsTopLeftButton() ? FormChangeWatcherDefaultValues.defaultTopLeftButtonText : nil, tappedTopRightButton: tappedTopRightButton)
         
         #if DEBUG
         assert(tableViewGeneric.changeableRows.count > 0, "You are watching a datasource which hasn't got changeable rows")
@@ -28,6 +28,10 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
     
     open func determineTopRightButtonText() -> String {
         return FormChangeWatcherDefaultValues.defaultTopRightButtonText
+    }
+    
+    private func tappedTopRightButton() {
+        prepareForSave(viewDidDisappear: false)
     }
 
 }
