@@ -41,7 +41,16 @@ open class TableViewRow: Tappable {
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
     }
     
-    public init<T: RawRepresentable>(cell: JVTableViewStdCell, identifier: T? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
+    // Some custom rows doesn't want identifiers
+    public init(classType: TableViewCell.Type, tapped: (() -> ())? = nil) {
+        self.classType = classType
+        self.classIdentifier = String(describing: classType)
+        self.tapped = tapped
+        self.identifier = TableViewRow.defaultRowIdentifier
+        self.showViewControllerOnTap = nil
+    }
+    
+    init<T: RawRepresentable>(cell: JVTableViewStdCell, identifier: T? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
         self.classType = cell.classType
         self.classIdentifier = String(describing: classType)
         self.identifier = determine(identifier: identifier)
@@ -49,11 +58,6 @@ open class TableViewRow: Tappable {
         self.tapped = tapped
         
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
-    }
-    
-    // Some custom rows doesn't want identifiers
-    public convenience init(classType: TableViewCell.Type, identifier: String? = nil) {
-        self.init(classType: classType, identifier: identifier, showViewControllerOnTap: nil, tapped: nil)
     }
     
     public func change(classType: TableViewCell.Type) {
@@ -79,15 +83,5 @@ open class TableViewRow: Tappable {
     func changeClassType(cell: JVTableViewStdCell) {
         self.classType = cell.classType
         self.classIdentifier = String(describing: classType)
-    }
-}
-
-extension String: RawRepresentable {
-    public var rawValue: String {
-        return self
-    }
-    
-    public init?(rawValue: String) {
-        self.init(stringLiteral: rawValue)
     }
 }
