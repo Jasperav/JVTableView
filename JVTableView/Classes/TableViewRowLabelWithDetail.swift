@@ -8,18 +8,36 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
     public var detailText: String? = nil
     public var contentTypeJVLabelDetail: ContentTypeJVLabelText
     
-    public init<T: RawRepresentable>(identifier: T? = nil,
-                text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
-                detailText: String? = nil,
-                contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
-                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
+    public init<T: RawRepresentable>(identifier: T,
+                                     text: String = "",
+                                     contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                                     detailText: String? = nil,
+                                     contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
+                                     accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
         
         self.detailText = detailText
         self.contentTypeJVLabelDetail = contentTypeJVLabelDetail
         
         super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+    }
+    
+    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
+                text: String = "",
+                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                detailText: String? = nil,
+                contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
+                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         
+        self.detailText = detailText
+        self.contentTypeJVLabelDetail = contentTypeJVLabelDetail
+        
+        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        
+        commonLoad()
+    }
+    
+    
+    private func commonLoad() {
         changeClassType(cell: JVTableViewStdCell.labelDetail)
     }
     
@@ -32,5 +50,5 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
         
         super.configure(cell: cell)
     }
-
+    
 }

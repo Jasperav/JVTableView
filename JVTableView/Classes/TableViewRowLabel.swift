@@ -3,7 +3,7 @@ import JVNoParameterInitializable
 
 open class TableViewRowLabel: TableViewRowText {
     
-    public init<T: RawRepresentable>(identifier: T? = nil,
+    public init<T: RawRepresentable>(identifier: T,
                                      text: String = "",
                                      contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
                                      accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
