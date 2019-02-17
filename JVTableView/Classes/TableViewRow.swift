@@ -51,6 +51,11 @@ open class TableViewRow: Tappable {
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
     }
     
+    // Some custom rows doesn't want identifiers
+    public convenience init(classType: TableViewCell.Type, identifier: String? = nil) {
+        self.init(classType: classType, identifier: identifier, showViewControllerOnTap: nil, tapped: nil)
+    }
+    
     public func change(classType: TableViewCell.Type) {
         self.classType = classType
         self.classIdentifier = String(describing: classType)
@@ -74,5 +79,15 @@ open class TableViewRow: Tappable {
     func changeClassType(cell: JVTableViewStdCell) {
         self.classType = cell.classType
         self.classIdentifier = String(describing: classType)
+    }
+}
+
+extension String: RawRepresentable {
+    public var rawValue: String {
+        return self
+    }
+    
+    public init?(rawValue: String) {
+        self.init(stringLiteral: rawValue)
     }
 }
