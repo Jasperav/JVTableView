@@ -79,6 +79,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        guard tableViewGeneric.firstResponderTableViewRowIdentifier != nil else { return }
         makeTextFieldFirstResponder()
     }
     
@@ -88,10 +89,9 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         prepareForSave(viewDidDisappear: true)
     }
-    
-    func makeTextFieldFirstResponder() {
-        guard let rowIdentifier = tableViewGeneric.firstResponderTableViewRowIdentifier else { return }
-        guard let cell = (tableViewGeneric.visibleCells as! [TableViewCell]).first(where: { $0.identifier == rowIdentifier}) else {
+
+    public func makeTextFieldFirstResponder() {
+        guard let cell = (tableViewGeneric.visibleCells as! [TableViewCell]).first(where: { $0.identifier == tableViewGeneric.firstResponderTableViewRowIdentifier! }) else {
             assert(false, "There is a first responder cell but it isn't visible.")
             
             return
