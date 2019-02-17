@@ -8,12 +8,12 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
     public var detailText: String? = nil
     public var contentTypeJVLabelDetail: ContentTypeJVLabelText
     
-    public init(identifier: String = TableViewRow.defaultRowIdentifier,
+    public init<T: RawRepresentable>(identifier: T? = nil,
                 text: String = "",
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 detailText: String? = nil,
                 contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
-                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
         
         self.detailText = detailText
         self.contentTypeJVLabelDetail = contentTypeJVLabelDetail

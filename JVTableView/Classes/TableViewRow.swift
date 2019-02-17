@@ -4,6 +4,10 @@ import JVTappable
 import os
 import JVConstraintEdges
 
+func determine<T: RawRepresentable>(identifier: T?) -> String where T.RawValue == String {
+    return identifier?.rawValue ?? TableViewRow.defaultRowIdentifier
+}
+
 open class TableViewRow: Tappable {
     
     public static let defaultRowIdentifier = ""
@@ -22,24 +26,25 @@ open class TableViewRow: Tappable {
     // If set to true, it MUST have a tappable action (else the app will crash).
     public var isSelectable = false
     
+    // When the cell is selectable, the closure inside here will be executed.
     public var tapped: (() -> ())?
     
     public let showViewControllerOnTap: UIViewControllerNoParameterInitializable?
     
-    public init(classType: TableViewCell.Type, identifier: String = TableViewRow.defaultRowIdentifier, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+    public init<T: RawRepresentable>(classType: TableViewCell.Type, identifier: T? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
         self.classType = classType
         self.classIdentifier = String(describing: classType)
-        self.identifier = identifier
+        self.identifier = determine(identifier: identifier)
         self.showViewControllerOnTap = showViewControllerOnTap
         self.tapped = tapped
         
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
     }
     
-    public init(cell: JVTableViewStdCell, identifier: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+    public init<T: RawRepresentable>(cell: JVTableViewStdCell, identifier: T? = nil, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
         self.classType = cell.classType
         self.classIdentifier = String(describing: classType)
-        self.identifier = identifier
+        self.identifier = determine(identifier: identifier)
         self.showViewControllerOnTap = showViewControllerOnTap
         self.tapped = tapped
         

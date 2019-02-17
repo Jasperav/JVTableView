@@ -7,11 +7,11 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     public var oldValue = false
     public var currentValue: Bool
     
-    public init(identifier: String = TableViewRow.defaultRowIdentifier,
+    public init<T: RawRepresentable>(identifier: T? = nil,
                 text: String = "",
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 oldValue: Bool = false
-        ) {
+        ) where T.RawValue == String {
         self.oldValue = oldValue
         
         currentValue = oldValue

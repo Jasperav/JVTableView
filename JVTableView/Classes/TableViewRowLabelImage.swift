@@ -7,13 +7,13 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     /// This has only effect when the cell reappears.
     public var image: UIImage?
     
-    public init(identifier: String = TableViewRow.defaultRowIdentifier,
+    public init<T: RawRepresentable>(identifier: T? = nil,
                 text: String = "",
                 contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 image: UIImage? = nil,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
-                tapped: (() -> ())? = nil) {
+                tapped: (() -> ())? = nil) where T.RawValue == String {
         
         self.image = image
         

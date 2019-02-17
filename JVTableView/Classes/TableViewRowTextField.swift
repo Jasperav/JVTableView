@@ -23,14 +23,14 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
     private let textFieldInitializer: TextFieldInitializer
     private let placeholderText: String
     
-    public init(identifier: String,
+    public init<T: RawRepresentable>(identifier: T,
                 placeholderText: String,
                 validationBlockUserInput: @escaping ((String) -> (Bool)),
                 validationToChangeValidationState: ((String) -> (Bool))? = nil,
                 keyboardReturnType: UIReturnKeyType = .done,
                 textFieldInitializer: TextFieldInitializer = TableViewRowTextField.textFieldInitializer,
                 oldValue: String = "",
-                isFirstResponder: Bool = false) {
+                isFirstResponder: Bool = false) where T.RawValue == String {
         self.oldValue = oldValue
         self.validationBlockUserInput = validationBlockUserInput
         self.validationToChangeValidationState = validationToChangeValidationState ?? validationBlockUserInput

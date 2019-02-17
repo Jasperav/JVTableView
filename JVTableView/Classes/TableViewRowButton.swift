@@ -3,11 +3,11 @@ import JVNoParameterInitializable
 import JVURLOpener
 
 open class TableViewRowButton: TableViewRowText {
-    public init(identifier: String = TableViewRow.defaultRowIdentifier,
-                text: String,
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
-                url: String) {
-
+    
+    public init<T: RawRepresentable>(identifier: T? = nil,
+                            text: String,
+                            contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
+                            url: String) where T.RawValue == String {
         super.init(cell: .button, identifier: identifier, accessoryType: .disclosureIndicator, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: nil, tapped: {
             URLOpener.open(url: url)
         })
