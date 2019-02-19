@@ -1,4 +1,5 @@
-public struct TableViewRowTapHandler {
+// Class rather than a struct, else we need to change the array everytime with ugly indexes...
+public class TableViewRowTapHandler {
     public let identifier: String
     
     let row: TableViewRow
@@ -10,7 +11,7 @@ public struct TableViewRowTapHandler {
         self.row = row
     }
     
-    public mutating func add(tapHandler: @escaping (() -> ())) {
+    public func add(tapHandler: @escaping (() -> ())) {
         assert(!addedTapHandler)
         
         row.tapped = tapHandler
