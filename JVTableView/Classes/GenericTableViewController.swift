@@ -10,15 +10,18 @@ import JVLoadableImage
 /// You do not need to create a JVTableView subclass.
 open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasource>: UITableViewController {
     
+    /// Is filled when the datasource has set the header image.
+    /// Implicit unwrapped: it is logically that a subclass that will use this variabele
+    /// knows it really has a value. It has no point for a subclass to check whetever
+    /// or not this value is filled.
+    public private (set) var headerImageLoadableView: LoadableImage!
+    
     var shouldCallPrepareForSaveWhenViewDidDisappeared: Bool {
         return true
     }
     
     /// The generic table view.
     unowned let tableViewGeneric: T
-    
-    /// Is filled when the datasource has set the header image.
-    public private (set) var headerImageLoadableView: LoadableImage?
     
     /// Possibility to override the initalizer.
     /// Be aware we also have a setup() method which omits the required initalizer of the decoder

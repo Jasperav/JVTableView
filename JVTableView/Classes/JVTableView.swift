@@ -17,6 +17,9 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     /// This property is usefull when you want to be directly notified if anything in the form has changed.
     public var formHasChanged: ((_ hasNewValues: Bool) -> ())?
     
+    /// The header stretch view which will maintain the stretch image.
+    public private (set) var headerImage: JVTableViewHeaderImage?
+    
     /// Making the datasource non-public will prevent the developer to directly modify rows.
     /// This is always illegal and can cause a corrupted state.
     let jvDatasource: U
@@ -31,9 +34,6 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     let changeableRows: [TableViewRow & Changeable]
     
     let firstResponderTableViewRowIdentifier: String?
-    
-    /// The header stretch view which will maintain the stretch image.
-    private (set) var headerImage: JVTableViewHeaderImage?
     
     /// Contains all the rows of jvDatasource which conforms to the protocol InputValidateable.
     private let rowInputValidators: [InputValidator]
@@ -55,7 +55,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         
         super.init(frame: CGRect.zero, style: jvDatasource.determineStyle())
         
-        self.headerImage = jvDatasource.determineHeaderImage()
+        headerImage = jvDatasource.determineHeaderImage()
         
         registerUniqueCellTypes()
         
