@@ -10,7 +10,7 @@ open class TableViewRowText: TableViewRow {
     public var contentTypeJVLabel: ContentTypeJVLabelText
     public var _text = ""
     
-    public init<T: RawRepresentable>(classType: TableViewCell.Type, identifier: T, accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
+    public init<T: RawRepresentable>(classType: TableViewCell.Type, identifier: T, accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.accessoryType = accessoryType
         self.contentTypeJVLabel = contentTypeJVLabel.copy(contentTypeId: nil)
         self._text = text
@@ -18,7 +18,7 @@ open class TableViewRowText: TableViewRow {
         super.init(classType: classType, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
     }
     
-    public init<T: RawRepresentable>(cell: JVTableViewStdCell, identifier: T, accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
+    public init<T: RawRepresentable>(cell: JVTableViewStdCell, identifier: T, accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.accessoryType = accessoryType
         self.contentTypeJVLabel = contentTypeJVLabel.copy(contentTypeId: nil)
         self._text = text
@@ -26,13 +26,13 @@ open class TableViewRowText: TableViewRow {
         super.init(cell: cell, identifier: identifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
     }
     
-    public init(cell: JVTableViewStdCell, rawIdentifier: String = TableViewRow.defaultRowIdentifier, accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil)  {
-        self.accessoryType = accessoryType
-        self.contentTypeJVLabel = contentTypeJVLabel.copy(contentTypeId: nil)
-        self._text = text
-        
-        super.init(cell: cell, rawIdentifier: rawIdentifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
-    }
+//    public init(cell: JVTableViewStdCell, rawIdentifier: String = TableViewRow.defaultRowIdentifier, accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel, text: String = "", showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil)  {
+//        self.accessoryType = accessoryType
+//        self.contentTypeJVLabel = contentTypeJVLabel.copy(contentTypeId: nil)
+//        self._text = text
+//        
+//        super.init(cell: cell, rawIdentifier: rawIdentifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+//    }
     
     open override func configure(cell: TableViewCell) {
         cell.accessoryType = accessoryType

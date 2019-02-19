@@ -15,8 +15,8 @@ public struct TableViewRowTextUpdate: RowUpdater {
     public let rowIdentifier: String
     public let value: String
     
-    public init<T: RawRepresentable>(rowIdentifier: T, value: String) where T.RawValue == String {
-        self.rowIdentifier = rowIdentifier.rawValue
+    public init<T: RawRepresentable>(rowIdentifier: T, value: String) {
+        self.rowIdentifier = String(describing: rowIdentifier.rawValue)
         self.value = value
     }
     
@@ -32,8 +32,8 @@ public struct TableViewRowTextFieldUpdate: RowUpdater {
     public let rowIdentifier: String
     public let value: String
     
-    public init<T: RawRepresentable>(rowIdentifier: T, value: String) where T.RawValue == String {
-        self.rowIdentifier = rowIdentifier.rawValue
+    public init<T: RawRepresentable>(rowIdentifier: T, value: String) {
+        self.rowIdentifier = String(describing: rowIdentifier.rawValue)
         self.value = value
     }
     
@@ -49,8 +49,8 @@ public struct TableViewRowSwitchUpdate: RowUpdater {
     public let rowIdentifier: String
     public let value: Bool
     
-    public init<T: RawRepresentable>(rowIdentifier: T, value: Bool) where T.RawValue == String {
-        self.rowIdentifier = rowIdentifier.rawValue
+    public init<T: RawRepresentable>(rowIdentifier: T, value: Bool) {
+        self.rowIdentifier = String(describing: rowIdentifier.rawValue)
         self.value = value
     }
     

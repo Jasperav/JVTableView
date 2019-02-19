@@ -2,8 +2,8 @@ public struct TableViewRowVisibleUpdate: Hashable {
     let rowIdentifier: String
     let isVisible: Bool
     
-    public init<T: RawRepresentable>(rowIdentifier: T, isVisible: Bool) where T.RawValue == String {
-        self.rowIdentifier = rowIdentifier.rawValue
+    public init<T: RawRepresentable>(rowIdentifier: T, isVisible: Bool) {
+        self.rowIdentifier = String(describing: rowIdentifier.rawValue)
         self.isVisible = isVisible
     }
     

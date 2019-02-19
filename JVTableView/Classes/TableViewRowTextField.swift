@@ -30,7 +30,7 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
                 keyboardReturnType: UIReturnKeyType = .done,
                 textFieldInitializer: TextFieldInitializer = TableViewRowTextField.textFieldInitializer,
                 oldValue: String = "",
-                isFirstResponder: Bool = false) where T.RawValue == String {
+                isFirstResponder: Bool = false) {
         self.oldValue = oldValue
         self.validationBlockUserInput = validationBlockUserInput
         self.validationToChangeValidationState = validationToChangeValidationState ?? validationBlockUserInput

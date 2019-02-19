@@ -27,40 +27,40 @@ open class TableViewRow: Tappable {
     
     public let showViewControllerOnTap: UIViewControllerNoParameterInitializable?
     
-    public init<T: RawRepresentable>(classType: TableViewCell.Type, identifier: T, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
+    public init<T: RawRepresentable>(classType: TableViewCell.Type, identifier: T, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.classType = classType
-        self.classIdentifier = identifier.rawValue
-        self.identifier = identifier.rawValue
+        self.classIdentifier = String(describing: identifier.rawValue)
+        self.identifier = String(describing: identifier.rawValue)
         self.showViewControllerOnTap = showViewControllerOnTap
         self.tapped = tapped
         
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
     }
     
-    public init(cell: JVTableViewStdCell, rawIdentifier: String = TableViewRow.defaultRowIdentifier, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
-        self.classType = cell.classType
-        self.classIdentifier = String(describing: classType)
-        self.identifier = rawIdentifier
-        self.showViewControllerOnTap = showViewControllerOnTap
-        self.tapped = tapped
-        
-        assert(tapped == nil ? true : showViewControllerOnTap == nil)
-    }
+//    public init(cell: JVTableViewStdCell, rawIdentifier: String = TableViewRow.defaultRowIdentifier, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+//        self.classType = cell.classType
+//        self.classIdentifier = String(describing: classType)
+//        self.identifier = rawIdentifier
+//        self.showViewControllerOnTap = showViewControllerOnTap
+//        self.tapped = tapped
+//        
+//        assert(tapped == nil ? true : showViewControllerOnTap == nil)
+//    }
+//    
+//    // Some custom rows doesn't want identifiers
+//    // Removing the T type omits generic errors.
+//    public init(classType: TableViewCell.Type, rawIdentifier: String = TableViewRow.defaultRowIdentifier, tapped: (() -> ())? = nil) {
+//        self.classType = classType
+//        self.classIdentifier = String(describing: classType)
+//        self.tapped = tapped
+//        self.identifier = rawIdentifier
+//        self.showViewControllerOnTap = nil
+//    }
     
-    // Some custom rows doesn't want identifiers
-    // Removing the T type omits generic errors.
-    public init(classType: TableViewCell.Type, rawIdentifier: String = TableViewRow.defaultRowIdentifier, tapped: (() -> ())? = nil) {
-        self.classType = classType
-        self.classIdentifier = String(describing: classType)
-        self.tapped = tapped
-        self.identifier = rawIdentifier
-        self.showViewControllerOnTap = nil
-    }
-    
-    init<T: RawRepresentable>(cell: JVTableViewStdCell, identifier: T, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
+    init<T: RawRepresentable>(cell: JVTableViewStdCell, identifier: T, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         self.classType = cell.classType
-        self.classIdentifier = identifier.rawValue
-        self.identifier = identifier.rawValue
+        self.classIdentifier = String(describing: identifier.rawValue)
+        self.identifier = String(describing: identifier.rawValue)
         self.showViewControllerOnTap = showViewControllerOnTap
         self.tapped = tapped
         

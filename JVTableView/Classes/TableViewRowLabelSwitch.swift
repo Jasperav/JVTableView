@@ -11,19 +11,19 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     
     public init<T: RawRepresentable>(identifier: T,
                                      text: String = "",
-                                     contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) where T.RawValue == String {
+                                     contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) {
         super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
         
         commonLoad()
     }
     
-    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-                text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) {
-        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
-        
-        commonLoad()
-    }
+//    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
+//                text: String = "",
+//                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) {
+//        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
+//        
+//        commonLoad()
+//    }
     
     private func commonLoad() {
         changeClassType(cell: JVTableViewStdCell.labelSwitch)

@@ -7,7 +7,7 @@ open class TableViewRowLabel: TableViewRowText {
                                      text: String = "",
                                      contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
                                      accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                                     showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) where T.RawValue == String {
+                                     showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         
         
         super.init(cell: .label, identifier: identifier, accessoryType: accessoryType, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
@@ -15,15 +15,15 @@ open class TableViewRowLabel: TableViewRowText {
         commonLoad()
     }
     
-    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-                text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
-                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
-        super.init(cell: .label, rawIdentifier: rawIdentifier, accessoryType: accessoryType, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
-        
-        commonLoad()
-    }
+//    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
+//                text: String = "",
+//                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
+//                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
+//                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+//        super.init(cell: .label, rawIdentifier: rawIdentifier, accessoryType: accessoryType, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+//        
+//        commonLoad()
+//    }
     
     private func commonLoad() {
         self.isSelectable = accessoryType != .none

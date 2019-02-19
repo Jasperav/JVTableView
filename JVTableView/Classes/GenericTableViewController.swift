@@ -41,11 +41,12 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         // After the setup, we require every row that is selectable but doesn't have
         // a tapped handler and view controller to present, to add a tap handler.
-        let rowsToAddTapHandlersTo = tableViewGeneric.determineRowsWithoutTapHandlers()
+        let tableViewRowsToAddTapHandlersTo = tableViewGeneric.determineRowsWithoutTapHandlers()
+        let rowsToAddTapHandlersTo = tableViewRowsToAddTapHandlersTo.map { TableViewRowTapHandler(row: $0) }
         
         addTapHandlers(rows: rowsToAddTapHandlersTo)
         
-        assert(tableViewGeneric.determineRowsWithoutTapHandlers().count == 0, "Not every tappable row has a tap listener.")
+        assert(rowsToAddTapHandlersTo.allSatisfy { $0.addedTapHandler }, "Not every tappable row has a tap listener.")
         
         // For all the view controllers that needs to be presented after they have been tapped
         // we do that here.
@@ -220,7 +221,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     /// Some view controllers do not conform to NoParameterInitializable
     /// Because they need more info when they are initialized.
     /// Do that here.
-    open func addTapHandlers(rows: [TableViewRow]) {
+    open func addTapHandlers(rows: [TableViewRowTapHandler]) {
         assert(rows.count == 0, "There are rows that require to have a tap listener attached to it, but this method isn't overridden.")
     }
     
