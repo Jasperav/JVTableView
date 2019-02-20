@@ -87,13 +87,12 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         // Either the tapped closure must be filled in, or it has a custom identifier.
         // see tapped(identifier: String) for more information.
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.isSelectable }) }) {
-            assert(row.tapped != nil || row.identifier != TableViewRow.defaultRowIdentifier)
+            assert(Bool.exactOneIsTrue(bools: row.tapped != nil,  row.identifier != TableViewRow.defaultRowIdentifier, row.showViewControllerOnTap != nil))
         }
         
-        // If the row isn't selectable, it can not be tappable or showViewControllerOnTap.
+        // The other way around the same applies: If the row isn't selectable, it can not be tappable or showViewControllerOnTap.
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ !$0.isSelectable }) }) {
-            assert(row.tapped == nil)
-            assert(row.showViewControllerOnTap == nil)
+            assert(row.tapped == nil && row.showViewControllerOnTap == nil && row.identifier == TableViewRow.defaultRowIdentifier)
         }
         
         // Omit row identifier duplicated
@@ -279,5 +278,21 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     open func retrieveChangeableRows() -> [TableViewRowUpdate] {
         return changeableRows.map { TableViewRowUpdate(changeableRow: $0) }
+    }
+}
+
+private extension Bool {
+    static func exactOneIsTrue(bools: Bool...) -> Bool {
+        var foundTrue = false
+        
+        for bool in bools {
+            guard !bool else { continue }
+            
+            guard !foundTrue else { return false }
+            
+            foundTrue = true
+        }
+        
+        return foundTrue
     }
 }
