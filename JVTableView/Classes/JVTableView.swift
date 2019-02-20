@@ -75,7 +75,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         
         guard let headerImage = headerImage else { return }
         
-        add(headerImage: headerImage)
+        setup(headerImage: headerImage)
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -145,7 +145,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         layoutIfNeeded()
     }
     
-    private func add(headerImage: JVTableViewHeaderImage) {
+    private func setup(headerImage: JVTableViewHeaderImage) {
         headerImage.loadableView.stretchImage()
         
         contentInset = UIEdgeInsets(top: headerImage.height, left: 0, bottom: 0, right: 0)
