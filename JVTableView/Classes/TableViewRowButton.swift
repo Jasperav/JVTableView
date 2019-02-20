@@ -15,16 +15,16 @@ open class TableViewRowButton: TableViewRowText {
         commonLoad()
     }
     
-//    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-//                text: String,
-//                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
-//                url: String) {
-//        super.init(cell: .button, rawIdentifier: rawIdentifier, accessoryType: .disclosureIndicator, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: nil) {
-//            URLOpener.open(url: url)
-//        }
-//        
-//        commonLoad()
-//    }
+    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
+                text: String,
+                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
+                url: String) {
+        super.init(cell: .button, rawIdentifier: rawIdentifier, accessoryType: .disclosureIndicator, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: nil) {
+            URLOpener.open(url: url)
+        }
+        
+        commonLoad()
+    }
     
     private func commonLoad() {
         self.isSelectable = true

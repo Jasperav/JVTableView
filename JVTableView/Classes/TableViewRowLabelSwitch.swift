@@ -17,13 +17,13 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         commonLoad()
     }
     
-//    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-//                text: String = "",
-//                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) {
-//        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
-//        
-//        commonLoad()
-//    }
+    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
+                text: String = "",
+                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) {
+        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
+        
+        commonLoad()
+    }
     
     private func commonLoad() {
         changeClassType(cell: JVTableViewStdCell.labelSwitch)

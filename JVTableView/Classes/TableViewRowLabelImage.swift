@@ -21,19 +21,19 @@ open class TableViewRowLabelImage: TableViewRowLabel {
         commonLoad()
     }
     
-//    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-//                text: String = "",
-//                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
-//                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-//                image: UIImage? = nil,
-//                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
-//                tapped: (() -> ())? = nil) {
-//        self.image = image
-//        
-//        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
-//        
-//        commonLoad()
-//    }
+    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
+                text: String = "",
+                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
+                image: UIImage? = nil,
+                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
+                tapped: (() -> ())? = nil) {
+        self.image = image
+        
+        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        
+        commonLoad()
+    }
     
     private func commonLoad() {
         changeClassType(cell: .labelImage)
