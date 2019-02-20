@@ -33,6 +33,8 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         super.init(style: tableViewGenericReference.style)
         
+        assert(title == nil, "Add the title in the setup method")
+        
         tableView = tableViewGeneric
         
         // Give the user the possiblity to customize values.
@@ -99,7 +101,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         prepareForSave()
     }
-
+    
     public func makeTextFieldFirstResponder() {
         guard let cell = (tableViewGeneric.visibleCells as! [TableViewCell]).first(where: { $0.identifier == tableViewGeneric.firstResponderTableViewRowIdentifier! }) else {
             assert(false, "There is a first responder cell but it isn't visible.")
