@@ -286,7 +286,7 @@ private extension Bool {
         var foundTrue = false
         
         for bool in bools {
-            guard !bool else { continue }
+            guard bool else { continue }
             
             guard !foundTrue else { return false }
             
