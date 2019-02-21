@@ -265,4 +265,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
+    
+    open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
 }
