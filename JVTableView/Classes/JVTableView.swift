@@ -84,15 +84,10 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     public func validate() {
         #if DEBUG
-        // Either the tapped closure must be filled in, or it has a custom identifier.
-        // see tapped(identifier: String) for more information.
-        for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ $0.isSelectable }) }) {
-            assert(Bool.exactOneIsTrue(bools: row.tapped != nil,  row.identifier != TableViewRow.defaultRowIdentifier, row.showViewControllerOnTap != nil))
-        }
         
-        // The other way around the same applies: If the row isn't selectable, it can not be tappable or showViewControllerOnTap.
+        // If the row isn't selectable, it can not be tappable or showViewControllerOnTap.
         for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ !$0.isSelectable }) }) {
-            assert(row.tapped == nil && row.showViewControllerOnTap == nil && row.identifier == TableViewRow.defaultRowIdentifier)
+            assert(row.tapped == nil && row.showViewControllerOnTap == nil)
         }
         
         // Omit row identifier duplicated
@@ -256,26 +251,13 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = jvDatasource.getRow(indexPath)
         
-        if let tapped = row.tapped {
-            tapped()
-        } else {
-            assert(row.identifier != TableViewRow.defaultRowIdentifier)
-            
-            tapped(identifier: row.identifier)
-        }
+        row.tapped!()
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateHeaderStretchImageView()
     }
 
-    /// For allowing easier tapping, this method is available.
-    /// Without this method, we would have a lot of methods with getRow...() in the initalizer of the implementing class.
-    /// This omits that all.
-    open func tapped(identifier: String) {
-        fatalError()
-    }
-    
     open func retrieveChangeableRows() -> [TableViewRowUpdate] {
         return changeableRows.map { TableViewRowUpdate(changeableRow: $0) }
     }
