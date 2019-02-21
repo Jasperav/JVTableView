@@ -120,9 +120,8 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         guard changedRows.count > 0 else { return }
         
-        save(changeableRows: changeableRows)
-        
-        save(changedRows: changedRows)
+        save(datasource: U.self, changeableRows: changeableRows)
+        save(datasource: U.self, changedRows: changeableRows)
     }
     
     /// * Recommended overridable methods. *
@@ -181,13 +180,13 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     /// This method must be overridden if you have rows that have changed.
     /// Will be called if at least one row have been changed.
-    open func save(changeableRows: [TableViewRowUpdate]) {
+    open func save(datasource: U.Type, changeableRows: [TableViewRowUpdate]) {
         assert(changeableRows.count == 0, "There are rows to save but this method isn't overridden!")
     }
     
     /// This method must be overridden if you have rows that have changed.
     /// Will be called if at least one row have been changed.
-    open func save(changedRows: [TableViewRowUpdate]) {
+    open func save(datasource: U.Type, changedRows: [TableViewRowUpdate]) {
         assert(changedRows.count == 0, "There are rows to save but this method isn't overridden!")
     }
     
