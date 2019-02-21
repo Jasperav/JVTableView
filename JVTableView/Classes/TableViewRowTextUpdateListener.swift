@@ -39,6 +39,7 @@ public struct TableViewRowTextFieldUpdate: RowUpdater {
     
     public func update(row: TableViewRowTextField) {
         row.oldValue = value
+        row.currentValue = value
     }
 }
 
@@ -56,11 +57,14 @@ public struct TableViewRowSwitchUpdate: RowUpdater {
     
     public func update(row: TableViewRowLabelSwitch) {
         row.oldValue = value
+        row.currentValue = value
     }
 }
 
-public extension Array where Element: RowUpdater {
+extension Array where Element: RowUpdater {
     func update(rows: [TableViewRow]) {
+        guard count > 0 else { return }
+        
         let filteredRows = rows.compactMap { $0 as? Element.R }
         
         for row in filteredRows {

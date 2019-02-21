@@ -4,7 +4,7 @@ import JVTappable
 import os
 import JVConstraintEdges
 
-open class TableViewRow: Tappable {
+open class TableViewRow: Tappable, Hashable {
     
     public static let defaultRowIdentifier = ""
     public static let edges = ConstraintEdges(height: 15, width: 15)
@@ -65,6 +65,18 @@ open class TableViewRow: Tappable {
         self.tapped = tapped
         
         assert(tapped == nil ? true : showViewControllerOnTap == nil)
+    }
+    
+    public static func == (lhs: TableViewRow, rhs: TableViewRow) -> Bool {
+        guard lhs.identifier != TableViewRow.defaultRowIdentifier && rhs.identifier != TableViewRow.defaultRowIdentifier else {
+            return false
+        }
+        
+        return lhs.identifier == rhs.identifier
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
     }
     
     public func change(classType: TableViewCell.Type) {
