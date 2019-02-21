@@ -261,20 +261,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     open func retrieveChangeableRows() -> [TableViewRowUpdate] {
         return changeableRows.map { TableViewRowUpdate(changeableRow: $0) }
     }
-}
-
-private extension Bool {
-    static func exactOneIsTrue(bools: Bool...) -> Bool {
-        var foundTrue = false
-        
-        for bool in bools {
-            guard bool else { continue }
-            
-            guard !foundTrue else { return false }
-            
-            foundTrue = true
-        }
-        
-        return foundTrue
+    
+    open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
 }

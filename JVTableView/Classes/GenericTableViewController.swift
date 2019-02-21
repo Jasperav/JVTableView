@@ -152,18 +152,17 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         #if DEBUG
         // Every row should now have a text property
-        let texts = tableViewGeneric.rows
+        let tableViewRowsText = tableViewGeneric.rows
             .compactMap({ $0 as? TableViewRowText })
-            .map({ $0._text })
         
-        for text in texts {
-            assert(text != "", "A row without text is never good.")
+        for row in tableViewRowsText {
+            assert(row._text != "", "A row without text is never good. \(row.identifier)")
         }
         
         let textFields = tableViewGeneric.rows.compactMap({ $0 as? TableViewRowTextField })
         
         for text in textFields {
-            assert(text.validationBlockUserInput(text.oldValue), "The new data isn't valid at the first place!")
+            assert(text.validationBlockUserInput(text.oldValue), "The new data isn't valid at the first place! \(text.identifier)")
         }
         #endif
         
