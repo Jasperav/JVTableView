@@ -226,7 +226,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         row.configure(cell: cell as! TableViewCell)
         
         if let changeableRow = row as? Changeable {
-            changeableRow.hasChanged = { [weak self] (_) in
+            changeableRow.hasChanged = { [unowned self] (_) in
                 self?.checkIfFormChanged()
             }
         }
