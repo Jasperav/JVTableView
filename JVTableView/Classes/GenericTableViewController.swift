@@ -90,6 +90,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         super.viewDidAppear(animated)
         
         guard tableViewGeneric.firstResponderTableViewRowIdentifier != nil else { return }
+        
         makeTextFieldFirstResponder()
     }
     
@@ -181,7 +182,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     /// This method must be overridden if you have rows that have changed.
     /// Will be called if at least one row have been changed.
     open func save(datasource: U.Type, changeableRows: [TableViewRowUpdate]) {
-        assert(changeableRows.count == 0, "There are rows to save but this method isn't overridden!")
+        // Don't do anything by default.
     }
     
     /// This method must be overridden if you have rows that have changed.
