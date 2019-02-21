@@ -46,7 +46,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         let tableViewRowsToAddTapHandlersTo = tableViewGeneric.determineRowsWithoutTapHandlers()
         let rowsToAddTapHandlersTo = tableViewRowsToAddTapHandlersTo.map { TableViewRowTapHandler(row: $0) }
         
-        setupTapHandlers(rows: rowsToAddTapHandlersTo)
+        setupTapHandlers(datasource: U.self, rows: rowsToAddTapHandlersTo)
         
         assert(rowsToAddTapHandlersTo.allSatisfy { $0.addedTapHandler }, "Not every tappable row has a tap listener.")
         
@@ -129,9 +129,9 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     /// Always call super.reloadData() if you override this method.
     open func reloadData() {
-        let textUpdates = createTableViewRowTextUpdates()
-        let textFieldUpdates = createTableViewRowTextFieldUpdates()
-        let switchUpdates = createTableViewRowSwitchUpdates()
+        let textUpdates = createTableViewRowTextUpdates(datasource: U.self)
+        let textFieldUpdates = createTableViewRowTextFieldUpdates(datasource: U.self)
+        let switchUpdates = createTableViewRowSwitchUpdates(datasource: U.self)
         
         #if DEBUG
         // Checks if there are no duplicate identifiers.
@@ -166,7 +166,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         }
         #endif
         
-        let visibleUpdateRows = createTableViewRowConditionallyVisible()
+        let visibleUpdateRows = createTableViewRowConditionallyVisible(datasource: U.self)
         
         assert(Set(visibleUpdateRows).count == visibleUpdateRows.count, "The row identifier is used twice, this is illegal")
         
@@ -192,25 +192,25 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     }
     
     /// Returns the rows that needs to have there value properties dynamically updated
-    open func createTableViewRowTextUpdates() -> [TableViewRowTextUpdate] {
+    open func createTableViewRowTextUpdates(datasource: U.Type) -> [TableViewRowTextUpdate] {
         // By default we dont have any listeners
         return []
     }
     
     /// Returns the rows that needs to have there value properties dynamically updated
-    open func createTableViewRowTextFieldUpdates() -> [TableViewRowTextFieldUpdate] {
+    open func createTableViewRowTextFieldUpdates(datasource: U.Type) -> [TableViewRowTextFieldUpdate] {
         // By default we dont have any listeners
         return []
     }
     
     /// Returns the rows that needs to have there value properties dynamically updated
-    open func createTableViewRowSwitchUpdates() -> [TableViewRowSwitchUpdate] {
+    open func createTableViewRowSwitchUpdates(datasource: U.Type) -> [TableViewRowSwitchUpdate] {
         // By default we dont have any listeners
         return []
     }
     
     /// Creates the rows that needs to be dynamically visible
-    open func createTableViewRowConditionallyVisible() -> [TableViewRowVisibleUpdate] {
+    open func createTableViewRowConditionallyVisible(datasource: U.Type) -> [TableViewRowVisibleUpdate] {
         return []
     }
     
@@ -222,7 +222,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     /// Some view controllers do not conform to NoParameterInitializable
     /// Because they need more info when they are initialized.
     /// Do that here.
-    open func setupTapHandlers(rows: [TableViewRowTapHandler]) {
+    open func setupTapHandlers(datasource: U.Type, rows: [TableViewRowTapHandler]) {
         assert(rows.count == 0, "There are rows that require to have a tap listener attached to it, but this method isn't overridden.")
     }
     
