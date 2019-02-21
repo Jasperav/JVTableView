@@ -169,6 +169,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         for section in jvDatasource.dataSource {
             for row in section.rows {
                 guard let changeableRow = row as? Changeable, changeableRow.determineHasBeenChanged() else { continue }
+                
                 formHasChanged(true)
                 
                 return
@@ -200,6 +201,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         for section in jvDatasource.dataSource {
             for row in section.rows {
                 guard let changeableRow = row as? Changeable else { continue }
+                
                 changeableRow.reset()
             }
         }
@@ -229,7 +231,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         
         if let changeableRow = row as? Changeable {
             changeableRow.hasChanged = { [unowned self] (_) in
-                self?.checkIfFormChanged()
+                self.checkIfFormChanged()
             }
         }
         
