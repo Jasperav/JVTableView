@@ -84,9 +84,11 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     public func validate() {
         #if DEBUG
-        
+        for row in rows.compactMap({ $0 as? Changeable & TableViewRow }) {
+            assert(row.identifier != TableViewRow.defaultRowIdentifier, "A changeable row should always have an identifier \(row.identifier)")
+        }
         // If the row isn't selectable, it can not be tappable or showViewControllerOnTap.
-        for row in jvDatasource.dataSource.flatMap({ $0.rows.filter({ !$0.isSelectable }) }) {
+        for row in rows.filter({ !$0.isSelectable }) {
             assert(row.tapped == nil && row.showViewControllerOnTap == nil)
         }
         
