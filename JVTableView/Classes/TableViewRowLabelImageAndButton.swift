@@ -1,13 +1,15 @@
+import JVView
+
 open class TableViewRowLabelImageAndButton: TableViewRowLabelImage {
     private let imageForButton: UIImage
     
     var tappedRightButton: (() -> ())!
     
-    public init<T: RawRepresentable>(identifier: T, text: String = "", imageLeft: UIImage? = nil, imageForButton: UIImage, tapped: (() -> ())? = nil, tappedRightButton: (() -> ())? = nil) {
+    public init<T: RawRepresentable>(identifier: T, text: String = "", contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel, imageLeft: UIImage? = nil, imageForButton: UIImage, tapped: (() -> ())? = nil, tappedRightButton: (() -> ())? = nil) {
         self.imageForButton = imageForButton
         self.tappedRightButton = tappedRightButton
         
-        super.init(identifier: identifier, text: text, accessoryType: .none, image: imageLeft, tapped: tapped)
+        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, image: imageLeft, tapped: tapped)
         
         changeClassType(cell: .labelImageAndButton)
     }
