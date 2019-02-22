@@ -23,12 +23,24 @@ open class TableViewCellLabel: TableViewCell {
         
         label.fill(toSuperview: contentView, edges: edges)
         
-        if let _leadingView = leadingView {
-            label.leadingAnchor.constraint(equalTo: _leadingView.trailingAnchor, constant: TableViewRow.edges.leading!).isActive = true
+        if let leadingView = leadingView {
+            assert(leadingView.constraints.count == 0 && leadingView.superview == nil)
+            
+            leadingView.fill(toSuperview: contentView, edges: ConstraintEdges(leading: TableViewRow.edges.leading!))
+            
+            label.leadingAnchor.constraint(equalTo: leadingView.trailingAnchor, constant: TableViewRow.edges.leading!).isActive = true
+            
+            addLeadingOrTrailingView(view: leadingView)
         }
         
-        if let _trailingView = trailingView, accessoryView != _trailingView {
-            label.trailingAnchor.constraint(equalTo: _trailingView.leadingAnchor, constant: -TableViewRow.edges.trailing!).isActive = true
+        if let trailingView = trailingView, accessoryView != trailingView {
+            assert(trailingView.constraints.count == 0 && trailingView.superview == nil)
+            
+            trailingView.fill(toSuperview: contentView, edges: ConstraintEdges(trailing: -TableViewRow.edges.trailing!))
+            
+            label.trailingAnchor.constraint(equalTo: trailingView.leadingAnchor, constant: -TableViewRow.edges.trailing!).isActive = true
+            
+            addLeadingOrTrailingView(view: trailingView)
         }
     }
     
@@ -44,6 +56,13 @@ open class TableViewCellLabel: TableViewCell {
         label.font = contentTypeJVLabelText.contentTypeTextFont.font
         label.textColor = contentTypeJVLabelText.contentTypeTextFont.color
         label.text = text
+    }
+    
+    private func addLeadingOrTrailingView(view: UIView) {
+        assert(view.constraints.count == 0 && view.superview == nil)
+        
+        view.equal(to: label, height: true, width: false)
+        view.setSameCenterY(view: label)
     }
     
 }

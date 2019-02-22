@@ -9,7 +9,8 @@ public enum JVTableViewStdCell: String, CaseIterable {
     labelSwitch,
     labelImage,
     labelDetail,
-    button
+    button,
+    labelImageAndButton
     
     var classType: TableViewCell.Type {
         switch self {
@@ -25,6 +26,8 @@ public enum JVTableViewStdCell: String, CaseIterable {
             return TableViewCellLabelWithDetail.self
         case .button:
             return TableViewCellButton.self
+        case .labelImageAndButton:
+            return TableViewCellLabelImageAndButton.self
         }
     }
 }

@@ -50,6 +50,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         assert(rowsToAddTapHandlersTo.allSatisfy { $0.addedTapHandler }, "Not every tappable row has a tap listener.")
         
+        let rowsToAddTapHandlersToForTableViewRowLabelImageAndButton = tableViewGeneric.rows.compactMap { $0 as? TableViewRowLabelImageAndButton }.filter { $0.tappedRightButton == nil }.map { TableViewRowLabelImageRightButtonTapHandler(row: $0) }
+        
+        setupTapHandlersForTableViewRowLabelImageAndButton(datasource: U.self, rows: rowsToAddTapHandlersToForTableViewRowLabelImageAndButton)
+        
         // For all the view controllers that needs to be presented after they have been tapped
         // we do that here.
         for row in tableViewGeneric.rows.filter({ $0.showViewControllerOnTap != nil }) {
@@ -214,6 +218,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         return []
     }
     
+    open func createTableViewRowLabelImageRightButtonTapHandlers(datasource: U.Type) -> [TableViewRowLabelImageRightButtonTapHandler] {
+        return []
+    }
+    
     /// This method must be overridden if you are using a header image.
     open func configure(headerImageView: LoadableImage) {
         fatalError()
@@ -223,6 +231,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     /// Because they need more info when they are initialized.
     /// Do that here.
     open func setupTapHandlers(datasource: U.Type, rows: [TableViewRowTapHandler]) {
+        assert(rows.count == 0, "There are rows that require to have a tap listener attached to it, but this method isn't overridden.")
+    }
+    
+    open func setupTapHandlersForTableViewRowLabelImageAndButton(datasource: U.Type, rows: [TableViewRowLabelImageRightButtonTapHandler]) {
         assert(rows.count == 0, "There are rows that require to have a tap listener attached to it, but this method isn't overridden.")
     }
     
