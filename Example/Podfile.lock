@@ -16,16 +16,17 @@ PODS:
     - JVCAGradientLayerExtensions
     - JVContentType
   - JVInputValidator (0.1.4)
-  - JVLoadableImage (0.2.1):
+  - JVLoadableImage (0.2.4):
     - JVConstraintEdges
     - JVGenericNotificationCenter
+    - JVUIButtonExtensions
   - JVNoParameterInitializable (0.1.1)
   - JVRestartable (0.1.6)
   - JVShapeHalfMoon (0.1.1):
     - JVCAShapeLayerExtensions
     - JVContentType
   - JVSizeable (0.1.0)
-  - JVTableView (1.3.4):
+  - JVTableView (1.3.6):
     - JVConstraintEdges
     - JVFormChangeWatcher
     - JVLoadableImage
@@ -98,12 +99,12 @@ SPEC CHECKSUMS:
   JVGenericNotificationCenter: 5e6b2a2774954d6bed9389d79984bac77f705ff7
   JVGradientLayer: 34e464b6f5624370653606c94229e81dcf1282ea
   JVInputValidator: 59a66bcb4ecae09a4a2d03785ba1c0ea3c8edb67
-  JVLoadableImage: f4122e21a812ddc70f371700fb9b722d88c60af2
+  JVLoadableImage: 3af2ced5918820b835d6804379cc7cd75faca7de
   JVNoParameterInitializable: 4a41b313e0409cfcb41c1620d70e0ebbe682157b
   JVRestartable: 008c47ae1b36de3bf2cdad2299852231b5749f2a
   JVShapeHalfMoon: 31444957e7a226e800003afaee2634c8ba8129a1
   JVSizeable: 1252e6b1bed411b3fc34f6119d8eaf6803876cd3
-  JVTableView: 9b8a3e09aa7d933489a3aa5ae766a15af59b7687
+  JVTableView: 305b4b2ca7caedb81233d16e64aa30b0aa600146
   JVTappable: 974c863a43962d8f985d5dee205b2ad00b62fcbd
   JVTextField: ed7f4ede9e6b769d6a13613a17c35dcf5b3e78e0
   JVUIButtonExtensions: dd2180c283cc2fde209aeb362f6169a2e0994535

@@ -1,4 +1,5 @@
 import JVUIButtonExtensions
+import JVCurrentDevice
 
 open class TableViewCellLabelImageAndButton: TableViewCellLabelImage {
     
@@ -7,17 +8,17 @@ open class TableViewCellLabelImageAndButton: TableViewCellLabelImage {
     open override func setup() {
         super.setup()
         
-        button.stretchImage()
         button.setContentCompressionResistance(999)
+        button.setWidth(determineButtonWidth())
         
-        addButtonWidth()
+        button.stretchImage()
     }
     
     open override func determineTrailingView() -> UIView? {
         return button
     }
     
-    open func addButtonWidth() {
-        fatalError()
+    open func determineButtonWidth() -> CGFloat {
+        return CurrentDevice.getValue(tablet: 40, phone: 30)
     }
 }
