@@ -65,16 +65,25 @@ extension Array where Element: RowUpdater {
     func update(rows: [TableViewRow]) {
         guard count > 0 else { return }
         
+        #if DEBUG
+        var updatedRows = 0
+        #endif
+        
         let filteredRows = rows.compactMap { $0 as? Element.R }
         
         for row in filteredRows {
             guard let matchingRow = find(rowIdentifier: row.identifier) else { continue }
             
             matchingRow.update(row: row)
+            
+            #if DEBUG
+            updatedRows += 1
+            #endif
         }
         
         #if DEBUG
         validate(allRows: filteredRows)
+        assert(updatedRows == count)
         #endif
     }
     
@@ -96,5 +105,9 @@ private extension Array where Element: RowUpdater {
         for row in self {
             guard allRows.contains(where: { $0.identifier == row.rowIdentifier }) else { fatalError("Tried to update a row which isn't even in the list.") }
         }
+    }
+    
+    func _validate(rows: [TableViewRow]) {
+        
     }
 }

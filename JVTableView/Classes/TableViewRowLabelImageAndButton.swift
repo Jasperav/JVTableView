@@ -38,6 +38,8 @@ open class TableViewRowLabelImageAndButton: TableViewRowLabelImage {
     
     private func commonLoad() {
         changeClassType(cell: .labelImageAndButton)
+        
+        assert(identifier == TableViewRow.defaultRowIdentifier ? tappedRightButton != nil : true)
     }
     
     open override func configure(cell: TableViewCell) {

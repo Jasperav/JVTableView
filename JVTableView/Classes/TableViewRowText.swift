@@ -32,6 +32,8 @@ open class TableViewRowText: TableViewRow {
         self._text = text
         
         super.init(cell: cell, rawIdentifier: rawIdentifier, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+        
+        assert(rawIdentifier == TableViewRow.defaultRowIdentifier ? _text != "" : true)
     }
     
     open override func configure(cell: TableViewCell) {
