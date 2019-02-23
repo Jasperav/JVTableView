@@ -36,7 +36,7 @@ open class TableViewCellLabel: TableViewCell {
         if let trailingView = trailingView, accessoryView != trailingView {
             assert(trailingView.superview == nil)
             
-            trailingView.fill(toSuperview: contentView, edges: ConstraintEdges(trailing: -TableViewRow.edges.trailing!))
+            trailingView.fill(toSuperview: contentView, edges: ConstraintEdges(trailing: TableViewRow.edges.trailing!))
             
             label.trailingAnchor.constraint(equalTo: trailingView.leadingAnchor, constant: -TableViewRow.edges.trailing!).isActive = true
             
