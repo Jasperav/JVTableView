@@ -62,6 +62,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         #if DEBUG
         tableViewGeneric.validate()
+        // If the row is selectable, it must be tappeable.
+        for row in rows.filter({ $0.isSelectable }) {
+            assert(row.tapped != nil)
+        }
         #endif
         
         guard let headerImage = tableViewGeneric.headerImage else {
