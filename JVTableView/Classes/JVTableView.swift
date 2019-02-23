@@ -92,6 +92,11 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
             assert(row.tapped == nil && row.showViewControllerOnTap == nil)
         }
         
+        // If the row is selectable, it must be tappeable.
+        for row in rows.filter({ $0.isSelectable }) {
+            assert(row.tapped != nil)
+        }
+        
         // Omit row identifier duplicated
         var customIdentifiers = Set<String>()
         
