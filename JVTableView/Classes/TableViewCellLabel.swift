@@ -24,7 +24,7 @@ open class TableViewCellLabel: TableViewCell {
         label.fill(toSuperview: contentView, edges: edges)
         
         if let leadingView = leadingView {
-            assert(leadingView.constraints.count == 0 && leadingView.superview == nil)
+            assert(leadingView.superview == nil)
             
             leadingView.fill(toSuperview: contentView, edges: ConstraintEdges(leading: TableViewRow.edges.leading!))
             
@@ -34,7 +34,7 @@ open class TableViewCellLabel: TableViewCell {
         }
         
         if let trailingView = trailingView, accessoryView != trailingView {
-            assert(trailingView.constraints.count == 0 && trailingView.superview == nil)
+            assert(trailingView.superview == nil)
             
             trailingView.fill(toSuperview: contentView, edges: ConstraintEdges(trailing: -TableViewRow.edges.trailing!))
             
