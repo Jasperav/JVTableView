@@ -8,7 +8,7 @@ public class TableViewTapHandler<T: TableViewRow>: Hashable {
     
     let row: T
     
-    private (set) var addedTapHandler = false
+    fileprivate (set) var addedTapHandler = false
     
     init(row: T) {
         self.identifier = row.identifier
@@ -18,7 +18,10 @@ public class TableViewTapHandler<T: TableViewRow>: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
     }
-    
+
+}
+
+public class TableViewRowTapHandler: TableViewTapHandler<TableViewRow> {
     public func add(tapHandler: @escaping (() -> ())) {
         assert(!addedTapHandler)
         
@@ -26,21 +29,15 @@ public class TableViewTapHandler<T: TableViewRow>: Hashable {
         
         addedTapHandler = true
     }
-    
-    func _add(tapHandler: @escaping (() -> ())) {
-        fatalError()
-    }
-}
-
-public class TableViewRowTapHandler: TableViewTapHandler<TableViewRow> {
-    override func _add(tapHandler: @escaping (() -> ())) {
-        row.tapped = tapHandler
-    }
 }
 
 public class TableViewRowLabelImageRightButtonTapHandler: TableViewTapHandler<TableViewRowLabelImageAndButton> {
     
-    override func _add(tapHandler: @escaping (() -> ())) {
+    public func add(tapHandler: @escaping ((TableViewCellLabelImageAndButton) -> ())) {
+        assert(!addedTapHandler)
+        
         row.tappedRightButton = tapHandler
+        
+        addedTapHandler = true
     }
 }
