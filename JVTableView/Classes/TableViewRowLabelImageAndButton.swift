@@ -7,12 +7,36 @@ open class TableViewRowLabelImageAndButton: TableViewRowLabelImage {
     private let textRightButton: String
     private weak var cell: TableViewCellLabelImageAndButton?
     
-    public init<T: RawRepresentable>(identifier: T, text: String = "", contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel, imageLeft: UIImage? = nil, textRightButton: String, tappedRightButton: ((TableViewCellLabelImageAndButton) -> ())? = nil) {
+    public init<T: RawRepresentable>(identifier: T,
+                                     text: String = "",
+                                     contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                                     imageLeft: UIImage? = nil,
+                                     textRightButton: String,
+                                     tappedRightButton: ((TableViewCellLabelImageAndButton) -> ())? = nil) {
         self.textRightButton = textRightButton
         self.tappedRightButton = tappedRightButton
         
         super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, image: imageLeft, tapped: nil)
         
+        commonLoad()
+    }
+    
+    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
+                text: String = "",
+                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
+                imageLeft: UIImage? = nil,
+                textRightButton: String,
+                tappedRightButton: ((TableViewCellLabelImageAndButton) -> ())? = nil) {
+        self.textRightButton = textRightButton
+        self.tappedRightButton = tappedRightButton
+        
+        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, image: imageLeft, showViewControllerOnTap: nil, tapped: nil)
+        
+        commonLoad()
+    }
+    
+    private func commonLoad() {
         changeClassType(cell: .labelImageAndButton)
     }
     

@@ -52,6 +52,8 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         let rowsToAddTapHandlersToForTableViewRowLabelImageAndButton = tableViewGeneric.rows.compactMap { $0 as? TableViewRowLabelImageAndButton }.filter { $0.tappedRightButton == nil }.map { TableViewRowLabelImageRightButtonTapHandler(row: $0) }
         
+        assert(rowsToAddTapHandlersToForTableViewRowLabelImageAndButton.allSatisfy { $0.identifier != TableViewRow.defaultRowIdentifier }, "You should have identifiers for this rows.")
+        
         setupTapHandlersForTableViewRowLabelImageAndButton(datasource: U.self, rows: rowsToAddTapHandlersToForTableViewRowLabelImageAndButton)
         
         // For all the view controllers that needs to be presented after they have been tapped
