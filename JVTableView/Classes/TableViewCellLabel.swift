@@ -59,8 +59,6 @@ open class TableViewCellLabel: TableViewCell {
     }
     
     private func addLeadingOrTrailingView(view: UIView) {
-        assert(view.constraints.count == 0 && view.superview == nil)
-        
         view.equal(to: label, height: true, width: false)
         view.setSameCenterY(view: label)
     }
