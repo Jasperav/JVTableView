@@ -1,13 +1,14 @@
 import JVView
 import JVConstraintEdges
 import JVCurrentDevice
+import JVTableViewCellLayoutCreator
 
 open class TableViewCellButton: TableViewCell {
     
     public let button = UIButton(type: .system)
     
     open override func setup() {
-        button.fill(toSuperview: contentView, edges: TableViewRow.edges)
+        TableViewCellLayoutCreator.create(middleView: button, toCell: self)
         
         button.isUserInteractionEnabled = false
         

@@ -8,8 +8,6 @@ open class TableViewCellLabelImageAndButton: TableViewCellLabelImage {
     open override func setup() {
         super.setup()
         
-        button.setContentHuggingAndCompressionResistance(999)
-        
         button.stretchImage()
     }
     

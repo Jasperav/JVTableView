@@ -1,4 +1,6 @@
-open class TableViewCell: UITableViewCell {
+import JVTableViewCellLayoutCreator
+
+open class TableViewCell: TableViewCellInnerContentView {
     
     var identifier: String?
     

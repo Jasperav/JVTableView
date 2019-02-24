@@ -8,7 +8,6 @@ open class TableViewCellLabelImage: TableViewCellLabel {
     open override func setup() {
         super.setup()
         
-        loadableImageView.setContentHuggingAndCompressionResistance(1)
         loadableImageView.setWidthAndHeightAreTheSame()
     }
     
