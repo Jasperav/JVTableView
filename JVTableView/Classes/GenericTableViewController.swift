@@ -130,7 +130,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         guard changedRows.count > 0 else { return }
         
         save(datasource: U.self, changeableRows: changeableRows)
-        save(datasource: U.self, changedRows: changeableRows)
+        save(datasource: U.self, changedRows: changedRows)
     }
     
     /// * Recommended overridable methods. *
