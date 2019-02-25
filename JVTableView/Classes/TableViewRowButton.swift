@@ -33,6 +33,6 @@ open class TableViewRowButton: TableViewRowText {
     open override func update(cell: TableViewCell) {
         let _cell = cell as! TableViewCellButton
         
-        _cell.update(contentTypeJVLabelText: contentTypeJVLabel, text: _text)
+        _cell.button.set(contentType: contentTypeJVLabel.contentTypeTextFont, text: _text)
     }
 }

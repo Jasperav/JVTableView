@@ -19,10 +19,4 @@ open class TableViewCellButton: TableViewCell {
         }
     }
     
-    open func update(contentTypeJVLabelText: ContentTypeJVLabelText,
-                     text: String? = nil) {
-        button.setTitle(text, for: .normal)
-        button.titleLabel!.font = contentTypeJVLabelText.contentTypeTextFont.font
-    }
-    
 }

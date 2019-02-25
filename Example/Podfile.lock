@@ -26,7 +26,7 @@ PODS:
     - JVCAShapeLayerExtensions
     - JVContentType
   - JVSizeable (0.1.0)
-  - JVTableView (1.5.3):
+  - JVTableView (1.5.5):
     - JVConstraintEdges
     - JVFormChangeWatcher
     - JVLoadableImage
@@ -46,7 +46,7 @@ PODS:
     - JVView
   - JVUIButtonExtensions (0.1.1)
   - JVURLOpener (0.1.1)
-  - JVView (0.2.0):
+  - JVView (0.2.1):
     - JVConstraintEdges
     - JVContentType
     - JVCurrentDevice
@@ -108,13 +108,13 @@ SPEC CHECKSUMS:
   JVRestartable: 008c47ae1b36de3bf2cdad2299852231b5749f2a
   JVShapeHalfMoon: 31444957e7a226e800003afaee2634c8ba8129a1
   JVSizeable: 1252e6b1bed411b3fc34f6119d8eaf6803876cd3
-  JVTableView: c8de10c804b745c63596c04f0c4cf5cbbf4c5d41
+  JVTableView: f329a26ee33e8207c85b233361a4fd48d4ae826a
   JVTableViewCellLayoutCreator: 90f976a1752cda0aa9f7100c67c9630c4184565e
   JVTappable: 974c863a43962d8f985d5dee205b2ad00b62fcbd
   JVTextField: aab0033a4fbe3cfc2d04a09fc456e2f01c1712b6
   JVUIButtonExtensions: dd2180c283cc2fde209aeb362f6169a2e0994535
   JVURLOpener: 6545c4695a338bb2047643a97151eecafe0620e7
-  JVView: cf3480ca75335733b329dd3a34c68a743fc672dc
+  JVView: 14c04cf8c4d612e9a5b0b33039bb475a414c48d5
 
 PODFILE CHECKSUM: 00ccd456b08e8fea833a5d368f2ccc81425c1c87
 
