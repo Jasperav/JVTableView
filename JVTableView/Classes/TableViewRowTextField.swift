@@ -24,13 +24,13 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
     private let placeholderText: String
     
     public init<T: RawRepresentable>(identifier: T,
-                placeholderText: String,
-                validationBlockUserInput: @escaping ((String) -> (Bool)),
-                validationToChangeValidationState: ((String) -> (Bool))? = nil,
-                keyboardReturnType: UIReturnKeyType = .done,
-                textFieldInitializer: TextFieldInitializer = TableViewRowTextField.textFieldInitializer,
-                oldValue: String = "",
-                isFirstResponder: Bool = false) {
+                                     placeholderText: String,
+                                     validationBlockUserInput: @escaping ((String) -> (Bool)),
+                                     validationToChangeValidationState: ((String) -> (Bool))? = nil,
+                                     keyboardReturnType: UIReturnKeyType = .done,
+                                     textFieldInitializer: TextFieldInitializer = TableViewRowTextField.textFieldInitializer,
+                                     oldValue: String = "",
+                                     isFirstResponder: Bool = false) {
         self.oldValue = oldValue
         self.validationBlockUserInput = validationBlockUserInput
         self.validationToChangeValidationState = validationToChangeValidationState ?? validationBlockUserInput
@@ -51,7 +51,7 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
         
         _cell.oldValue = oldValue
         
-        _cell.textField.update(textFieldInitializer: textFieldInitializer)
+        _cell.textField.update(textFieldInitializer: textFieldInitializer, placeholderText: textFieldInitializer.placeholderText)
         _cell.textField.validationBlockUserInput = validationBlockUserInput
         _cell.textField.validationToChangeValidationState = validationToChangeValidationState
         _cell.textField.oldValue = oldValue
