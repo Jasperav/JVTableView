@@ -74,7 +74,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         }
         
         for row in tableViewGeneric.rows {
-            guard row.updateUnsafely || row.tapped != nil || row is Changeable else { continue }
+            guard !(row.updateUnsafely || row.tapped != nil || row is Changeable) else { continue }
             
             assert(row.identifier == TableViewRow.defaultRowIdentifier, "You specified a row with an identifier, but the row is static.")
         }
