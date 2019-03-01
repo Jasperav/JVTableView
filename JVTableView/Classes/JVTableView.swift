@@ -239,6 +239,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
             }
         }
         
+        cell.selectionStyle = row.isSelectable ? UITableViewCell.SelectionStyle.gray : .none
+        
         return cell
     }
     
