@@ -58,7 +58,13 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         // we do that here.
         for row in tableViewGeneric.rows.filter({ $0.showViewControllerOnTap != nil }) {
             present(viewControllerType: row.showViewControllerOnTap!, tapped: &row.tapped)
+            
+            assert(row.identifier == TableViewRow.defaultRowIdentifier, "This row doesnt need an identifier.")
         }
+        
+        let unsafeUpdateableRows = tableViewGeneric.rowsWithCustomIdentifier.filter { $0.updateUnsafely }
+        
+        updateUnsafe(rows: unsafeUpdateableRows)
         
         #if DEBUG
         tableViewGeneric.validate()
@@ -66,7 +72,15 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         for row in tableViewGeneric.rows.filter({ $0.isSelectable }) {
             assert(row.tapped != nil)
         }
+        
+        for row in tableViewGeneric.rows {
+            guard !row.updateUnsafely && !row.isSelectable else { continue }
+            
+            assert(row.identifier == TableViewRow.defaultRowIdentifier, "You specified a row with an identifier, but the row is static.")
+        }
         #endif
+        
+        
         
         guard let headerImage = tableViewGeneric.headerImage else {
             reloadData()
@@ -224,6 +238,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     open func createTableViewRowLabelImageRightButtonTapHandlers(datasource: U.Type) -> [TableViewRowLabelImageRightButtonTapHandler] {
         return []
+    }
+    
+    open func updateUnsafe(rows: [TableViewRow]) {
+        assert(rows.count == 0)
     }
     
     /// This method must be overridden if you are using a header image.

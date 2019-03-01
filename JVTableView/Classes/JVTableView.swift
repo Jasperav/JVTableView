@@ -112,6 +112,10 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         firstResponderRows.removeAll(where: { !$0.isFirstResponder })
         
         assert(firstResponderRows.count <= 1, "No more than 1 table view row text field can be the first responder.")
+        
+        let unsafeUpdateableRows = rows.filter { $0.updateUnsafely }
+        
+        assert(unsafeUpdateableRows.allSatisfy { $0.identifier != TableViewRow.defaultRowIdentifier }, "You must be able to access the unsafe updateable rows by property.")
         #endif
     }
     
