@@ -74,13 +74,11 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         }
         
         for row in tableViewGeneric.rows {
-            guard !row.updateUnsafely && !row.isSelectable else { continue }
+            guard !row.updateUnsafely || row.tapped != nil else { continue }
             
             assert(row.identifier == TableViewRow.defaultRowIdentifier, "You specified a row with an identifier, but the row is static.")
         }
         #endif
-        
-        
         
         guard let headerImage = tableViewGeneric.headerImage else {
             reloadData()
