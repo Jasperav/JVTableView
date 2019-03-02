@@ -3,7 +3,7 @@ import JVLoadableImage
 
 open class TableViewCellLabelImage: TableViewCellLabel {
     
-    public let loadableImageView = LoadableImage(style: .gray, rounded: true)
+    public let loadableImageView = LoadableImage(style: .gray, rounded: true, isUserInteractionEnabled: false)
     
     open override func setup() {
         super.setup()
