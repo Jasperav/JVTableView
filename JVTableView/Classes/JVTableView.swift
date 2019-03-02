@@ -64,6 +64,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         
         dataSource = self
         delegate = self
+        keyboardDismissMode = .onDrag
         
         tableFooterView = UIView()
         

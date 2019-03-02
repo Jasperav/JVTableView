@@ -97,10 +97,6 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         fatalError("init(coder:) has not been implemented")
     }
     
-    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        tableViewGeneric.endEditing(true)
-    }
-    
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
