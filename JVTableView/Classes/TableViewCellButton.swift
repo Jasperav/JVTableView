@@ -8,7 +8,7 @@ open class TableViewCellButton: TableViewCell {
     public let button = UIButton(type: .system)
     
     open override func setup() {
-        TableViewCellLayoutCreator.create(middleView: button, toCell: self)
+        TableViewCellLayoutCreator.create(middleView: button, toCell: self, innerContentViewEdges: TableViewCell.edges)
         
         button.isUserInteractionEnabled = false
         
