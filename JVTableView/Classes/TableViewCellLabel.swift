@@ -18,7 +18,7 @@ open class TableViewCellLabel: TableViewCell {
             trailingView = nil
         }
 
-        TableViewCellLayoutCreator.create(middleView: label, toCell: self, innerContentViewEdges: TableViewCell.edges, leadingView: leadingView, trailingView: trailingView)
+        TableViewCellLayoutCreator.create(middleView: label, toCell: self, leadingView: leadingView, trailingView: trailingView)
     }
     
     open func determineLeadingView() -> UIView? {
