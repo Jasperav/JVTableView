@@ -14,7 +14,7 @@ open class TableViewCellTextField: TableViewCell, ChangeableValues {
     public var didReturn: (() -> ())?
     
     open override func setup() {
-        TableViewCellLayoutCreator.create(middleView: textField, toCell: self)
+        TableViewCellLayoutCreator.create(toCell: self, middleView: textField)
         
         textField.borderStyle = .roundedRect
         textField.returnKeyType = .done
