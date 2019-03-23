@@ -169,9 +169,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     /// Checks if any row in the datasource has a different oldValue compared to its currentValue.
     private func checkIfFormChanged() {
-        guard let formHasChanged = formHasChanged else { return }
-        
-        formHasChanged(changeableRows.contains(where: { $0.determineHasBeenChanged() }))
+        formHasChanged?(changeableRows.contains(where: { $0.determineHasBeenChanged() }))
     }
     
     /// Registers the unique cell types with there reuse identifier.
