@@ -171,14 +171,12 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     private func checkIfFormChanged() {
         guard let formHasChanged = formHasChanged else { return }
         
-        for section in jvDatasource.dataSource {
-            for row in section.rows {
-                guard let changeableRow = row as? Changeable, changeableRow.determineHasBeenChanged() else { continue }
-                
-                formHasChanged(true)
-                
-                return
-            }
+        for row in changeableRows {
+            guard row.determineHasBeenChanged() else { continue }
+            
+            formHasChanged(true)
+            
+            return
         }
         
         formHasChanged(false)
@@ -203,12 +201,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     /// when a user is typing something a textField and that textField has at a moment the same oldValue and newValue,
     /// The keyboard disappears.
     public func resetForm(reloadData: Bool = false) {
-        for section in jvDatasource.dataSource {
-            for row in section.rows {
-                guard let changeableRow = row as? Changeable else { continue }
-                
-                changeableRow.reset()
-            }
+        for row in changeableRows {
+            row.reset()
         }
         
         if reloadData {
@@ -268,7 +262,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateHeaderStretchImageView()
     }
-
+    
     open func retrieveChangeableRows() -> [TableViewRowUpdate] {
         return changeableRows.map { TableViewRowUpdate(changeableRow: $0) }
     }
