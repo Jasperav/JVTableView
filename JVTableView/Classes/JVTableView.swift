@@ -171,15 +171,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     private func checkIfFormChanged() {
         guard let formHasChanged = formHasChanged else { return }
         
-        for row in changeableRows {
-            guard row.determineHasBeenChanged() else { continue }
-            
-            formHasChanged(true)
-            
-            return
-        }
-        
-        formHasChanged(false)
+        formHasChanged(changeableRows.contains(where: { $0.determineHasBeenChanged() }))
     }
     
     /// Registers the unique cell types with there reuse identifier.
