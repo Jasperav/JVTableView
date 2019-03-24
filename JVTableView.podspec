@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'JVTableView'
-  s.version          = '1.7.1'
+  s.version          = '1.7.2'
   s.summary          = 'A short description of JVTableView.'
 
   s.description      = <<-DESC

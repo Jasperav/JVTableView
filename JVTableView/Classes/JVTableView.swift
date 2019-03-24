@@ -38,6 +38,10 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     /// Contains all the rows of jvDatasource which conforms to the protocol InputValidateable.
     private let rowInputValidators: [InputValidator]
     
+    public var rowsAreValid: Bool {
+        return rowInputValidators.allSatisfy { $0.validationState == .valid }
+    }
+    
     public required init() {
         let tempJVDatasource = U.init()
         
@@ -83,8 +87,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         fatalError()
     }
     
+    #if DEBUG
     public func validate() {
-        #if DEBUG
         for row in rows.compactMap({ $0 as? Changeable & TableViewRow }) {
             assert(row.identifier != TableViewRow.defaultRowIdentifier, "A changeable row should always have an identifier \(row.identifier)")
         }
@@ -117,8 +121,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         let unsafeUpdateableRows = rows.filter { $0.updateUnsafely }
         
         assert(unsafeUpdateableRows.allSatisfy { $0.identifier != TableViewRow.defaultRowIdentifier }, "You must be able to access the unsafe updateable rows by property.")
-        #endif
     }
+    #endif
     
     open override func reloadData() {
         jvDatasource.determineSectionsWithVisibleRows()
@@ -131,10 +135,6 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
             .filter { $0.isSelectable }
             .filter { $0.tapped == nil }
             .filter { $0.showViewControllerOnTap == nil }
-    }
-    
-    public func isValid() -> Bool {
-        return rowInputValidators.allSatisfy { $0.validationState == .valid }
     }
     
     /// Call this once after you did setup the whole tableview & datasource.
