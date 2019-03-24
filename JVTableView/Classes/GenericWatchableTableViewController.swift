@@ -14,7 +14,9 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
         return FormChangeWatcherDefaultValues.defaultTopRightButtonText
     }
     
-    open var topLeftButtonText: String {
+    /// When nil, the form change watcher topRightButtonState == .disabledWhenFormIsInvalid
+    /// Else, .hiddenWhenFormIsNotChanged
+    open var topLeftButtonText: String? {
         return FormChangeWatcherDefaultValues.defaultTopLeftButtonText
     }
     
