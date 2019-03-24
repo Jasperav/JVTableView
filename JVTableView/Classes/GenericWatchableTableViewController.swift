@@ -34,20 +34,17 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
         fatalError("init(coder:) has not been implemented")
     }
     
-    #if DEBUG
-    open override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        guard topLeftButtonText != nil else { return }
-        
-        assert(tableViewGeneric.changeableRows.allSatisfy({ !$0.isChanged }), "UIViewController is invisible, but there are rows changed")
-    }
-    #endif
-    
     private func tappedTopRightButton() {
         view.endEditing(true)
         
         prepareForSave()
     }
 
+    #if DEBUG
+    deinit {
+        guard topLeftButtonText != nil else { return }
+        
+        assert(tableViewGeneric.changeableRows.allSatisfy({ !$0.isChanged }), "UIViewController is deinit, but there where rows changed")
+    }
+    #endif
 }
