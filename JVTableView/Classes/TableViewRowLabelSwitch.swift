@@ -43,7 +43,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         super.configure(cell: cell)
     }
     
-    public override func createUpdateContainer() -> TableViewRowUpdateType {
+    public override func createUpdateContainer() -> TableViewRowUpdateContainer {
         return .bool(currentValue)
     }
 }

@@ -1,6 +1,6 @@
 import JVChangeableValue
 
-public enum TableViewRowUpdateType {
+public enum TableViewRowUpdateContainer {
     case text(String), bool(Bool), other(Any)
     
     public var asText: String {
@@ -34,7 +34,7 @@ public enum TableViewRowUpdateType {
 public struct TableViewRowUpdate {
     public let identifier: String
     public let hasChanged: Bool
-    public let value: TableViewRowUpdateType
+    public let value: TableViewRowUpdateContainer
     
     init(changeableRow: Changeable & TableViewRow) {
         identifier = changeableRow.identifier
