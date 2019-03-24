@@ -27,14 +27,22 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
         
         formChangeWatcher = FormChangeWatcher(changeableForm: tableViewGeneric, viewController: self, topRightButtonText: topRightButtonText, topLeftButtonTextWhenFormIsChanged: topLeftButtonText, tappedTopRightButton: tappedTopRightButton)
         
-        #if DEBUG
         assert(tableViewGeneric.changeableRows.count > 0, "You are watching a datasource which hasn't got changeable rows")
-        #endif
     }
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    #if DEBUG
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        guard topLeftButtonText != nil else { return }
+        
+        assert(tableViewGeneric.changeableRows.allSatisfy({ !$0.isChanged }), "UIViewController is invisible, but there are rows changed")
+    }
+    #endif
     
     private func tappedTopRightButton() {
         view.endEditing(true)
