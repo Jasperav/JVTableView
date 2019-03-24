@@ -37,13 +37,13 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         
         _cell.hasChanged = { [unowned self] (hasChanged) in
             self.currentValue = _cell._switch.isOn
-            self.hasChanged?(self.determineHasBeenChanged())
+            self.hasChanged?(self.isChanged)
         }
         
         super.configure(cell: cell)
     }
     
-    public override func determineUpdateType() -> TableViewRowUpdateType {
+    public override func createUpdateContainer() -> TableViewRowUpdateType {
         return .bool(currentValue)
     }
 }

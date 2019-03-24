@@ -103,7 +103,7 @@ open class TableViewRow: Tappable, Hashable {
     }
     
     // Will be called when 'self' is changeable and the data from the tableView will be saved.
-    open func determineUpdateType() -> TableViewRowUpdateType {
+    open func createUpdateContainer() -> TableViewRowUpdateType {
         fatalError()
     }
     

@@ -3,6 +3,10 @@ import JVNoParameterInitializable
 
 open class TableViewRowLabelImage: TableViewRowLabel {
     
+    open var shouldUpdateImage: Bool {
+        return true
+    }
+    
     /// Changing this property alone does not change the image of the cell property itself
     /// This has only effect when the cell reappears.
     public var image: UIImage?
@@ -40,7 +44,7 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     }
     
     open override func configure(cell: TableViewCell) {
-        if shouldUpdateImage() {
+        if shouldUpdateImage {
             let _cell = cell as! TableViewCellLabelImage
             
             if let image = image {
@@ -51,9 +55,5 @@ open class TableViewRowLabelImage: TableViewRowLabel {
         }
         
         super.configure(cell: cell)
-    }
-    
-    open func shouldUpdateImage() -> Bool {
-        return true
     }
 }

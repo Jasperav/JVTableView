@@ -38,7 +38,7 @@ public struct TableViewRowUpdate {
     
     init(changeableRow: Changeable & TableViewRow) {
         identifier = changeableRow.identifier
-        hasChanged = changeableRow.determineHasBeenChanged()
-        value = changeableRow.determineUpdateType()
+        hasChanged = changeableRow.isChanged
+        value = changeableRow.createUpdateContainer()
     }
 }

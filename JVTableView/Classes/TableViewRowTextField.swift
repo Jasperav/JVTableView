@@ -76,7 +76,7 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
         }
     }
     
-    open override func determineUpdateType() -> TableViewRowUpdateType {
+    open override func createUpdateContainer() -> TableViewRowUpdateType {
         return .text(currentValue)
     }
 }

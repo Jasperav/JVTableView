@@ -3,6 +3,10 @@ import JVChangeableValue
 
 public class TableViewCellLabelSwitch: TableViewCellLabel, ChangeableValues {
     
+    public override var trailingView: UIView? {
+        return accessoryView
+    }
+    
     public var currentValue = false
     public var oldValue = false
     public var hasChanged: ((Bool) -> ())?
@@ -19,10 +23,6 @@ public class TableViewCellLabelSwitch: TableViewCellLabel, ChangeableValues {
     @objc func valueChange() {
         currentValue = _switch.isOn
         
-        hasChanged?(determineHasBeenChanged())
-    }
-    
-    public override func determineTrailingView() -> UIView? {
-        return accessoryView
+        hasChanged?(isChanged)
     }
 }

@@ -43,7 +43,7 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         // After the setup, we require every row that is selectable but doesn't have
         // a tapped handler and view controller to present, to add a tap handler.
-        let tableViewRowsToAddTapHandlersTo = tableViewGeneric.determineRowsWithoutTapHandlers()
+        let tableViewRowsToAddTapHandlersTo = tableViewGeneric.rowsWithoutTapHandlers
         let rowsToAddTapHandlersTo = tableViewRowsToAddTapHandlersTo.map { TableViewRowTapHandler(row: $0) }
         
         setupTapHandlers(datasource: U.self, rows: rowsToAddTapHandlersTo)
@@ -124,16 +124,26 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         (cell as! TableViewCellTextField).textField.becomeFirstResponder()
     }
     
-    /// Prepares to call the save method.
-    /// It checks the necessary rows to select and passes it to the save method.
-    open func prepareForSave() {
-        let changeableRows = tableViewGeneric.retrieveChangeableRows()
-        let changedRows = changeableRows.filter { $0.hasChanged }
+    /// Call this method when you successfully processed the saving method
+    /// and the changeablerows should change there oldValue by currentValue.
+    public final func savedChangeableRows() {
+        for row in tableViewGeneric.changeableRows {
+            row.updateFromCurrentState()
+        }
         
-        guard changedRows.count > 0 else { return }
+        reloadData()
+    
+        assert(tableViewGeneric.changeableRows.filter { $0.isChanged }.count == 0)
+    }
+    
+    final func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout (() -> ())?) {
+        assert(tapped == nil)
         
-        save(datasource: U.self, changeableRows: changeableRows)
-        save(datasource: U.self, changedRows: changedRows)
+        tapped = { [unowned self] in
+            let viewController = viewControllerType.init()
+            
+            self.navigationController!.pushViewController(viewController, animated: true)
+        }
     }
     
     /// * Recommended overridable methods. *
@@ -188,6 +198,18 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         }
         
         tableViewGeneric.reloadData()
+    }
+    
+    /// Prepares to call the save method.
+    /// It checks the necessary rows to select and passes it to the save method.
+    open func prepareForSave() {
+        let changeableRows = tableViewGeneric.retrieveChangeableRows()
+        let changedRows = changeableRows.filter { $0.hasChanged }
+        
+        guard changedRows.count > 0 else { return }
+        
+        save(datasource: U.self, changeableRows: changeableRows)
+        save(datasource: U.self, changedRows: changedRows)
     }
     
     /// This method must be overridden if you have rows that have changed.
@@ -252,14 +274,4 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     /// One time setup for the view controller.
     /// See the description of the init() why this method is here.
     open func setup() {}
-    
-    func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout (() -> ())?) {
-        assert(tapped == nil)
-        
-        tapped = { [unowned self] in
-            let viewController = viewControllerType.init()
-            
-            self.navigationController!.pushViewController(viewController, animated: true)
-        }
-    }
 }

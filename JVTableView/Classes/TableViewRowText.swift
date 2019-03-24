@@ -46,7 +46,7 @@ open class TableViewRowText: TableViewRow {
         fatalError()
     }
     
-    open override func determineUpdateType() -> TableViewRowUpdateType {
+    open override func createUpdateContainer() -> TableViewRowUpdateType {
         return .text(_text)
     }
 }

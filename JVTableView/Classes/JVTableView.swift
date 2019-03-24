@@ -33,6 +33,13 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     /// Contains all the rows of jvDatasource which conforms to the protocol Changeable.
     let changeableRows: [TableViewRow & Changeable]
     
+    var rowsWithoutTapHandlers: [TableViewRow] {
+        return rowsWithCustomIdentifier
+            .filter { $0.isSelectable }
+            .filter { $0.tapped == nil }
+            .filter { $0.showViewControllerOnTap == nil }
+    }
+    
     let firstResponderTableViewRowIdentifier: String?
     
     /// Contains all the rows of jvDatasource which conforms to the protocol InputValidateable.
@@ -57,9 +64,9 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         
         jvDatasource = tempJVDatasource
         
-        super.init(frame: CGRect.zero, style: jvDatasource.determineStyle())
+        super.init(frame: CGRect.zero, style: jvDatasource.style)
         
-        headerImage = jvDatasource.determineHeaderImage()
+        headerImage = jvDatasource.headerImage
         
         registerUniqueCellTypes()
         
@@ -109,7 +116,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
             assert(row.identifier != TableViewRow.defaultRowIdentifier)
             // Every changeable row must override determineCurrentValue().
             // The default method throws a fatalerror. We check if it doesn't throw.
-            row.determineUpdateType()
+            let _ = row.createUpdateContainer()
         }
         
         var firstResponderRows = rows.compactMap { $0 as? TableViewRowTextField }
@@ -125,16 +132,9 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     #endif
     
     open override func reloadData() {
-        jvDatasource.determineSectionsWithVisibleRows()
+        jvDatasource.updateVisibleRows()
         
         super.reloadData()
-    }
-    
-    func determineRowsWithoutTapHandlers() -> [TableViewRow] {
-        return rowsWithCustomIdentifier
-            .filter { $0.isSelectable }
-            .filter { $0.tapped == nil }
-            .filter { $0.showViewControllerOnTap == nil }
     }
     
     /// Call this once after you did setup the whole tableview & datasource.
@@ -169,7 +169,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     /// Checks if any row in the datasource has a different oldValue compared to its currentValue.
     private func checkIfFormChanged() {
-        formHasChanged?(changeableRows.contains(where: { $0.determineHasBeenChanged() }))
+        formHasChanged?(changeableRows.contains(where: { $0.isChanged }))
     }
     
     /// Registers the unique cell types with there reuse identifier.
