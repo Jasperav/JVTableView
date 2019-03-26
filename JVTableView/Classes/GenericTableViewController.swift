@@ -127,13 +127,15 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     /// Call this method when you successfully processed the saving method
     /// and the changeablerows should change there oldValue by currentValue.
     public final func savedChangeableRows() {
-        for row in tableViewGeneric.changeableRows {
-            row.updateFromCurrentState()
+        DispatchQueue.main.async {
+            for row in self.tableViewGeneric.changeableRows {
+                row.updateFromCurrentState()
+            }
+            
+            self.reloadData()
+            
+            assert(self.tableViewGeneric.changeableRows.filter { $0.isChanged }.count == 0)
         }
-        
-        reloadData()
-    
-        assert(tableViewGeneric.changeableRows.filter { $0.isChanged }.count == 0)
     }
     
     final func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout (() -> ())?) {
