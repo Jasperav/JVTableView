@@ -108,7 +108,13 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         var customIdentifiers = Set<String>()
         
         for row in rowsWithCustomIdentifier {
-            assert(customIdentifiers.insert(row.identifier).inserted)
+            if !customIdentifiers.insert(row.identifier).inserted {
+                for row in rowsWithCustomIdentifier {
+                    print(row.identifier)
+                }
+                
+                fatalError()
+            }
         }
         
         for row in changeableRows {

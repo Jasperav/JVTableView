@@ -103,7 +103,7 @@ private extension Array where Element: RowUpdater {
     /// Ofcourse it is mandatory to, when the user updates a row, it is present in the array of all rows.
     func validate(allRows: [Element.R]) {
         for row in self {
-            guard allRows.contains(where: { $0.identifier == row.rowIdentifier }) else { fatalError("Tried to update a row which isn't even in the list.") }
+            guard allRows.contains(where: { $0.identifier == row.rowIdentifier }) else { fatalError("Tried to update a row which isn't even in the list: \(allRows.map({ $0.identifier })) row: \(row.rowIdentifier)") }
         }
     }
     

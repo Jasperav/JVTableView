@@ -34,6 +34,21 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Call this method when you successfully processed the saving method
+    /// and the changeablerows should change there oldValue by currentValue.
+    public final func savedChangeableRows() {
+        DispatchQueue.main.async {
+            for row in self.tableViewGeneric.changeableRows {
+                row.updateFromCurrentState()
+            }
+            
+            self.reloadData()
+            self.formChangeWatcher.handleFormChange(hasNewValues: false)
+            
+            assert(self.tableViewGeneric.changeableRows.filter { $0.isChanged }.count == 0)
+        }
+    }
+    
     private func tappedTopRightButton() {
         view.endEditing(true)
         

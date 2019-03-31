@@ -20,6 +20,13 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         return true
     }
     
+    open var reloadDataOnViewWillAppear: Bool {
+        return false
+    }
+    
+    /// True when the tableView did load the data at least once.
+    private var didReload = false
+    
     /// The generic table view.
     unowned let tableViewGeneric: T
     
@@ -72,7 +79,6 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         for row in tableViewGeneric.rows.filter({ $0.isSelectable }) {
             assert(row.tapped != nil)
         }
-        
         #endif
         
         guard let headerImage = tableViewGeneric.headerImage else {
@@ -95,6 +101,18 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        guard didReload && reloadDataOnViewWillAppear else {
+            didReload = true
+            
+            return
+        }
+        
+        tableView.reloadData()
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -124,20 +142,6 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         (cell as! TableViewCellTextField).textField.becomeFirstResponder()
     }
     
-    /// Call this method when you successfully processed the saving method
-    /// and the changeablerows should change there oldValue by currentValue.
-    public final func savedChangeableRows() {
-        DispatchQueue.main.async {
-            for row in self.tableViewGeneric.changeableRows {
-                row.updateFromCurrentState()
-            }
-            
-            self.reloadData()
-            
-            assert(self.tableViewGeneric.changeableRows.filter { $0.isChanged }.count == 0)
-        }
-    }
-    
     final func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout (() -> ())?) {
         assert(tapped == nil)
         
@@ -165,6 +169,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         // Every row that has a switch must be updated at runtime.
         // This means that the count of switchUpdates must be equal to the total amount of switch rows in the datasource.
         let switchableRows = tableViewGeneric.rows.compactMap { $0 as? TableViewRowLabelSwitch }
+        
+        if switchableRows.count != switchUpdates.count {
+            
+        }
         
         assert(switchableRows.count == switchUpdates.count)
         #endif
@@ -266,7 +274,9 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     /// Because they need more info when they are initialized.
     /// Do that here.
     open func setupTapHandlers(datasource: U.Type, rows: [TableViewRowTapHandler]) {
-        assert(rows.count == 0, "There are rows that require to have a tap listener attached to it, but this method isn't overridden.")
+        guard rows.count > 0 else { return }
+        
+        fatalError("There are rows that require to have a tap listener attached to it, but this method isn't overridden: \(rows.map({ $0.identifier }))")
     }
     
     open func setupTapHandlersForTableViewRowLabelImageAndButton(datasource: U.Type, rows: [TableViewRowLabelImageRightButtonTapHandler]) {
