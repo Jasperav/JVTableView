@@ -9,6 +9,7 @@ PODS:
   - JVContentType (0.1.7)
   - JVCurrentDevice (0.1.1):
     - DeviceKit
+  - JVDebugProcessorMacros (0.1.0)
   - JVFontUtils (0.1.0)
   - JVFormChangeWatcher (0.1.3)
   - JVGenericNotificationCenter (0.1.3):
@@ -16,6 +17,8 @@ PODS:
   - JVGradientLayer (0.1.2):
     - JVCAGradientLayerExtensions
     - JVContentType
+  - JVImagePresenter (0.2.2):
+    - JVConstraintEdges
   - JVInputValidator (0.1.5)
   - JVJSONCodable (0.1.1)
   - JVLoadableImage (0.2.9):
@@ -28,9 +31,11 @@ PODS:
     - JVCAShapeLayerExtensions
     - JVContentType
   - JVSizeable (0.1.0)
-  - JVTableView (1.7.3):
+  - JVTableView (1.7.9):
     - JVConstraintEdges
+    - JVDebugProcessorMacros
     - JVFormChangeWatcher
+    - JVImagePresenter
     - JVLoadableImage
     - JVNoParameterInitializable
     - JVTableViewCellLayoutCreator
@@ -71,10 +76,12 @@ SPEC REPOS:
     - JVConstraintEdges
     - JVContentType
     - JVCurrentDevice
+    - JVDebugProcessorMacros
     - JVFontUtils
     - JVFormChangeWatcher
     - JVGenericNotificationCenter
     - JVGradientLayer
+    - JVImagePresenter
     - JVInputValidator
     - JVJSONCodable
     - JVLoadableImage
@@ -101,10 +108,12 @@ SPEC CHECKSUMS:
   JVConstraintEdges: a92172856b464d8666fb72f59d718e140f74591c
   JVContentType: bf617302d029baefccde48eb79edc7634fd15f55
   JVCurrentDevice: 36aaad85ebb56d935de74e7b3bc47c852899dc39
+  JVDebugProcessorMacros: 5df41f5660e5d5212c1d4c96fc0caa0800d77311
   JVFontUtils: e390fee698f64889fafa4ccabd25084bdbf136b7
   JVFormChangeWatcher: d589d294b1b3abe08a168d257554c42b72c1c60f
   JVGenericNotificationCenter: c66ef91393be834c525b5c3723ac8c021fc8af3b
   JVGradientLayer: 34e464b6f5624370653606c94229e81dcf1282ea
+  JVImagePresenter: 8e3433ead67ee8c3a862b0113ad2ac8211b809bb
   JVInputValidator: 9c67efc61a99ab564823ebef87f84422da798088
   JVJSONCodable: f7802593adaccf981224f606059016b5c7edabca
   JVLoadableImage: 079517cf37fae8236fb5eb8a383e71ceb222b4df
@@ -112,7 +121,7 @@ SPEC CHECKSUMS:
   JVRestartable: 008c47ae1b36de3bf2cdad2299852231b5749f2a
   JVShapeHalfMoon: 31444957e7a226e800003afaee2634c8ba8129a1
   JVSizeable: 1252e6b1bed411b3fc34f6119d8eaf6803876cd3
-  JVTableView: a09e58676e513cd50aa4f19e9c1b46da34c74c93
+  JVTableView: 6f5358e061ffc7b2e5e0d3a09b243ec2bcd6228d
   JVTableViewCellLayoutCreator: bbdafe7aa61042eeaad2997a8d20048763aee99d
   JVTappable: 974c863a43962d8f985d5dee205b2ad00b62fcbd
   JVTextField: 83d9f41efbe321ed80588e596016c4b1c2ea6f05
