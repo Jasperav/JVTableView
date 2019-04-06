@@ -13,7 +13,7 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     
     public init<T: RawRepresentable>(identifier: T,
                 text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 image: UIImage? = nil,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
@@ -27,7 +27,7 @@ open class TableViewRowLabelImage: TableViewRowLabel {
     
     public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
                 text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 image: UIImage? = nil,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,

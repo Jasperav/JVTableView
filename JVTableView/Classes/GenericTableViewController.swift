@@ -2,6 +2,7 @@ import JVNoParameterInitializable
 import JVChangeableValue
 import JVLoadableImage
 import JVDebugProcessorMacros
+import JVImagePresenter
 
 /// Subclass of UITableViewController.
 /// Inhert from this class if you want just want to use a JVTableView without any additional views.
@@ -23,6 +24,11 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     open var reloadDataOnViewWillAppear: Bool {
         return false
+    }
+    
+    /// This property must be overridden if you are using a header image.
+    open var headerImageViewIdentifier: Int64 {
+        fatalError()
     }
     
     /// True when the tableView did load the data at least once.
@@ -90,10 +96,14 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         
         headerImageLoadableView = headerImage.loadableView
         
-        configure(headerImageView: headerImageLoadableView!)
-        
-        // The identifier must have changed after configuration.
-        assert(headerImageLoadableView!.identifier != 0)
+        headerImageLoadableView!.identifier = headerImageViewIdentifier
+        headerImageLoadableView!.tapped = { [unowned self] in
+            let vc = ImageZoomViewControllerSlide()
+            
+            JVTableViewHeaderImageCache.handle(self.headerImageLoadableView!.identifier, vc.imageView)
+            
+            self.navigationController!.pushViewController(vc, animated: true)
+        }
         
         tableViewGeneric.correctHeaderImageAfterSetup()
         
@@ -267,11 +277,6 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     
     open func updateUnsafe(rows: [TableViewRow]) {
         assert(rows.count == 0)
-    }
-    
-    /// This method must be overridden if you are using a header image.
-    open func configure(headerImageView: LoadableImage) {
-        fatalError()
     }
     
     /// Some view controllers do not conform to NoParameterInitializable

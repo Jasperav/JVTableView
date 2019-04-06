@@ -5,7 +5,7 @@ open class TableViewRowLabel: TableViewRowText {
     
     public init<T: RawRepresentable>(identifier: T,
                                      text: String = "",
-                                     contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
+                                     contentTypeJVLabel: ContentTypeJVLabel = TableViewRowText.standardContentTypeJVLabel,
                                      accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                                      showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         
@@ -17,7 +17,7 @@ open class TableViewRowLabel: TableViewRowText {
     
     public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
                 text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
+                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowText.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         super.init(cell: .label, rawIdentifier: rawIdentifier, accessoryType: accessoryType, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
@@ -34,12 +34,12 @@ open class TableViewRowLabel: TableViewRowText {
     }
     
     open override func update(cell: TableViewCell) {
-        (cell as! TableViewCellLabel).updateLabel(contentTypeJVLabelText: contentTypeJVLabel, text: _text)
+        (cell as! TableViewCellLabel).updateLabel(ContentTypeJVLabel: contentTypeJVLabel, text: _text)
     }
     
     @discardableResult
     public func makeDestructive() -> TableViewRowLabel {
-        contentTypeJVLabel = contentTypeJVLabel.changeColor(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
+        contentTypeJVLabel = contentTypeJVLabel.change(color: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
         
         return self
     }

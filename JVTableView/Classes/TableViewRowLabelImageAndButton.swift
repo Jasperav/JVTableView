@@ -9,7 +9,7 @@ open class TableViewRowLabelImageAndButton: TableViewRowLabelImage {
     
     public init<T: RawRepresentable>(identifier: T,
                                      text: String = "",
-                                     contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                                     contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
                                      imageLeft: UIImage? = nil,
                                      textRightButton: String,
                                      tappedRightButton: ((TableViewCellLabelImageAndButton) -> ())? = nil) {
@@ -23,7 +23,7 @@ open class TableViewRowLabelImageAndButton: TableViewRowLabelImage {
     
     public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
                 text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
                 imageLeft: UIImage? = nil,
                 textRightButton: String,

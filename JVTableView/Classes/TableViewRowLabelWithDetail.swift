@@ -3,16 +3,16 @@ import JVNoParameterInitializable
 
 public class TableViewRowLabelWithDetail: TableViewRowLabel {
     
-    public static var contentTypeJVLabelDetail: ContentTypeJVLabelText!
+    public static var contentTypeJVLabelDetail: ContentTypeJVLabel!
     
     public var detailText: String? = nil
-    public var contentTypeJVLabelDetail: ContentTypeJVLabelText
+    public var contentTypeJVLabelDetail: ContentTypeJVLabel
     
     public init<T: RawRepresentable>(identifier: T,
                                      text: String = "",
-                                     contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                                     contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
                                      detailText: String? = nil,
-                                     contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
+                                     contentTypeJVLabelDetail: ContentTypeJVLabel = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
                                      accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         
         self.detailText = detailText
@@ -23,9 +23,9 @@ public class TableViewRowLabelWithDetail: TableViewRowLabel {
     
     public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
                 text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel,
+                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
                 detailText: String? = nil,
-                contentTypeJVLabelDetail: ContentTypeJVLabelText = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
+                contentTypeJVLabelDetail: ContentTypeJVLabel = TableViewRowLabelWithDetail.contentTypeJVLabelDetail,
                 accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
         
         self.detailText = detailText

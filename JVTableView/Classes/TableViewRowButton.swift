@@ -6,7 +6,7 @@ open class TableViewRowButton: TableViewRowText {
     
     public init<T: RawRepresentable>(identifier: T,
                                      text: String,
-                                     contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
+                                     contentTypeJVLabel: ContentTypeJVLabel = TableViewRowText.standardContentTypeJVLabel,
                                      url: String) {
         super.init(cell: .button, identifier: identifier, accessoryType: .disclosureIndicator, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: nil, tapped: {
             URLOpener.open(url: url)
@@ -17,7 +17,7 @@ open class TableViewRowButton: TableViewRowText {
     
     public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
                 text: String,
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowText.standardContentTypeJVLabel,
+                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowText.standardContentTypeJVLabel,
                 url: String) {
         super.init(cell: .button, rawIdentifier: rawIdentifier, accessoryType: .disclosureIndicator, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: nil) {
             URLOpener.open(url: url)
@@ -33,6 +33,7 @@ open class TableViewRowButton: TableViewRowText {
     open override func update(cell: TableViewCell) {
         let _cell = cell as! TableViewCellButton
         
-        _cell.button.set(contentType: contentTypeJVLabel.contentTypeTextFont, text: _text)
+        _cell.button.titleLabel!.font = contentTypeJVLabel.contentTypeTextFont.font
+        _cell.button.setTitle(_text, for: .normal)
     }
 }

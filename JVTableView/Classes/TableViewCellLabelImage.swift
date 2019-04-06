@@ -12,6 +12,6 @@ open class TableViewCellLabelImage: TableViewCellLabel {
     open override func setup() {
         super.setup()
         
-        loadableImageView.setWidthAndHeightAreTheSame()
+        loadableImageView.isSquare = true
     }
 }

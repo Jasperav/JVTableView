@@ -5,7 +5,7 @@ public struct JVTableViewHeaderImage {
     public static var defaultHeight: CGFloat = -1
     
     /// The image should be set on the loadable view.
-    public let loadableView = LoadableImage(style: .gray, rounded: false)
+    public let loadableView = LoadableImage(style: .gray, rounded: false, stretched: true)
     
     let height: CGFloat
     

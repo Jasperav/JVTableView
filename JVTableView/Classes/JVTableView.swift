@@ -152,14 +152,6 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         layoutIfNeeded()
     }
     
-    private func setup(headerImage: JVTableViewHeaderImage) {
-        headerImage.loadableView.stretchImage()
-        
-        contentInset = UIEdgeInsets(top: headerImage.height, left: 0, bottom: 0, right: 0)
-        
-        addSubview(headerImage.loadableView)
-    }
-    
     private func updateHeaderStretchImageView() {
         guard let headerImage = headerImage else { return }
         
@@ -269,5 +261,13 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     open func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
+    }
+}
+
+extension JVTableView: ModelCreator {
+    private func setup(headerImage: JVTableViewHeaderImage) {
+        contentInset = UIEdgeInsets(top: headerImage.height, left: 0, bottom: 0, right: 0)
+        
+        addSubview(headerImage.loadableView)
     }
 }

@@ -28,9 +28,9 @@ open class TableViewCellLabel: TableViewCell {
         TableViewCellLayoutCreator.create(toCell: self, middleView: label, leadingView: leadingView, trailingView: trailingView)
     }
     
-    open func updateLabel(contentTypeJVLabelText: ContentTypeJVLabelText, text: String? = nil) {
-        label.font = contentTypeJVLabelText.contentTypeTextFont.font
-        label.textColor = contentTypeJVLabelText.contentTypeTextFont.color
+    open func updateLabel(ContentTypeJVLabel: ContentTypeJVLabel, text: String? = nil) {
+        label.font = ContentTypeJVLabel.contentTypeTextFont.font
+        label.textColor = ContentTypeJVLabel.contentTypeTextFont.color
         label.text = text
     }
     

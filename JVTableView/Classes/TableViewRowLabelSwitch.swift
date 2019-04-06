@@ -11,7 +11,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     
     public init<T: RawRepresentable>(identifier: T,
                                      text: String = "",
-                                     contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) {
+                                     contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel) {
         super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
         
         commonLoad()
@@ -19,7 +19,7 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
     
     public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
                 text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabelText = TableViewRowLabel.standardContentTypeJVLabel) {
+                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel) {
         super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
         
         commonLoad()
