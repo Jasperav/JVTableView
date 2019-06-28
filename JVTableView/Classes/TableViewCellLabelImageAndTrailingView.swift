@@ -1,5 +1,5 @@
 import JVCurrentDevice
-import JVUIButtonExtensions
+import JVUIButton
 
 open class TableViewCellLabelImageAndButton: TableViewCellLabelImage {
     
@@ -11,7 +11,6 @@ open class TableViewCellLabelImageAndButton: TableViewCellLabelImage {
     
     open override func setup() {
         super.setup()
-        // TODO: Link JVUIButton
         button.stretchImage()
     }
 }
