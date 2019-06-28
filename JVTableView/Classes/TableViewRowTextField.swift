@@ -1,6 +1,5 @@
 import UIKit
 import JVChangeableValue
-import JVTextField
 import JVView
 import JVInputValidator
 
