@@ -1,6 +1,5 @@
 import UIKit
 import JVConstraintEdges
-import JVTappable
 import JVView
 import JVFormChangeWatcher
 import JVLoadableImage
