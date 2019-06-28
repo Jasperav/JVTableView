@@ -1,78 +1,52 @@
 import UIKit
 import JVNoParameterInitializable
-import JVTappable
 import os
 import JVConstraintEdges
 
-open class TableViewRow: Tappable, Hashable {
+open class TableViewRow: Hashable {
     
     public static let defaultRowIdentifier = ""
     public static let edges = ConstraintEdges(height: 15, width: 15)
     
     // Determine if this cell should appear in the table view.
-    open var showInTableView: (() -> (Bool)) = { return true }
+    open var isVisible: (() -> (Bool)) = { return true }
+    open var classType: TableViewCell.Type {
+        fatalError()
+    }
     
-    public private (set) var classType: TableViewCell.Type
-    public private (set) var classIdentifier: String
+    public private (set) var classIdentifier = TableViewRow.defaultRowIdentifier
     
-    // When the cell is selectable, the closure inside here will be executed.
-    public var tapped: (() -> ())?
+    /// Get's called inside the didSelectRowAt
+    var _tapped: (() -> ())?
     
-    /// Some rows have some properties that the implemeting UIViewController needs access to.
+    // When the cell is selectable and _tapped == nil, the closure inside here will be executed.
+    public var tapped: ((UIViewController) -> ())?
+    
+    // Possibility to save the row directly, without using the ViewController.
+    public var save: (() -> ())? = nil
+    
+    public var accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
+    
+    /// Some rows have some properties that the implementing UIViewController needs access to.
     /// Therefore, we allow a customization poimt up to the developer when this property is set to true.
     /// This is only allowed on direct subclasses of UITableViewRow and which aren't standard cells.
-    let updateUnsafely: Bool
+    public var updateUnsafely = false
     
     // By setting an identifier, it can be retrieved through the datasource again to query e.g. the value.
-    let identifier: String
-    
+    public let identifier: String
+
     // Determines if this cell should be selectable.
     // If set to true, it MUST have a tappable action (else the app will crash).
-    var isSelectable = false
-    let showViewControllerOnTap: UIViewControllerNoParameterInitializable?
+    public var isSelectable: (() -> (Bool)) = { return true }
     
-    public init<T: RawRepresentable>(classType: TableViewCell.Type, identifier: T, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, updateUnsafely: Bool = false, tapped: (() -> ())? = nil) {
-        self.classType = classType
-        self.classIdentifier = String(describing: identifier.rawValue)
+    public var showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil
+    
+    public init<T: RawRepresentable>(identifier: T) {
         self.identifier = String(describing: identifier.rawValue)
-        self.showViewControllerOnTap = showViewControllerOnTap
-        self.tapped = tapped
-        self.updateUnsafely = updateUnsafely
-        
-        assert(tapped == nil ? true : showViewControllerOnTap == nil)
     }
     
-    public init(cell: JVTableViewStdCell, rawIdentifier: String = TableViewRow.defaultRowIdentifier, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, updateUnsafely: Bool = false, tapped: (() -> ())? = nil) {
-        self.classType = cell.classType
-        self.classIdentifier = String(describing: classType)
+    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier) {
         self.identifier = rawIdentifier
-        self.showViewControllerOnTap = showViewControllerOnTap
-        self.tapped = tapped
-        self.updateUnsafely = updateUnsafely
-        
-        assert(tapped == nil ? true : showViewControllerOnTap == nil)
-    }
-    
-    // Some custom rows doesn't want identifiers
-    // Removing the T type omits generic errors.
-    public init(classType: TableViewCell.Type, rawIdentifier: String = TableViewRow.defaultRowIdentifier, updateUnsafely: Bool = false, tapped: (() -> ())? = nil) {
-        self.classType = classType
-        self.classIdentifier = String(describing: classType)
-        self.tapped = tapped
-        self.identifier = rawIdentifier
-        self.showViewControllerOnTap = nil
-        self.updateUnsafely = updateUnsafely
-    }
-    
-    init<T: RawRepresentable>(cell: JVTableViewStdCell, identifier: T, showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, updateUnsafely: Bool = false, tapped: (() -> ())? = nil) {
-        self.classType = cell.classType
-        self.classIdentifier = String(describing: identifier.rawValue)
-        self.identifier = String(describing: identifier.rawValue)
-        self.showViewControllerOnTap = showViewControllerOnTap
-        self.tapped = tapped
-        self.updateUnsafely = updateUnsafely
-        
-        assert(tapped == nil ? true : showViewControllerOnTap == nil)
     }
     
     public static func == (lhs: TableViewRow, rhs: TableViewRow) -> Bool {
@@ -87,28 +61,46 @@ open class TableViewRow: Tappable, Hashable {
         hasher.combine(identifier)
     }
     
-    public func change(classType: TableViewCell.Type) {
-        self.classType = classType
-        self.classIdentifier = String(describing: classType)
-    }
-    
+    /// Call super.configure as the last expression when overriding this method.
     open func configure(cell: TableViewCell) {
-        #if DEBUG
-        // Let the app crash when a standard cell hasn't been configured.
-        let forbiddenClassTypes = JVTableViewStdCell.allCases.map { $0.classType }
-        let currentCellType = type(of: cell)
+        if isSelectable() {
+            // Cell can be selected again
+            cell.accessoryType = accessoryType
+            makeSelectable(cell: cell)
+        } else {
+            // Cell became unclickable
+            cell.accessoryType = .none
+            makeUnselectable(cell: cell)
+        }
+    }
+    
+    /// Called after the cell was unselectable, but is now selectable again.
+    open func makeSelectable(cell: TableViewCell) {
         
-        assert(!forbiddenClassTypes.contains(where: { $0 == currentCellType }))
-        #endif
     }
     
-    // Will be called when 'self' is changeable and the data from the tableView will be saved.
-    open func createUpdateContainer() -> TableViewRowUpdateContainer {
-        fatalError()
+    /// Called after the cell was selectable, but now isn't anymore.
+    open func makeUnselectable(cell: TableViewCell) {
+        
     }
     
-    func changeClassType(cell: JVTableViewStdCell) {
-        self.classType = cell.classType
-        self.classIdentifier = String(describing: classType)
+    #if DEBUG
+    open func validate() {
+        assert(tapped == nil ? true : showViewControllerOnTap == nil)
+        if accessoryType == .none {
+            assert(!isSelectable())
+        }
+        assert(showViewControllerOnTap == nil ? true : isSelectable())
+        assert(classIdentifier != TableViewRow.defaultRowIdentifier)
+    }
+    #endif
+    
+    open func commonLoad() {
+        classIdentifier = String(describing: classType)
+        
+        if isSelectable() && tapped == nil && showViewControllerOnTap == nil {
+            assert(identifier != TableViewRow.defaultRowIdentifier, "You must be able to access the unsafe updateable rows by property.")
+            updateUnsafely = true
+        }
     }
 }

@@ -3,43 +3,27 @@ import JVNoParameterInitializable
 
 open class TableViewRowLabel: TableViewRowText {
     
-    public init<T: RawRepresentable>(identifier: T,
-                                     text: String = "",
-                                     contentTypeJVLabel: ContentTypeJVLabel = TableViewRowText.standardContentTypeJVLabel,
-                                     accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                                     showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
+    open override var classType: TableViewCell.Type {
+        return TableViewCellLabel.self
+    }
+
+    open override func configure(cell: TableViewCell) {
+        let _cell = cell as! TableViewCellLabel
         
+        _cell.label.update(setup: labelSetup)
         
-        super.init(cell: .label, identifier: identifier, accessoryType: accessoryType, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
-    
-        commonLoad()
+        super.configure(cell: cell)
     }
     
-    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-                text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowText.standardContentTypeJVLabel,
-                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil, tapped: (() -> ())? = nil) {
-        super.init(cell: .label, rawIdentifier: rawIdentifier, accessoryType: accessoryType, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
+    open override func makeUnselectable(cell: TableViewCell) {
+        let _cell = cell as! TableViewCellLabel
         
-        commonLoad()
-    }
-    
-    private func commonLoad() {
-        self.isSelectable = accessoryType != .none
-        
-        assert(accessoryType != .none ? isSelectable : !isSelectable)
-        assert(tapped == nil ? true : isSelectable)
-        assert(showViewControllerOnTap == nil ? true : isSelectable)
-    }
-    
-    open override func update(cell: TableViewCell) {
-        (cell as! TableViewCellLabel).updateLabel(ContentTypeJVLabel: contentTypeJVLabel, text: _text)
+        _cell.label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
     }
     
     @discardableResult
-    public func makeDestructive() -> TableViewRowLabel {
-        contentTypeJVLabel = contentTypeJVLabel.change(color: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
+    public func makeDestructive() -> Self {
+        labelSetup.color = .systemRed
         
         return self
     }

@@ -3,57 +3,45 @@ import JVNoParameterInitializable
 
 open class TableViewRowLabelImage: TableViewRowLabel {
     
-    open var shouldUpdateImage: Bool {
-        return true
+    open override var classType: TableViewCell.Type {
+        return TableViewCellLabelImage.self
     }
     
-    /// Changing this property alone does not change the image of the cell property itself
-    /// This has only effect when the cell reappears.
-    public var image: UIImage?
+    public enum Image {
+        case image(UIImage), imageIdentifier(Int64)
+    }
     
-    public init<T: RawRepresentable>(identifier: T,
-                text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
-                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                image: UIImage? = nil,
-                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
-                tapped: (() -> ())? = nil) {
+    private let image: (() -> (Image))
+    
+    public init<T: RawRepresentable>(identifier: T, text: String, image: @escaping (() -> (Image))) {
         self.image = image
         
-        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
-        
-        commonLoad()
+        super.init(identifier: identifier, text: text)
     }
     
-    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-                text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
-                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                image: UIImage? = nil,
-                showViewControllerOnTap: UIViewControllerNoParameterInitializable? = nil,
-                tapped: (() -> ())? = nil) {
+    public init(text: @escaping (() -> (String)), image: @escaping (() -> (Image))) {
         self.image = image
         
-        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: accessoryType, showViewControllerOnTap: showViewControllerOnTap, tapped: tapped)
-        
-        commonLoad()
+        super.init(text: text)
     }
     
-    private func commonLoad() {
-        changeClassType(cell: .labelImage)
+    public init(text: String, image: @escaping (() -> (Image))) {
+        self.image = image
+        
+        super.init(text: text)
     }
     
     open override func configure(cell: TableViewCell) {
-        if shouldUpdateImage {
-            let _cell = cell as! TableViewCellLabelImage
-            
-            if let image = image {
-                _cell.loadableImageView.show(image: image)
-            } else {
-                _cell.loadableImageView.showIndicator()
-            }
+        let _cell = cell as! TableViewCellLabelImage
+        
+        switch image() {
+        case .image(let image):
+            _cell.loadableImageView.forceChange(state: .highResolutionImage(image))
+        case .imageIdentifier(let imageIdentifier):
+            JVTableViewHeaderImageCache.handle(imageIdentifier, _cell.loadableImageView)
         }
         
         super.configure(cell: cell)
     }
+    
 }

@@ -1,7 +1,7 @@
 import UIKit
 import JVNoParameterInitializable
 
-open class JVTableViewDatasource: NoParameterInitializable {
+open class JVTableViewDatasource {
     open var headerImage: JVTableViewHeaderImage? {
         return nil
     }
@@ -14,13 +14,24 @@ open class JVTableViewDatasource: NoParameterInitializable {
     
     private (set) var dataSourceVisibleRows = [TableViewSection]()
     
-    public required init() {
+    public init() {
         createSections()
     }
     
     func updateVisibleRows() {
-        dataSourceVisibleRows = dataSource.filter { $0.rows.filter { $0.showInTableView() }.count > 0 }
+        dataSourceVisibleRows.removeAll()
+        
+        for section in dataSource {
+            let visibleRows = section.rows.filter { $0.isVisible() }
+            
+            guard !visibleRows.isEmpty else { continue } // Whole section is empty
+            
+            dataSourceVisibleRows.append(TableViewSection(header: section.header, footerText: section.footerText, rows: visibleRows))
+        }
     }
+    
+    /// Customization point before reloading the datasource
+    open func prepareForReload() { }
     
     /// Must be overridden.
     /// This is the starting point when creating sections and rows.
@@ -41,14 +52,28 @@ open class JVTableViewDatasource: NoParameterInitializable {
     }
     
     public func getRow(_ identifier: String) -> TableViewRow {
-        for section in dataSource {
-            for row in section.rows {
-                guard row.identifier == identifier else { continue }
-                return row
+        return dataSource.map { $0.rows }
+            .flatMap { $0 }
+            .first(where: { $0.identifier == identifier })!
+    }
+    
+    private func calculateIndexPath(identifier: String, array: [TableViewSection]) -> IndexPath {
+        for (section, sectionElement) in array.enumerated() {
+            for (row, rowElement) in sectionElement.rows.enumerated() {
+                guard rowElement.identifier == identifier else { continue }
+                
+                return IndexPath(row: row, section: section)
             }
         }
         
         fatalError()
     }
     
+    func indexPathForVisibleCell(identifier: String) -> IndexPath {
+        calculateIndexPath(identifier: identifier, array: dataSourceVisibleRows)
+    }
+    
+    func indexPath(identifier: String) -> IndexPath {
+        calculateIndexPath(identifier: identifier, array: dataSource)
+    }
 }

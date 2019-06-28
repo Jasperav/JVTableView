@@ -3,7 +3,10 @@ import JVLoadableImage
 
 open class TableViewCellLabelImage: TableViewCellLabel {
     
-    public let loadableImageView = LoadableImage(style: .gray, rounded: true, isUserInteractionEnabled: false)
+    public let loadableImageView = LoadableMedia(style: .medium,
+                                                 rounded: true,
+                                                 isUserInteractionEnabled: false,
+                                                 stretched: true)
     
     open override var leadingView: UIView? {
         return loadableImageView
@@ -12,6 +15,6 @@ open class TableViewCellLabelImage: TableViewCellLabel {
     open override func setup() {
         super.setup()
         
-        loadableImageView.isSquare = true
+        loadableImageView.layoutSquare()
     }
 }

@@ -1,15 +1,21 @@
 import UIKit
 import JVChangeableValue
 import JVTextField
+import JVView
 import JVInputValidator
 
 open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidateable {
     
-    public static var textFieldInitializer: TextFieldInitializer!
+    public var oldValue: String {
+        get {
+            return _oldValue()
+        } set {
+            fatalError()
+        }
+    }
     
-    public var oldValue = ""
+    public var textFieldSetup = TextSetup()
     public var currentValue: String
-    
     public var inputValidator = InputValidator(validationState: .valid)
     
     // Sends back if the currentValue == oldValue
@@ -18,30 +24,29 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
     
     let validationBlockUserInput: ((String) -> (Bool))
     var isFirstResponder: Bool
+    
     private let validationToChangeValidationState: ((String) -> (Bool))
     private let keyboardReturnType: UIReturnKeyType
-    private let textFieldInitializer: TextFieldInitializer
     private let placeholderText: String
+    private let _oldValue: (() -> (String))
     
     public init<T: RawRepresentable>(identifier: T,
                                      placeholderText: String,
                                      validationBlockUserInput: @escaping ((String) -> (Bool)),
                                      validationToChangeValidationState: ((String) -> (Bool))? = nil,
                                      keyboardReturnType: UIReturnKeyType = .done,
-                                     textFieldInitializer: TextFieldInitializer = TableViewRowTextField.textFieldInitializer,
-                                     oldValue: String = "",
+                                     oldValue: @escaping (() -> (String)) = { return "" },
                                      isFirstResponder: Bool = false) {
-        self.oldValue = oldValue
+        self._oldValue = oldValue
+
         self.validationBlockUserInput = validationBlockUserInput
         self.validationToChangeValidationState = validationToChangeValidationState ?? validationBlockUserInput
         self.placeholderText = placeholderText
         self.keyboardReturnType = keyboardReturnType
-        self.textFieldInitializer = textFieldInitializer
         self.isFirstResponder = isFirstResponder
-        currentValue = oldValue
+        currentValue = oldValue()
         
-        super.init(cell: JVTableViewStdCell.textField,
-                   identifier: identifier)
+        super.init(identifier: identifier)
         
         assert(validationBlockUserInput(""), "No input shouldn't be blocked.")
     }
@@ -50,8 +55,7 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
         let _cell = cell as! TableViewCellTextField
         
         _cell.oldValue = oldValue
-        
-        _cell.textField.update(textFieldInitializer: textFieldInitializer, placeholderText: textFieldInitializer.placeholderText)
+        _cell.textField.set(font: textFieldSetup.font, placeholderText: placeholderText)
         _cell.textField.validationBlockUserInput = validationBlockUserInput
         _cell.textField.validationToChangeValidationState = validationToChangeValidationState
         _cell.textField.oldValue = oldValue
@@ -74,9 +78,5 @@ open class TableViewRowTextField: TableViewRow, ChangeableValues, InputValidatea
         _cell.textField.inputValidator.changedValidationState = { [unowned self] (state) in
             self.inputValidator.update(state: state)
         }
-    }
-    
-    open override func createUpdateContainer() -> TableViewRowUpdateContainer {
-        return .text(currentValue)
     }
 }

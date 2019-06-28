@@ -2,59 +2,57 @@ import JVView
 
 open class TableViewRowLabelImageAndButton: TableViewRowLabelImage {
     
-    var tappedRightButton: ((TableViewCellLabelImageAndButton) -> ())!
+    open override var classType: TableViewCell.Type {
+        return TableViewCellLabelImageAndButton.self
+    }
     
-    private let textRightButton: String
+    public var tappedRightButton: ((TableViewCellLabelImageAndButton) -> ())!
+    
+    private let textRightButton: (() -> (String))
     private weak var cell: TableViewCellLabelImageAndButton?
     
-    public init<T: RawRepresentable>(identifier: T,
-                                     text: String = "",
-                                     contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
-                                     imageLeft: UIImage? = nil,
-                                     textRightButton: String,
-                                     tappedRightButton: ((TableViewCellLabelImageAndButton) -> ())? = nil) {
+    public init<T: RawRepresentable>(identifier: T, text: String, image: @escaping (() -> (Image)), textRightButton: @escaping (() -> (String))) {
         self.textRightButton = textRightButton
-        self.tappedRightButton = tappedRightButton
         
-        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, image: imageLeft, tapped: nil)
-        
-        commonLoad()
+        super.init(identifier: identifier, text: text, image: image)
     }
     
-    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-                text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel,
-                accessoryType: UITableViewCell.AccessoryType = .disclosureIndicator,
-                imageLeft: UIImage? = nil,
-                textRightButton: String,
-                tappedRightButton: ((TableViewCellLabelImageAndButton) -> ())? = nil) {
+    public init(text: @escaping (() -> (String)), image: @escaping (() -> (Image)), textRightButton: @escaping (() -> (String))) {
         self.textRightButton = textRightButton
-        self.tappedRightButton = tappedRightButton
         
-        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, image: imageLeft, showViewControllerOnTap: nil, tapped: nil)
-        
-        commonLoad()
+        super.init(text: text, image: image)
     }
-    
-    private func commonLoad() {
-        changeClassType(cell: .labelImageAndButton)
-        
-        assert(identifier == TableViewRow.defaultRowIdentifier ? tappedRightButton != nil : true)
-    }
-    
+
     open override func configure(cell: TableViewCell) {
         let _cell = cell as! TableViewCellLabelImageAndButton
         
         self.cell = _cell
         
-        _cell.button.addTarget(self, action: #selector(_tappedButton), for: .touchUpInside)
-        
-        _cell.button.setTitle(textRightButton, for: .normal)
+        _cell.button.addTarget(self, action: #selector(tappedViewControllerButton), for: .touchUpInside)
+        _cell.button.setTitle(textRightButton(), for: .normal)
         
         super.configure(cell: cell)
     }
     
-    @objc private func _tappedButton() {
+    open override func commonLoad() {
+        isSelectable = {
+            return false
+        }
+        
+        accessoryType = .none
+        
+        super.commonLoad()
+    }
+    
+    @objc private func tappedViewControllerButton() {
         tappedRightButton(cell!)
     }
+    
+    #if DEBUG
+    open override func validate() {
+        super.validate()
+        
+        assert(tappedRightButton != nil)
+    }
+    #endif
 }

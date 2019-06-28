@@ -1,7 +1,7 @@
 import UIKit
 import JVConstraintEdges
 import JVChangeableValue
-import JVTextField
+import JVView
 import JVTableViewCellLayoutCreator
 
 open class TableViewCellTextField: TableViewCell, ChangeableValues {
@@ -13,7 +13,7 @@ open class TableViewCellTextField: TableViewCell, ChangeableValues {
     public var didReturn: (() -> ())?
     
     open override func setup() {
-        TableViewCellLayoutCreator.create(toCell: self, middleView: textField)
+        TableViewCellLayoutCreator.layout(cell: self, middleView: textField)
         
         textField.borderStyle = .roundedRect
         textField.returnKeyType = .done

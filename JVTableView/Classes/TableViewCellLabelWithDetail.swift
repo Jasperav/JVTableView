@@ -1,16 +1,20 @@
 import JVConstraintEdges
+import JVView
+// TODO: Import JVStackView
 
 public class TableViewCellLabelWithDetail: TableViewCellLabel {
-    public let labelDetail = UILabel(frame: .zero)
+
+    let labelDetail = LoadableLabel(textSetup: TextSetup(), state: .load)
+    let stackView = UIStackView(frame: .zero)
     
-    public override var trailingView: UIView? {
-        return labelDetail
+    public override var middleView: UIView {
+        return stackView
     }
 
     public override func setup() {
         super.setup()
         
-        // Resetting this to 1 ensures us the height of the 'normal' label doesn't shrink
-        //labelDetail.setContentHuggingPriority(UILayoutPriority(rawValue: 1), for: .vertical)
+        stackView.spacing = 3 // TODO: Dynamic
+        stackView.addArrangedSubview(label)
     }
 }

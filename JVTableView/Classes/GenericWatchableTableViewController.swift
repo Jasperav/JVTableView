@@ -23,8 +23,10 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
     
     private var formChangeWatcher: FormChangeWatcher<T, GenericWatchableTableViewController<T, U>>!
     
-    public override init() {
-        super.init()
+    public override init(tableView: T) {
+        super.init(tableView: tableView)
+        
+        setupNavigationItemButtons()
         
         formChangeWatcher = FormChangeWatcher(changeableForm: tableViewGeneric, viewController: self, topRightButtonText: topRightButtonText, topLeftButtonTextWhenFormIsChanged: topLeftButtonText, tappedTopRightButton: tappedTopRightButton)
         
@@ -32,7 +34,12 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
     }
     
     public required init?(coder aDecoder: NSCoder) {
-        Unsupported()
+        fatalError()
+    }
+    
+    open func setupNavigationItemButtons() {
+        // Perfect place for adding the navigation items.
+        // After this method is called, formChangeWatcher will be initialized.
     }
     
     /// Call this method when you successfully processed the saving method
@@ -43,10 +50,8 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
                 row.updateFromCurrentState()
             }
             
-            self.reloadData()
-            self.formChangeWatcher.handleFormChange(hasNewValues: false)
-            
             assert(self.tableViewGeneric.changeableRows.filter { $0.isChanged }.count == 0)
+            self.formChangeWatcher.handleFormChange(hasNewValues: false)
         }
     }
     
@@ -55,7 +60,7 @@ open class GenericWatchableTableViewController<T: JVTableView<U>, U: JVTableView
         
         prepareForSave()
     }
-
+    
     #if DEBUG
     deinit {
         guard topLeftButtonText != nil else { return }

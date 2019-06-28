@@ -7,8 +7,12 @@ open class TableViewCellButton: TableViewCell {
     
     public let button = UIButton(type: .system)
     
+    open override var middleView: UIView {
+        return button
+    }
+    
     open override func setup() {
-        TableViewCellLayoutCreator.create(toCell: self, middleView: button)
+        super.setup()
         
         button.isUserInteractionEnabled = false
         

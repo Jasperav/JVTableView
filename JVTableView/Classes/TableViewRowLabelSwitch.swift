@@ -3,30 +3,31 @@ import JVView
 import JVChangeableValue
 
 public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
+    public typealias HideRows = [(hide: Bool, identifier: String)]
+    
+    open override var classType: TableViewCell.Type {
+        return TableViewCellLabelSwitch.self
+    }
+    
+    public var oldValue: Bool {
+        get {
+            return _oldValue()
+        } set {
+            _oldValue = { return newValue }
+        }
+    }
+    
+    public var hideRows: ((_ currentValue: Bool) -> HideRows) = { _ in return [] }
     public var hasChanged: ((Bool) -> ())?
+    public var currentValue: Bool
     
-    // Since the switch's value should always be dynamic, the user must provide the actual value of the switch at runtime.
-    public var oldValue = false
-    public var currentValue = false
+    private var _oldValue: (() -> (Bool))
     
-    public init<T: RawRepresentable>(identifier: T,
-                                     text: String = "",
-                                     contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel) {
-        super.init(identifier: identifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
+    public init<T: RawRepresentable>(identifier: T, text: String, currentValue: @escaping (() -> (Bool))) {
+        self._oldValue = currentValue
+        self.currentValue = currentValue()
         
-        commonLoad()
-    }
-    
-    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-                text: String = "",
-                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowLabel.standardContentTypeJVLabel) {
-        super.init(rawIdentifier: rawIdentifier, text: text, contentTypeJVLabel: contentTypeJVLabel, accessoryType: .none, showViewControllerOnTap: nil)
-        
-        commonLoad()
-    }
-    
-    private func commonLoad() {
-        changeClassType(cell: JVTableViewStdCell.labelSwitch)
+        super.init(identifier: identifier, text: text)
     }
     
     public override func configure(cell: TableViewCell) {
@@ -43,7 +44,15 @@ public class TableViewRowLabelSwitch: TableViewRowLabel, ChangeableValues {
         super.configure(cell: cell)
     }
     
-    public override func createUpdateContainer() -> TableViewRowUpdateContainer {
-        return .bool(currentValue)
+    public override func makeUnselectable(cell: TableViewCell) {
+        // Do nothing, else the label gets grayed out
+    }
+    
+    public override func commonLoad() {
+        isSelectable = {
+            return false
+        }
+        
+        super.commonLoad()
     }
 }

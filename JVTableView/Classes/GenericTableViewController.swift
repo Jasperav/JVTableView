@@ -16,14 +16,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     /// Implicit unwrapped: it is logically that a subclass that will use this variabele
     /// knows it really has a value. It has no point for a subclass to check whetever
     /// or not this value is filled.
-    public private (set) var headerImageLoadableView: LoadableImage!
+    public private (set) var headerImageLoadableView: LoadableMedia!
     
     var shouldCallPrepareForSaveWhenViewDidDisappeared: Bool {
         return true
-    }
-    
-    open var reloadDataOnViewWillAppear: Bool {
-        return false
     }
     
     /// This property must be overridden if you are using a header image.
@@ -31,72 +27,63 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         fatalError()
     }
     
-    /// True when the tableView did load the data at least once.
-    private var didReload = false
-    
     /// The generic table view.
-    unowned let tableViewGeneric: T
+    public unowned let tableViewGeneric: T
+    public let datasourceType = U.self
+    
+    /// True when the tableView did load the data at least once.
+    public private (set) var didReload = false
     
     /// Possibility to override the initalizer.
     /// Be aware we also have a setup() method which omits the required initalizer of the decoder
-    public init() {
-        // Create a reference else tableViewGeneric gets instantly deinitialized.
-        let tableViewGenericReference = T.init()
+    public init(tableView: T) {
+        tableViewGeneric = tableView
         
-        tableViewGeneric = tableViewGenericReference
+        super.init(style: tableView.style)
+
+        self.tableView = tableViewGeneric
         
-        super.init(style: tableViewGenericReference.style)
-        
-        assert(title == nil, "Add the title in the setup method")
-        
-        tableView = tableViewGeneric
-        
-        // Give the user the possiblity to customize values.
-        // See the description of the init() why this method is here.
-        setup()
-        
-        // After the setup, we require every row that is selectable but doesn't have
-        // a tapped handler and view controller to present, to add a tap handler.
-        let tableViewRowsToAddTapHandlersTo = tableViewGeneric.rowsWithoutTapHandlers
-        let rowsToAddTapHandlersTo = tableViewRowsToAddTapHandlersTo.map { TableViewRowTapHandler(row: $0) }
-        
-        setupTapHandlers(datasource: U.self, rows: rowsToAddTapHandlersTo)
-        
-        assert(rowsToAddTapHandlersTo.allSatisfy { $0.addedTapHandler }, "Not every tappable row has a tap listener.")
-        
-        let rowsToAddTapHandlersToForTableViewRowLabelImageAndButton = tableViewGeneric.rows.compactMap { $0 as? TableViewRowLabelImageAndButton }.filter { $0.tappedRightButton == nil }.map { TableViewRowLabelImageRightButtonTapHandler(row: $0) }
-        
-        setupTapHandlersForTableViewRowLabelImageAndButton(datasource: U.self, rows: rowsToAddTapHandlersToForTableViewRowLabelImageAndButton)
-        
+        for row in tableViewGeneric.rowsWithCustomIdentifier.filter ({ $0.updateUnsafely }) {
+            updateUnsafe(datasource: U.self, row: row)
+        }
+
+        for row in tableViewGeneric.rows {
+            #if DEBUG
+            row.validate()
+            #endif
+        }
+
         // For all the view controllers that needs to be presented after they have been tapped
         // we do that here.
         for row in tableViewGeneric.rows.filter({ $0.showViewControllerOnTap != nil }) {
-            present(viewControllerType: row.showViewControllerOnTap!, tapped: &row.tapped)
-            
-            assert(row.identifier == TableViewRow.defaultRowIdentifier, "This row doesnt need an identifier.")
+            self.present(viewControllerType: row.showViewControllerOnTap!, tapped: &row.tapped)
         }
         
-        let unsafeUpdateableRows = tableViewGeneric.rowsWithCustomIdentifier.filter { $0.updateUnsafely }
-        
-        updateUnsafe(rows: unsafeUpdateableRows)
-        
+        for row in tableViewGeneric.rows.filter({ $0.isSelectable() && $0._tapped == nil }) {
+            row._tapped = { [unowned self] in
+                row.tapped!(self)
+            }
+            
+            assert(row._tapped != nil, row.identifier)
+            assert(row.tapped != nil, row.identifier)
+        }
+
         #if DEBUG
         tableViewGeneric.validate()
         // If the row is selectable, it must be tappeable.
-        for row in tableViewGeneric.rows.filter({ $0.isSelectable }) {
-            assert(row.tapped != nil)
+        for row in tableViewGeneric.rows.filter({ $0.isSelectable() }) {
+            assert(row.tapped != nil, row.identifier)
+            assert(row._tapped != nil, row.identifier)
         }
         #endif
         
-        guard let headerImage = tableViewGeneric.headerImage else {
-            reloadData()
-            
-            return
-        }
+        guard let headerImage = tableViewGeneric.headerImage else { return }
         
         headerImageLoadableView = headerImage.loadableView
         
         headerImageLoadableView!.identifier = headerImageViewIdentifier
+        JVTableViewHeaderImageCache.handle(headerImageViewIdentifier, headerImageLoadableView)
+        
         headerImageLoadableView!.tapped = { [unowned self] in
             let vc = ImageZoomViewControllerSlide()
             
@@ -104,26 +91,18 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
             
             self.navigationController!.pushViewController(vc, animated: true)
         }
-        
-        tableViewGeneric.correctHeaderImageAfterSetup()
-        
-        reloadData()
     }
     
     public required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError()
     }
     
     open override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        guard didReload && reloadDataOnViewWillAppear else {
-            didReload = true
-            
-            return
+        if headerImageLoadableView != nil {
+            tableViewGeneric.correctHeaderImageAfterSetup()
         }
         
-        tableView.reloadData()
+        super.viewWillAppear(animated)
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -153,10 +132,10 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
         (cell as! TableViewCellTextField).textField.becomeFirstResponder()
     }
     
-    final func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout (() -> ())?) {
+    final func present(viewControllerType: UIViewControllerNoParameterInitializable, tapped: inout ((UIViewController) -> ())?) {
         assert(tapped == nil)
         
-        tapped = { [unowned self] in
+        tapped = { [unowned self] _ in
             let viewController = viewControllerType.init()
             
             self.navigationController!.pushViewController(viewController, animated: true)
@@ -164,135 +143,95 @@ open class GenericTableViewController<T: JVTableView<U>, U: JVTableViewDatasourc
     }
     
     /// * Recommended overridable methods. *
-    
-    /// Always call super.reloadData() if you override this method.
-    open func reloadData() {
-        let textUpdates = createTableViewRowTextUpdates(datasource: U.self)
-        let textFieldUpdates = createTableViewRowTextFieldUpdates(datasource: U.self)
-        let switchUpdates = createTableViewRowSwitchUpdates(datasource: U.self)
-        
+
+    open func reloadData(preserveSelectedRow: Bool = false) {
+        let selectedIndexPath = tableView.indexPathForSelectedRow
         #if DEBUG
-        // Checks if there are no duplicate identifiers.
-        let rowIdentifiers = Set(textUpdates.map { $0.rowIdentifier } + textFieldUpdates.map { $0.rowIdentifier } + switchUpdates.map { $0.rowIdentifier })
-        
-        assert(rowIdentifiers.count == textUpdates.count + textFieldUpdates.count + switchUpdates.count, "Duplicate identifer for update")
-        
-        // Every row that has a switch must be updated at runtime.
-        // This means that the count of switchUpdates must be equal to the total amount of switch rows in the datasource.
-        let switchableRows = tableViewGeneric.rows.compactMap { $0 as? TableViewRowLabelSwitch }
-        
-        if switchableRows.count != switchUpdates.count {
-            dp("Count's aren't equal")
-            dp(switchableRows.map { $0.identifier })
-            dp("---")
-            dp(switchUpdates.map { $0.rowIdentifier })
-            IllegalState()
-        }
-        
+        let changedRows = tableViewGeneric.changeableRows.filter { $0.isChanged }
         #endif
         
-        textUpdates.update(rows: tableViewGeneric.rowsWithCustomIdentifier)
-        textFieldUpdates.update(rows: tableViewGeneric.rowsWithCustomIdentifier)
-        switchUpdates.update(rows: tableViewGeneric.rowsWithCustomIdentifier)
+        prepareForReload()
+
+        tableViewGeneric.reloadData()
         
         #if DEBUG
+        let changedRowsAfterReload = tableViewGeneric.changeableRows.filter { $0.isChanged }
+        // If assertion error -> the reload of the tableView caused made changes
+        // to disappear
+        assert(changedRows.count == changedRowsAfterReload.count)
+        
+        for (index, row) in changedRows.enumerated() {
+            assert(changedRowsAfterReload[index].identifier == row.identifier)
+        }
         // Every row should now have a text property
-        let tableViewRowsText = tableViewGeneric.rows
-            .compactMap({ $0 as? TableViewRowText })
+        let tableViewRowsText = tableViewGeneric.jvDatasource.dataSourceVisibleRows.map{ $0.rows }.flatMap { $0 }.compactMap({ $0 as? TableViewRowText })
         
         for row in tableViewRowsText {
-            assert(row._text != "", "A row without text is never good. \(row.identifier)")
+            assert(!row.labelSetup.text()!.isEmpty, "A row without text is never good. \(row.identifier)")
         }
         
-        let textFields = tableViewGeneric.rows.compactMap({ $0 as? TableViewRowTextField })
+        let textFields = tableViewGeneric.rows.compactMap { $0 as? TableViewRowTextField }
         
         for text in textFields {
             assert(text.validationBlockUserInput(text.oldValue), "The new data isn't valid at the first place! \(text.identifier)")
         }
         #endif
         
-        let visibleUpdateRows = createTableViewRowConditionallyVisible(datasource: U.self)
+        finishedPreparedForReload()
         
-        assert(Set(visibleUpdateRows).count == visibleUpdateRows.count, "The row identifier is used twice, this is illegal")
-        
-        for row in visibleUpdateRows {
-            let tableViewRow = tableViewGeneric.jvDatasource.getRow(row.rowIdentifier)
-            
-            tableViewRow.showInTableView = { return row.isVisible }
+        if let selectedIndexPath = selectedIndexPath, preserveSelectedRow {
+            self.tableView.selectRow(at: selectedIndexPath, animated: false, scrollPosition: .none)
         }
-        
-        tableViewGeneric.reloadData()
     }
     
     /// Prepares to call the save method.
     /// It checks the necessary rows to select and passes it to the save method.
     open func prepareForSave() {
-        let changeableRows = tableViewGeneric.retrieveChangeableRows()
-        let changedRows = changeableRows.filter { $0.hasChanged }
+        let changeableRows = tableViewGeneric.changeableRows
+        let changedRows = changeableRows.filter { $0.isChanged }
+        let rowsThatHaveOwnSaveMethod = changeableRows.filter { $0.save != nil }
+        let rowsWithoutOwnSaveMethod = changeableRows.filter { $0.save == nil }
         
         guard changedRows.count > 0 else { return }
         
-        save(datasource: U.self, changeableRows: changeableRows)
-        save(datasource: U.self, changedRows: changedRows)
+        for row in changeableRows {
+            save(datasource: U.self, changeableRow: row)
+        }
+        
+        for row in rowsWithoutOwnSaveMethod {
+            save(datasource: U.self, changedRow: row)
+        }
+        
+        for row in rowsThatHaveOwnSaveMethod {
+            row.save!()
+        }
+        
+        savedChangedRows()
     }
     
     /// This method must be overridden if you have rows that have changed.
     /// Will be called if at least one row have been changed.
-    open func save(datasource: U.Type, changeableRows: [TableViewRowUpdate]) {
+    open func save(datasource: U.Type, changeableRow: TableViewRow & Changeable) {
         // Don't do anything by default.
     }
     
+    /// Called when at least one row has been changed.
+    open func savedChangedRows() { }
+    
     /// This method must be overridden if you have rows that have changed.
     /// Will be called if at least one row have been changed.
-    open func save(datasource: U.Type, changedRows: [TableViewRowUpdate]) {
-        assert(changedRows.count == 0, "There are rows to save but this method isn't overridden!")
+    open func save(datasource: U.Type, changedRow: TableViewRow & Changeable) {
+        assert(false, "There are rows to save but this method isn't overridden!")
     }
     
-    /// Returns the rows that needs to have there value properties dynamically updated
-    open func createTableViewRowTextUpdates(datasource: U.Type) -> [TableViewRowTextUpdate] {
-        // By default we dont have any listeners
-        return []
-    }
+    /// Called before a reload.
+    /// Initialize here some values that will be re-used by multiple update statements.
+    open func prepareForReload() {}
     
-    /// Returns the rows that needs to have there value properties dynamically updated
-    open func createTableViewRowTextFieldUpdates(datasource: U.Type) -> [TableViewRowTextFieldUpdate] {
-        // By default we dont have any listeners
-        return []
-    }
+    /// Reset the values that were calculated from prepareForReload()
+    open func finishedPreparedForReload() {}
     
-    /// Returns the rows that needs to have there value properties dynamically updated
-    open func createTableViewRowSwitchUpdates(datasource: U.Type) -> [TableViewRowSwitchUpdate] {
-        // By default we dont have any listeners
-        return []
+    open func updateUnsafe(datasource: U.Type, row: TableViewRow) {
+        assert(false)
     }
-    
-    /// Creates the rows that needs to be dynamically visible
-    open func createTableViewRowConditionallyVisible(datasource: U.Type) -> [TableViewRowVisibleUpdate] {
-        return []
-    }
-    
-    open func createTableViewRowLabelImageRightButtonTapHandlers(datasource: U.Type) -> [TableViewRowLabelImageRightButtonTapHandler] {
-        return []
-    }
-    
-    open func updateUnsafe(rows: [TableViewRow]) {
-        assert(rows.count == 0)
-    }
-    
-    /// Some view controllers do not conform to NoParameterInitializable
-    /// Because they need more info when they are initialized.
-    /// Do that here.
-    open func setupTapHandlers(datasource: U.Type, rows: [TableViewRowTapHandler]) {
-        guard rows.count > 0 else { return }
-        
-        fatalError("There are rows that require to have a tap listener attached to it, but this method isn't overridden: \(rows.map({ $0.identifier }))")
-    }
-    
-    open func setupTapHandlersForTableViewRowLabelImageAndButton(datasource: U.Type, rows: [TableViewRowLabelImageRightButtonTapHandler]) {
-        assert(rows.count == 0, "There are rows that require to have a tap listener attached to it, but this method isn't overridden.")
-    }
-    
-    /// One time setup for the view controller.
-    /// See the description of the init() why this method is here.
-    open func setup() {}
 }

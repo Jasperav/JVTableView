@@ -7,8 +7,10 @@ import JVLoadableImage
 import JVChangeableValue
 import JVNoParameterInitializable
 import JVInputValidator
+import os
+import JVDebugProcessorMacros
 
-open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate, NoParameterInitializable {
+open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, UITableViewDataSource, UITableViewDelegate {
     
     /// Will be called when anything in the form has been changed.
     /// Not mandatory when you have a screen which won't update directly
@@ -20,9 +22,8 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     /// The header stretch view which will maintain the stretch image.
     public private (set) var headerImage: JVTableViewHeaderImage?
     
-    /// Making the datasource non-public will prevent the developer to directly modify rows.
-    /// This is always illegal and can cause a corrupted state.
-    let jvDatasource: U
+    /// Don't modify rows directly.
+    public let jvDatasource: U
     
     /// Contains all the rows of jvDatasource.
     let rows: [TableViewRow]
@@ -35,7 +36,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     
     var rowsWithoutTapHandlers: [TableViewRow] {
         return rowsWithCustomIdentifier
-            .filter { $0.isSelectable }
+            .filter { $0.isSelectable() }
             .filter { $0.tapped == nil }
             .filter { $0.showViewControllerOnTap == nil }
     }
@@ -49,15 +50,11 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         return rowInputValidators.allSatisfy { $0.validationState == .valid }
     }
     
-    public required init() {
-        let tempJVDatasource = U.init()
+    public init(datasource tempJVDatasource: U) {
+        rows = tempJVDatasource.dataSource.flatMap { $0.rows }
         
-        rows = tempJVDatasource.dataSource.flatMap({ $0.rows })
-        
-        rowsWithCustomIdentifier = rows.filter({ $0.identifier != TableViewRow.defaultRowIdentifier })
-        
+        rowsWithCustomIdentifier = rows.filter { $0.identifier != TableViewRow.defaultRowIdentifier }
         changeableRows = rows.compactMap { $0 as? TableViewRow & Changeable }
-        
         rowInputValidators = rows.compactMap { $0 as? InputValidateable }.map { $0.inputValidator }
         
         firstResponderTableViewRowIdentifier = rowsWithCustomIdentifier.compactMap { $0 as? TableViewRowTextField }.first(where: { $0.isFirstResponder })?.identifier
@@ -67,12 +64,17 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         super.init(frame: CGRect.zero, style: jvDatasource.style)
         
         headerImage = jvDatasource.headerImage
+
+        for row in rows {
+            row.commonLoad()
+        }
         
         registerUniqueCellTypes()
         
         sectionFooterHeight = UITableView.automaticDimension
         estimatedSectionFooterHeight = 5
         
+        jvDatasource.prepareForReload()
         dataSource = self
         delegate = self
         keyboardDismissMode = .onDrag
@@ -82,8 +84,6 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         #if DEBUG
         validate()
         #endif
-        
-        reloadData()
         
         guard let headerImage = headerImage else { return }
         
@@ -99,30 +99,21 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         for row in rows.compactMap({ $0 as? Changeable & TableViewRow }) {
             assert(row.identifier != TableViewRow.defaultRowIdentifier, "A changeable row should always have an identifier \(row.identifier)")
         }
-        // If the row isn't selectable, it can not be tappable or showViewControllerOnTap.
-        for row in rows.filter({ !$0.isSelectable }) {
-            assert(row.tapped == nil && row.showViewControllerOnTap == nil)
-        }
-        
+
         // Omit row identifier duplicated
         var customIdentifiers = Set<String>()
         
         for row in rowsWithCustomIdentifier {
             if !customIdentifiers.insert(row.identifier).inserted {
+                os_log("Duplicate row identifiers found. These are the row identifiers: ", type: .debug)
                 for row in rowsWithCustomIdentifier {
-                    print(row.identifier)
+                    os_log("%{private}@", type: .debug, row.identifier)
                 }
                 
-                fatalError()
+                os_log("Now crashing", type: .debug)
+                
+                assert(false)
             }
-        }
-        
-        for row in changeableRows {
-            // Every changeable row should have an identifier
-            assert(row.identifier != TableViewRow.defaultRowIdentifier)
-            // Every changeable row must override determineCurrentValue().
-            // The default method throws a fatalerror. We check if it doesn't throw.
-            let _ = row.createUpdateContainer()
         }
         
         var firstResponderRows = rows.compactMap { $0 as? TableViewRowTextField }
@@ -130,16 +121,12 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         firstResponderRows.removeAll(where: { !$0.isFirstResponder })
         
         assert(firstResponderRows.count <= 1, "No more than 1 table view row text field can be the first responder.")
-        
-        let unsafeUpdateableRows = rows.filter { $0.updateUnsafely }
-        
-        assert(unsafeUpdateableRows.allSatisfy { $0.identifier != TableViewRow.defaultRowIdentifier }, "You must be able to access the unsafe updateable rows by property.")
     }
     #endif
     
     open override func reloadData() {
         jvDatasource.updateVisibleRows()
-        
+
         super.reloadData()
     }
     
@@ -155,14 +142,15 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     private func updateHeaderStretchImageView() {
         guard let headerImage = headerImage else { return }
         
-        var headerRect = CGRect(x: 0, y: -headerImage.height, width: bounds.width, height: headerImage.height)
+        let rect: CGRect
         
         if contentOffset.y < -headerImage.height {
-            headerRect.origin.y = contentOffset.y
-            headerRect.size.height = -contentOffset.y
+            rect = CGRect(x: 0, y: contentOffset.y, width: bounds.width, height: -contentOffset.y)
+        } else {
+            rect = CGRect(x: 0, y: -headerImage.height, width: bounds.width, height: headerImage.height)
         }
         
-        headerImage.loadableView.frame = headerRect
+        headerImage.loadableView.frame = rect
     }
     
     /// Checks if any row in the datasource has a different oldValue compared to its currentValue.
@@ -177,7 +165,7 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         for row in rows {
             let classIdentifier = row.classIdentifier
             
-            guard insertedClassTypes.insert(classIdentifier).inserted else { break }
+            guard insertedClassTypes.insert(classIdentifier).inserted else { continue }
             
             // The cell hasn't been registered yet, do it now.
             register(row.classType, forCellReuseIdentifier: classIdentifier)
@@ -219,40 +207,73 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
         if let changeableRow = row as? Changeable {
             changeableRow.hasChanged = { [unowned self] (_) in
                 self.checkIfFormChanged()
+                
+                if let switchCell = row as? TableViewRowLabelSwitch {
+                    let rows = switchCell.hideRows(switchCell.currentValue)
+                    
+                    guard !rows.isEmpty else { return }
+                    
+                    var inserts = [IndexPath]()
+                    var deletes = [IndexPath]()
+                    
+                    for someRow in rows {
+                        let matchingRow = self.rows.first(where: { $0.identifier == someRow.identifier })!
+                        let isVisible = matchingRow.isVisible()
+                        
+                        if isVisible && someRow.hide {
+                            deletes.append(self.jvDatasource.indexPathForVisibleCell(identifier: someRow.identifier))
+                            matchingRow.isVisible = { return false }
+                        } else if !isVisible && !someRow.hide {
+                            inserts.append(self.jvDatasource.indexPath(identifier: someRow.identifier))
+                            matchingRow.isVisible = { return true }
+                        }
+                    }
+                    
+                    self.jvDatasource.updateVisibleRows()
+                    tableView.performBatchUpdates({
+                        tableView.deleteRows(at: deletes, with: .automatic)
+                        tableView.insertRows(at: inserts, with: .automatic)
+                    })
+                }
             }
         }
         
-        cell.selectionStyle = row.isSelectable ? UITableViewCell.SelectionStyle.gray : .none
+        cell.selectionStyle = row.isSelectable() ? UITableViewCell.SelectionStyle.gray : .none
         
         return cell
+    }
+    
+    public func reloadRow(identifier: String) {
+        guard let cell = (visibleCells as! [TableViewCell]).first(where: { $0.identifier! == identifier }), let indexPath = indexPath(for: cell) else {
+            assert(false)
+            return
+        }
+        
+        reloadRows(at: [indexPath], with: .none)
     }
     
     public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return jvDatasource.getSection(section).header
     }
     
-    public func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    open func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return jvDatasource.getSection(section).footerText
     }
     
     public func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let cell = jvDatasource.getRow(indexPath)
         
-        return cell.isSelectable ? indexPath : nil
+        return cell.isSelectable() ? indexPath : nil
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = jvDatasource.getRow(indexPath)
         
-        row.tapped!()
+        row._tapped!()
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateHeaderStretchImageView()
-    }
-    
-    open func retrieveChangeableRows() -> [TableViewRowUpdate] {
-        return changeableRows.map { TableViewRowUpdate(changeableRow: $0) }
     }
     
     open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -264,10 +285,22 @@ open class JVTableView<U: JVTableViewDatasource>: UITableView, ChangeableForm, U
     }
 }
 
-extension JVTableView: ModelCreator {
+extension JVTableView: ViewLayout {
     private func setup(headerImage: JVTableViewHeaderImage) {
         contentInset = UIEdgeInsets(top: headerImage.height, left: 0, bottom: 0, right: 0)
         
         addSubview(headerImage.loadableView)
+        // Removing space between the image and first cell
+        tableHeaderView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: 0.01)))
+    }
+}
+
+public extension UITableView {
+    func deselectCurrentRow(animated: Bool) {
+        guard let row = indexPathForSelectedRow else {
+            return
+        }
+        
+        deselectRow(at: row, animated: animated)
     }
 }

@@ -4,36 +4,41 @@ import JVURLOpener
 
 open class TableViewRowButton: TableViewRowText {
     
-    public init<T: RawRepresentable>(identifier: T,
-                                     text: String,
-                                     contentTypeJVLabel: ContentTypeJVLabel = TableViewRowText.standardContentTypeJVLabel,
-                                     url: String) {
-        super.init(cell: .button, identifier: identifier, accessoryType: .disclosureIndicator, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: nil, tapped: {
-            URLOpener.open(url: url)
-        })
-        
-        commonLoad()
+    open override var classType: TableViewCell.Type {
+        return TableViewCellButton.self
     }
-    
-    public init(rawIdentifier: String = TableViewRow.defaultRowIdentifier,
-                text: String,
-                contentTypeJVLabel: ContentTypeJVLabel = TableViewRowText.standardContentTypeJVLabel,
-                url: String) {
-        super.init(cell: .button, rawIdentifier: rawIdentifier, accessoryType: .disclosureIndicator, contentTypeJVLabel: contentTypeJVLabel, text: text, showViewControllerOnTap: nil) {
-            URLOpener.open(url: url)
+
+    public init(text: String, urlToOpenWhenTapped: String) {
+        super.init(text: text)
+        
+        tapped = { _ in
+            URLOpener.open(url: urlToOpenWhenTapped)
         }
+    }
+    
+    override open func commonLoad() {
+        isSelectable = { return true }
         
-        commonLoad()
+        super.commonLoad()
     }
     
-    private func commonLoad() {
-        self.isSelectable = true
-    }
-    
-    open override func update(cell: TableViewCell) {
+    open override func configure(cell: TableViewCell) {
         let _cell = cell as! TableViewCellButton
         
-        _cell.button.titleLabel!.font = contentTypeJVLabel.contentTypeTextFont.font
-        _cell.button.setTitle(_text, for: .normal)
+        _cell.button.setTitle(labelSetup.text(), for: .normal)
+        
+        super.configure(cell: cell)
+    }
+    
+    open override func makeSelectable(cell: TableViewCell) {
+        let _cell = cell as! TableViewCellButton
+        
+        _cell.button.isEnabled = true
+    }
+    
+    open override func makeUnselectable(cell: TableViewCell) {
+        let _cell = cell as! TableViewCellButton
+        
+        _cell.button.isEnabled = false
     }
 }
